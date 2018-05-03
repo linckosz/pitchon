@@ -1,0 +1,12 @@
+/*
+ *CSS for compatibility
+*/
+[contenteditable] {
+/*fix for iOS 7 and up, for typing in contenteditable*/
+	-webkit-touch-callout: text;
+	-webkit-user-select: text;
+	-khtml-user-select: text;
+	-moz-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
+}

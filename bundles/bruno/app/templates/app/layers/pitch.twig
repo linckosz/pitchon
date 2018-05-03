@@ -1,0 +1,33 @@
+{# category ? #}
+<div id="begin_app_layers_pitch" class="visibility_hidden">
+	<script>
+		JSfiles.later("{{ _filelatest('/bruno/app/scripts/app/layers/pitch.js') }}");
+	</script>
+	<link rel="stylesheet" href="{{ _filelatest('/bruno/app/styles/app/layers/pitch.css') }}" type="text/css" />
+</div>
+<div id="end_app_layers_pitch" class="visibility_hidden"></div>
+
+<div class="display_none">
+
+	<div id="-app_layers_pitch" class="app_layers_pitch">
+	</div>
+
+	<div id="-app_layers_pitch_add_icon" class="app_layers_pitch_add_icon">
+		<div find="add">
+			<img class="app_layers_pitch_add_icon_img" src="{{ _filelatest('/bruno/app/images/models/pitch/add.png') }}" /><br />
+			{{ _trans('app', 4, 2, 'html') }}{# New Pitch #}
+		</div>
+		<div find="input" class="display_none">
+			<div>
+				<textarea find="input_textarea" class="app_layers_pitch_add_icon_textarea font_sans_serif selectable" rows="1">{{ _trans('app', 4, 2, 'html') }}{# New Pitch #}</textarea>
+			</div>
+			<div>
+				<span find="input_cancel" class="app_layers_pitch_add_icon_button">{{ _trans('app', 1, 4, 'html') }}{# Cancel #}</span>
+				<span find="input_create" class="app_layers_pitch_add_icon_button">{{ _trans('app', 1, 7, 'html') }}{# OK #}</span>
+			</div>
+		</div>
+	</div>
+
+	<img id="-app_layers_pitch_add_corner" class="app_layers_pitch_add_corner display_none" src="{{ _filelatest('/bruno/app/images/models/pitch/add.png') }}" />
+
+</div>

@@ -1,0 +1,55 @@
+{# category 4 #}
+<div id="begin_app_content" class="visibility_hidden">
+	<script>
+		JSfiles.later("{{ _filelatest('/bruno/app/scripts/app/content.js') }}");
+	</script>
+	<link rel="stylesheet" href="{{ _filelatest('/bruno/app/styles/app/content.css') }}" type="text/css" />
+	<style type="text/css">
+		#app_content_submenu_preview {
+			background-image: url("{{ _filelatest('/bruno/app/images/submenu/background_01.jpg') }}");
+		}
+	</style>
+</div>
+
+<table id="app_content_top">
+	<tr>
+		<td class="app_content_top_cell">
+			<div class="base_pointer icon-projectBlack" id="app_content_top_home"></div>
+		</td>
+		<td class="app_content_top_cell app_content_top_title">
+			<div id="app_content_top_title" class="ellipsis">
+				<span id="app_content_top_title_menu">
+					<span id="app_content_top_title_pitches">
+						<span id="app_content_top_title_select_pitches" class="app_content_top_title_select">{{ _trans('app', 4, 3, 'html') }}{# Pitches #}</span>
+					</span>
+					<span id="app_content_top_title_questions" class="display_none">
+						<span class="app_content_top_title_next fa fa-angle-right"></span>
+						<span id="app_content_top_title_select_questions" class="app_content_top_title_select">{{ _trans('app', 4, 4, 'html') }}{# Questions #}</span>
+					</span>
+					<span id="app_content_top_title_answers" class="display_none">
+						<span class="app_content_top_title_next fa fa-angle-right"></span>
+						<span id="app_content_top_title_select_answers" class="app_content_top_title_select">{{ _trans('app', 4, 5, 'html') }}{# Answers #}</span>
+					</span>
+				</span>
+			</div>
+		</td>
+		<td class="app_content_top_cell">
+			<div class="base_pointer icon-Settings" id="app_content_top_settings"></div>
+		</td>
+	</tr>
+</table>
+
+<div id="app_content_dynamic" class="clear">
+	{# this absolute DIV is important, it help to fixed absolute elements position to this DIV and not the page itsel. #}
+	<div id="app_content_dynamic_sub">{# DO NOT DELETE #}
+		<div id="app_content_dynamic_layers">
+			{% include '/bundles/bruno/app/templates/app/layers.twig' %}
+		</div>
+	</div>
+</div>
+
+<span id="app_content_powered">&copy; Copyright</span>
+
+<span id="app_content_pc" class="display_none">{{ _trans('app', 4, 23, 'html') }}{# PC version: #}<br />https://{{ http_host }}</span>
+
+<div id="end_app_content" class="visibility_hidden"></div>

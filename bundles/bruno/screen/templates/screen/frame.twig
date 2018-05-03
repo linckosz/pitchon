@@ -1,0 +1,78 @@
+{% extends '/bundles/bruno/screen/templates/base.twig' %}
+{% block frame %}
+	<div id="begin_ppt_frame" class="visibility_hidden">
+		<link rel="stylesheet" href="{{ _filelatest('/bruno/screen/styles/screen/frame.css') }}" type="text/css" />
+		{% if body_preview %}
+			<style type="text/css">
+				#ppt_frame_website {
+					left: 9vw;
+					left: 15vmin;
+					font-size: 3.2vw;
+					font-size: 5.2vmin;
+				}
+				#ppt_frame_website_logo {
+					height: 4.4vw;
+					height: 5.6vmin;
+					line-height: 4.4vw;
+					line-height: 5.6vmin;
+					width: 4.4vw;
+					width: 5.6vmin;
+					font-size: 4.2vw;
+					font-size: 5.4vmin;
+				}
+			</style>
+		{% endif %}
+		<style type="text/css">
+			#ppt_frame_website_logo {
+				background-image: url("{{ data_brand_pic|raw }}");
+			}
+		</style>
+		<script src="{{ _filelatest('/bruno/screen/scripts/screen/frame.js') }}" type="text/javascript"></script>
+		<script src="{{ _filelatest('/bruno/screen/scripts/screen/event.js') }}" type="text/javascript"></script>
+	</div>
+
+	<div id="ppt_frame">
+		<div id="ppt_frame_left">
+			<div id="ppt_frame_left_top">
+				{% if data_question_picture %}
+					<img id="quiz_question_picture" src="{{ data_question_picture }}" />
+				{% endif %}
+				<span id="ppt_question_prefix" class="display_none">{{ _trans('screen', 0, 2, 'html') }}{# Q: #}</span>
+				<span id="ppt_question_title">{{ data_question_title }}</span>
+			</div>
+			<div id="ppt_frame_left_bottom">
+				{% block qanda %}
+				{% endblock %}
+			</div>
+		</div>
+		<div id="ppt_frame_right">
+			<div id="ppt_frame_right_top_code" class="{{ get_style }} {% if data_pitch_url_hide or not data_pitch_code %}hidden{% endif %}">
+				<div id="ppt_frame_right_top_code_div">{{ data_pitch_code }}</div>
+			</div>
+			<div id="ppt_frame_right_top" class="{{ get_style }} {% if data_pitch_url_hide %}hidden{% endif %}">
+				<img id="ppt_frame_right_top_qrcode" class="{{ get_style }}" src="{{ data_pitch_url|raw }}{% if body_preview %}&preview=1{% endif %}" />
+				<div id="ppt_frame_right_top_domain" class="{{ get_style }} {% if not data_pitch_code %}hidden{% endif %}">
+					<div id="ppt_frame_right_top_domain_div">{{ domain }}</div>
+				</div>
+			</div>
+			<div id="ppt_frame_right_bottom">
+				<iframe id="ppt_stats_iframe" name="ppt_stats_iframe" frameborder="0" scrolling="no" src="{{ data_stats_iframe|raw }}"></iframe>
+			</div>
+		</div>
+	</div>
+
+	<div id="ppt_frame_website">
+		<span id="ppt_frame_website_logo"></span>
+		<span id="ppt_frame_website_link">{{ data_brand }}</span>
+	</div>
+
+	<span id="ppt_frame_average" class="visibility_hidden"></span>
+
+	<img id="ppt_frame_style" src="{{ _filelatest(data_question_style_picture) }}" />
+
+	<div id="end_ppt_frame" class="visibility_hidden">
+		<script type="text/javascript">
+			$("#ppt_frame_right_top_code").addClass("ln{{ data_pitch_code_length }}");
+		</script>
+	</div>
+{% endblock %}

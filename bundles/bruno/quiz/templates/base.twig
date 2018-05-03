@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+<title>{{ title }}</title>
+<link rel="shortcut icon" href="{{ _filelatest('/favicon.ico') }}" />
+<link rel="icon" href="{{ _filelatest('/favicon.png') }}" type="image/png" />
+<link rel="apple-touch-icon" href="{{ _filelatest('/favicon.png') }}" type="image/png" />
+{# remove address bar for some mobile browsers #}
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-barstyle" content="default">
+
+<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="date=no">
+<meta name="format-detection" content="address=no">
+
+<!-- Start SEO -->
+<meta name="description" content="Make your pitch more interactive and please your audience!" />
+<meta name="Keywords" content="pitch" />
+<!-- End SEO -->
+
+<link rel="stylesheet" href="{{ _filelatest('/styles/libs/font-awesome.min.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ _filelatest('/bruno/quiz/styles/font-icon/style.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ _filelatest('/bruno/wrapper/styles/responsive.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ _filelatest('/bruno/quiz/styles/base.css') }}" type="text/css" />
+
+<style type="text/css">
+
+	.base_color_bg_main_gradient {
+		background-image: url("{{ _filelatest('/bruno/quiz/images/bg02.png') }}"), linear-gradient(140deg, #023762, #00719C) !important;
+	}
+
+	{% if html_zoom %}
+		html {
+			zoom: {{ html_zoom }};
+		}
+	{% endif %}
+
+</style>
+
+<script src="{{ _filelatest('/scripts/libs/jquery-3.2.1.min.js') }}" type="text/javascript"></script>
+
+{# can only regroup files that does not have absolute path access #}
+<script src="{{ _grouplatest('quiz.base.js', [
+	'/bruno/wrapper/scripts/polyfill.js',
+	'/scripts/libs/blueimp.md5.min.js',
+	'/scripts/libs/js.cookie.js',
+	'/scripts/libs/json3.min.js',
+	'/scripts/libs/fastclick.min.js',
+	'/bruno/wrapper/scripts/php.js',
+	'/bruno/wrapper/scripts/error.js',
+	'/bruno/wrapper/scripts/static.js',
+	'/bruno/wrapper/scripts/responsive.js',
+	'/bruno/quiz/scripts/base.js',
+]) }}" type="text/javascript"></script>
+
+<script type="text/javascript" src="https://l2.io/ip.js?var=wrapper_user_ip&{{ 'now'|date('Ymd') }}"></script>
+
+<script>
+
+var wrapper_href = window.location.href;
+//Delete URI
+//window.history.replaceState(null, null, document.location.pathname);
+
+window.name = 'pitchonquiz';
+document.domainRoot = '{{ domain }}';
+document.brunoDev = '{{ bruno_dev }}';
+
+setCookie('ip', wrapper_user_ip, 90);
+
+var wrapper_html_zoom = false;
+{% if html_zoom %}
+	wrapper_html_zoom = {{ html_zoom }};
+{% endif %}
+
+//In IE console is undefined if the dev tool is closed
+if(!window.console){
+	console = {
+		log: function() {
+			return true;
+		}
+	};
+}
+
+var base_scanner = function(){
+	alert('must adapt'); //toto
+};
+</script>
+
+</head>
+<body id="body_bruno" class="base_color_text_white unselectable base_tapHighlight_off base_color_bg_main_gradient">
+	
+	{% block frame %}
+	{% endblock %}
+
+	<div id="base_website">
+		<span id="base_website_logo" class="icon-projectBlack"></span><span id="base_website_link">{{ domain }}</span>
+	</div>
+
+</body>
+</html>

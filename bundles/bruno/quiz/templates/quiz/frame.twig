@@ -1,0 +1,26 @@
+{% extends '/bundles/bruno/quiz/templates/base.twig' %}
+{% block frame %}
+	<div id="begin_quiz_frame" class="visibility_hidden">
+		<link rel="stylesheet" href="{{ _filelatest('/bruno/quiz/styles/quiz/frame.css') }}" type="text/css" />
+	</div>
+
+	<div id="quiz_frame">
+		<div id="quiz_frame_cell">
+			<div id="quiz_frame_cell_top">
+				<span id="quiz_question_prefix" class="display_none">{{ _trans('quiz', 0, 2, 'html') }}{# Q: #}</span>
+				<span id="quiz_question_title">{{ data_question_title }}</span>
+				{% if picture %}
+					<div>
+						<img class="quiz_question_picture_img" src="{{ picture }}" />
+					</div>
+				{% endif %}
+			</div>
+			<div id="quiz_frame_cell_bottom">
+				{% block qanda %}
+				{% endblock %}
+			</div>
+		</div>
+	</div>
+
+	<div id="end_quiz_frame" class="visibility_hidden"></div>
+{% endblock %}

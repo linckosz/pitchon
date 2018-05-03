@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% if get_refresh and get_style == 'stats' %}
+	<noscript><meta http-equiv="refresh" content="3" /></noscript>
+{% endif %}
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+<title>{{ title }}</title>
+<link rel="shortcut icon" href="{{ _filelatest('/favicon.ico') }}" />
+<link rel="icon" href="{{ _filelatest('/favicon.png') }}" type="image/png" />
+<link rel="apple-touch-icon" href="{{ _filelatest('/favicon.png') }}" type="image/png" />
+{# remove address bar for some mobile browsers #}
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-barstyle" content="default">
+
+<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="date=no">
+<meta name="format-detection" content="address=no">
+
+<!-- Start SEO -->
+<meta name="description" content="Make your pitch more interactive and please your audience!" />
+<meta name="Keywords" content="pitch" />
+<!-- End SEO -->
+
+<link rel="stylesheet" href="{{ _filelatest('/styles/libs/font-awesome.min.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ _filelatest('/bruno/screen/styles/font-icon/style.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ _filelatest('/bruno/screen/styles/font-icon/style.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ _filelatest('/bruno/screen/styles/base.css') }}" type="text/css" />
+
+<style type="text/css">
+
+	{% if get_style == 'stats' %}
+		html, body, .base_color_bg_main_gradient {
+			background: transparent !important;
+		}
+	{% else %}
+		.base_color_bg_main_gradient {
+			background-image: url("{{ _filelatest('/bruno/screen/images/bg02.png') }}"), linear-gradient(140deg, #023762, #00719C) !important;
+		}
+	{% endif %}
+
+	{% if body_preview %}
+		html, body {
+			height: {{ html_height }}px;
+			width: {{ html_width }}px;
+		}
+	{% endif %}
+
+</style>
+
+<script src="{{ _filelatest('/scripts/libs/jquery-3.2.1.min.js') }}" type="text/javascript"></script>
+
+{# can only regroup files that does not have absolute path access #}
+<script src="{{ _grouplatest('ppt.base.js', [
+	'/bruno/wrapper/scripts/polyfill.js',
+	'/scripts/libs/blueimp.md5.min.js',
+	'/scripts/libs/js.cookie.js',
+	'/scripts/libs/json3.min.js',
+	'/scripts/libs/fastclick.min.js',
+	'/bruno/wrapper/scripts/php.js',
+	'/bruno/wrapper/scripts/error.js',
+	'/bruno/wrapper/scripts/static.js',
+	'/bruno/wrapper/scripts/responsive.js',
+	'/bruno/screen/scripts/base.js',
+]) }}" type="text/javascript"></script>
+
+<script>
+
+var wrapper_href = window.location.href;
+//Delete URI
+//window.history.replaceState(null, null, document.location.pathname);
+
+window.name = 'pitchonscreen';
+document.domainRoot = '{{ domain }}';
+document.brunoDev = '{{ bruno_dev }}';
+
+//In IE console is undefined if the dev tool is closed
+if(!window.console){
+	console = {
+		log: function() {
+			return true;
+		}
+	};
+}
+
+var ppt_event_slide = {
+	listenevent: false,
+	timer: false,
+	change: function(){},
+	direction: 'next',
+	prev: false,
+	next: false,
+};
+
+{% if listenevent %}
+	ppt_event_slide.listenevent = true;
+{% endif %}
+{% if slide_prev %}
+	ppt_event_slide.prev = "{{ slide_prev }}";
+{% endif %}
+{% if slide_next %}
+	ppt_event_slide.next = "{{ slide_next }}";
+{% endif %}
+
+</script>
+
+</head>
+<body id="body_bruno" class="base_color_text_white unselectable base_tapHighlight_off base_color_bg_main_gradient">
+
+	<span id="ppt_event_slide" class="display_none">
+		<span id="ppt_event_slide_prev" class="ppt_event_slide_button">< {{ _trans('screen', 0, 8, 'html') }}{# Previous slide #}</span>
+		<span id="ppt_event_slide_next" class="ppt_event_slide_button">{{ _trans('screen', 0, 9, 'html') }}{# Next slide #} ></span></span>
+	</span>
+
+	{% block frame %}
+	{% endblock %}
+
+</body>
+</html>

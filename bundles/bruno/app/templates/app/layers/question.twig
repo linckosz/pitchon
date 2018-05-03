@@ -1,0 +1,33 @@
+{# category ? #}
+<div id="begin_app_layers_question" class="visibility_hidden">
+	<script>
+		JSfiles.later("{{ _filelatest('/bruno/app/scripts/app/layers/question.js') }}");
+	</script>
+	<link rel="stylesheet" href="{{ _filelatest('/bruno/app/styles/app/layers/question.css') }}" type="text/css" />
+</div>
+<div id="end_app_layers_question" class="visibility_hidden"></div>
+
+<div class="display_none">
+
+	<div id="-app_layers_question" class="app_layers_question">
+	</div>
+
+	<div id="-app_layers_question_add_icon" class="app_layers_question_add_icon">
+		<div find="add">
+			<img class="app_layers_question_add_icon_img" src="{{ _filelatest('/bruno/app/images/models/question/add.png') }}" /><br />
+			{{ _trans('app', 4, 6, 'html') }}{# New Question #}
+		</div>
+		<div find="input" class="display_none">
+			<div>
+				<textarea find="input_textarea" class="app_layers_question_add_icon_textarea font_sans_serif selectable" rows="1">{{ _trans('app', 4, 6, 'html') }}{# New Question #}</textarea>
+			</div>
+			<div>
+				<span find="input_cancel" class="app_layers_question_add_icon_button">{{ _trans('app', 1, 4, 'html') }}{# Cancel #}</span>
+				<span find="input_create" class="app_layers_question_add_icon_button">{{ _trans('app', 1, 7, 'html') }}{# OK #}</span>
+			</div>
+		</div>
+	</div>
+
+	<img id="-app_layers_question_add_corner" class="app_layers_question_add_corner display_none" src="{{ _filelatest('/bruno/app/images/models/question/add.png') }}" />
+
+</div>

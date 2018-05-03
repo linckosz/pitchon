@@ -1,0 +1,63 @@
+{% extends '/bundles/bruno/wrapper/templates/wrapper.twig' %}
+{% block base %}
+	<div id="begin_base" class="visibility_hidden">
+		<script>
+			JSfiles.later("{{ _filelatest('/bruno/app/scripts/generic/base.js') }}", 30);
+			var base_grumble_bubble = new Image();
+			base_grumble_bubble.src = "{{ _filelatest('/scripts/libs/grumble/images/bubble-sprite.png') }}";
+		</script>
+
+		<script src="{{ _grouplatest('app.generic.base.js', [
+			'/scripts/libs/chart.min.js',
+			'/scripts/libs/chart.extensions.js',
+			'/scripts/libs/ChinesePY.js',
+			'/scripts/libs/ChinesePY.extensions.js',
+		]) }}" type="text/javascript"></script>
+
+		<!--[if lte IE 8]>
+			<script src="{{ _filelatest('/scripts/libs/excanvas.js') }}" type="text/javascript"></script>
+		<![endif]-->
+		{# for video player #}
+		<script src="{{ _filelatest('/scripts/libs/mediaelementjs/mediaelement-and-player.min.js') }}" type="text/javascript"></script>
+		<link rel="stylesheet" href="{{ _filelatest('/scripts/libs/mediaelementjs/mediaelementplayer.css') }}" type="text/css" />
+
+		<script src="{{ _filelatest('/scripts/libs/grumble/js/jquery.grumble.min.js') }}" type="text/javascript"></script>
+		<link rel="stylesheet" href="{{ _filelatest('/scripts/libs/grumble/css/grumble.min.css') }}" type="text/css" />
+		<style type="text/css">
+			.grumble{
+				background-image: url("{{ _filelatest('/scripts/libs/grumble/images/bubble-sprite.png') }}");
+			}
+			.grumble-text {
+				cursor: pointer;
+				text-transform: none;
+			}
+			.grumble-text > .outer {
+				padding: 20px;
+				font-size: 16px;
+				line-height: 16px;
+			}
+			.grumble-text:hover > .outer {
+				filter: alpha(opacity=80) !important;
+				opacity: 0.80 !important;
+				-moz-opacity: 0.80 !important;
+				-khtml-opacity: 0.80 !important;
+			}
+		</style>
+		
+
+		<link rel="stylesheet" href="{{ _filelatest('/bruno/app/styles/font-icon/style.css') }}" type="text/css" />
+		<link rel="stylesheet" href="{{ _filelatest('/bruno/app/styles/generic/base.css') }}" type="text/css" />
+
+	</div>
+	<div id="base_error"></div>
+	<input id="base_input_focusHelper" type="text" readonly="readonly" class="visibility_hidden" />{# this is an empty input used as focus control #}
+	<div id="base_myQRcode_popup" class="base_myQRcode_popup visibility_hidden base_pointer" onclick="base_toggle_myQRcode()">
+		<div></div>
+		<img />
+	</div>
+	{% block app_application %}
+	{% endblock %}
+	<div id="end_base" class="visibility_hidden">
+		<img id="-submit_progress_bar" class="submit_progress_bar" find="submit_progress_bar" src="{{ _filelatest('/bruno/app/images/generic/base/generic/loading_bar.gif') }}"/>
+	</div>
+{% endblock %}

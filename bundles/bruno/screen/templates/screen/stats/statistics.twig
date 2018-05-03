@@ -1,0 +1,333 @@
+{% extends '/bundles/bruno/screen/templates/base.twig' %}
+{% block frame %}
+	<div id="begin_ppt_stats_statistics" class="visibility_hidden">
+		<link rel="stylesheet" href="{{ _filelatest('/bruno/screen/styles/screen/stats/statistics.css') }}" type="text/css" />
+		<style type="text/css">
+			#ppt_stats_statistics_1 {
+				height: 0%;
+				left: {{ data_column_left_1 }}%;
+				{% if data_answers_count < 1 %}display: none !important;{% endif %}
+			}
+			#ppt_stats_statistics_2 {
+				height: 0%;
+				left: {{ data_column_left_2 }}%;
+				{% if data_answers_count < 2 %}display: none !important;{% endif %}
+			}
+			#ppt_stats_statistics_3 {
+				height: 0%;
+				left: {{ data_column_left_3 }}%;
+				{% if data_answers_count < 3 %}display: none !important;{% endif %}
+			}
+			#ppt_stats_statistics_4 {
+				height: 0%;
+				left: {{ data_column_left_4 }}%;
+				{% if data_answers_count < 4 %}display: none !important;{% endif %}
+			}
+			#ppt_stats_statistics_5 {
+				height: 0%;
+				left: {{ data_column_left_5 }}%;
+				{% if data_answers_count < 5 %}display: none !important;{% endif %}
+			}
+			#ppt_stats_statistics_6 {
+				height: 0%;
+				left: {{ data_column_left_6 }}%;
+				{% if data_answers_count < 6 %}display: none !important;{% endif %}
+			}
+		</style>
+		<script type="text/javascript">
+			//Play with the transparency of the letter to not affect the readability
+			var ppt_stats_statistics_letter_opacity = function(value){
+				var opacity = 1;
+				if(value<15){
+					opacity = value/15;
+					opacity = Math.round(100*opacity)/100;
+				}
+				if(opacity<0.2){
+					opacity = 0.2;
+				}
+				return opacity;
+			};
+
+			var ppt_stats_statistics_url = "/statsjs/{{ data_questionid_enc }}.js";
+			{% if data_preview %}
+				ppt_stats_statistics_url += '?preview=1';
+			{% endif %}
+
+			var statsjs_data_average = parseInt({{ data_average }});
+			var statsjs_data_participants = parseInt({{ data_participants }});
+			var statsjs_data_answers_count = parseInt({{ data_answers_count }});
+			var statsjs_data_number_1 = 0;
+			var statsjs_data_number_2 = 0;
+			var statsjs_data_number_3 = 0;
+			var statsjs_data_number_4 = 0;
+			var statsjs_data_number_5 = 0;
+			var statsjs_data_number_6 = 0;
+
+			var ppt_stats_statistics_format = function(value){
+				if(value < 0){
+					value = 0;
+				} else if(value > 100){
+					value = 100;
+				}
+				{% if data_question_style == 4 %}
+					return value/10; //Because we base the notation on 100 points in the function ppt_stats_statistics_refresh_screen
+				{% else %}
+					return value+'%';
+				{% endif %}
+			}
+
+			var ppt_stats_statistics_height = function(value){
+				if(value < 0){
+					value = 0;
+				} else if(value > 100){
+					value = 100;
+				}
+				return value;
+			}
+
+			var ppt_stats_statistics_refresh_screen = function(){
+
+				{% if data_question_style == 4 and data_step == 'question' %}
+					//We hide result
+					statsjs_data_average = 0;
+					statsjs_data_answers_count = 0;
+					statsjs_data_number_1 = 0;
+					statsjs_data_number_2 = 0;
+					statsjs_data_number_3 = 0;
+					statsjs_data_number_4 = 0;
+					statsjs_data_number_5 = 0;
+					statsjs_data_number_6 = 0;
+				{% elseif data_question_style == 4 %}
+					//The score is on 10 points, but we need to base it on 100 to avoid display issue
+					statsjs_data_number_1 = 10*statsjs_data_number_1;
+					statsjs_data_number_2 = 10*statsjs_data_number_2;
+					statsjs_data_number_3 = 10*statsjs_data_number_3;
+					statsjs_data_number_4 = 10*statsjs_data_number_4;
+					statsjs_data_number_5 = 10*statsjs_data_number_5;
+					statsjs_data_number_6 = 10*statsjs_data_number_6;
+				{% endif %}
+
+				statsjs_data_participants = parseInt(statsjs_data_participants, 10);
+				if(statsjs_data_participants){
+					$("#ppt_stats_statistics_participants_nbr").html(statsjs_data_participants);
+					$("#ppt_stats_statistics_participants").removeClass("visibility_hidden");
+				} else {
+					$("#ppt_stats_statistics_participants_nbr").html("");
+					$("#ppt_stats_statistics_participants").addClass("visibility_hidden");
+				}
+
+				statsjs_data_number_1 = parseInt(statsjs_data_number_1, 10);
+				if(statsjs_data_number_1 != $("#ppt_stats_statistics_1").data("number")){
+					if(statsjs_data_number_1==0){
+						$("#ppt_stats_statistics_1").addClass('display_none');
+					} else {
+						$("#ppt_stats_statistics_1")
+							.removeClass('display_none')
+							.css('display', '');
+					}
+					$("#ppt_stats_statistics_1").data("number", statsjs_data_number_1);
+					$("#ppt_stats_statistics_1_number").html(ppt_stats_statistics_format(statsjs_data_number_1));
+					$("#ppt_stats_statistics_1").stop(true).animate({height: ppt_stats_statistics_height(statsjs_data_number_1)+"%"}, 1000);
+					$("#ppt_stats_statistics_1_letter").css('opacity', ppt_stats_statistics_letter_opacity(statsjs_data_number_1));
+				}
+
+				statsjs_data_number_2 = parseInt(statsjs_data_number_2, 10);
+				if(statsjs_data_number_2 != $("#ppt_stats_statistics_2").data("number")){
+					if(statsjs_data_number_2==0){
+						$("#ppt_stats_statistics_2").addClass('display_none');
+					} else {
+						$("#ppt_stats_statistics_2")
+							.removeClass('display_none')
+							.css('display', '');
+					}
+					$("#ppt_stats_statistics_2").data("number", statsjs_data_number_2);
+					$("#ppt_stats_statistics_2_number").html(ppt_stats_statistics_format(statsjs_data_number_2));
+					$("#ppt_stats_statistics_2").stop(true).animate({height: ppt_stats_statistics_height(statsjs_data_number_2)+"%"}, 1000);
+					$("#ppt_stats_statistics_2_letter").css('opacity', ppt_stats_statistics_letter_opacity(statsjs_data_number_2));
+				}
+
+				statsjs_data_number_3 = parseInt(statsjs_data_number_3, 10);
+				if(statsjs_data_number_3 != $("#ppt_stats_statistics_3").data("number")){
+					if(statsjs_data_number_3==0){
+						$("#ppt_stats_statistics_3").addClass('display_none');
+					} else {
+						$("#ppt_stats_statistics_3")
+							.removeClass('display_none')
+							.css('display', '');
+					}
+					$("#ppt_stats_statistics_3").data("number", statsjs_data_number_3);
+					$("#ppt_stats_statistics_3_number").html(ppt_stats_statistics_format(statsjs_data_number_3));
+					$("#ppt_stats_statistics_3").stop(true).animate({height: ppt_stats_statistics_height(statsjs_data_number_3)+"%"}, 1000);
+					$("#ppt_stats_statistics_3_letter").css('opacity', ppt_stats_statistics_letter_opacity(statsjs_data_number_3));
+				}
+
+				statsjs_data_number_4 = parseInt(statsjs_data_number_4, 10);
+				if(statsjs_data_number_4 != $("#ppt_stats_statistics_4").data("number")){
+					if(statsjs_data_number_4==0){
+						$("#ppt_stats_statistics_4").addClass('display_none');
+					} else {
+						$("#ppt_stats_statistics_4")
+							.removeClass('display_none')
+							.css('display', '');
+					}
+					$("#ppt_stats_statistics_4").data("number", statsjs_data_number_4);
+					$("#ppt_stats_statistics_4_number").html(ppt_stats_statistics_format(statsjs_data_number_4));
+					$("#ppt_stats_statistics_4").stop(true).animate({height: ppt_stats_statistics_height(statsjs_data_number_4)+"%"}, 1000);
+					$("#ppt_stats_statistics_4_letter").css('opacity', ppt_stats_statistics_letter_opacity(statsjs_data_number_4));
+				}
+
+				statsjs_data_number_5 = parseInt(statsjs_data_number_5, 10);
+				if(statsjs_data_number_5 != $("#ppt_stats_statistics_5").data("number")){
+					if(statsjs_data_number_5==0){
+						$("#ppt_stats_statistics_5").addClass('display_none');
+					} else {
+						$("#ppt_stats_statistics_5")
+							.removeClass('display_none')
+							.css('display', '');
+					}
+					$("#ppt_stats_statistics_5").data("number", statsjs_data_number_5);
+					$("#ppt_stats_statistics_5_number").html(ppt_stats_statistics_format(statsjs_data_number_5));
+					$("#ppt_stats_statistics_5").stop(true).animate({height: ppt_stats_statistics_height(statsjs_data_number_5)+"%"}, 1000);
+					$("#ppt_stats_statistics_5_letter").css('opacity', ppt_stats_statistics_letter_opacity(statsjs_data_number_5));
+				}
+
+				statsjs_data_number_6 = parseInt(statsjs_data_number_6, 10);
+				if(statsjs_data_number_6 != $("#ppt_stats_statistics_6").data("number")){
+					if(statsjs_data_number_6==0){
+						$("#ppt_stats_statistics_6").addClass('display_none');
+					} else {
+						$("#ppt_stats_statistics_6")
+							.removeClass('display_none')
+							.css('display', '');
+					}
+					$("#ppt_stats_statistics_6").data("number", statsjs_data_number_6);
+					$("#ppt_stats_statistics_6_number").html(ppt_stats_statistics_format(statsjs_data_number_5));
+					$("#ppt_stats_statistics_6").stop(true).animate({height: ppt_stats_statistics_height(statsjs_data_number_6)+"%"}, 1000);
+					$("#ppt_stats_statistics_6_letter").css('opacity', ppt_stats_statistics_letter_opacity(statsjs_data_number_6));
+				}
+
+				{% if data_question_style == 4 %}
+					if(statsjs_data_participants > 0){
+						window.parent.jQuery('#ppt_frame_average').removeClass("visibility_hidden").html(statsjs_data_average/10);
+					} else {
+						window.parent.jQuery('#ppt_frame_average').addClass("visibility_hidden").html("");
+					}
+				{% else %}
+					window.parent.jQuery('#ppt_frame_average').addClass("visibility_hidden").html("");
+				{% endif %}
+			};
+
+
+			var ppt_stats_statistics_refresh = function(){
+				
+				{% if data_preview %}
+					statsjs_data_participants = 200 + Math.floor(Math.random() * 100);
+
+					{% if data_question_style == 4 and data_step == 'question' %}
+						//We hide result
+						statsjs_data_average = 0;
+						statsjs_data_answers_count = 0;
+						statsjs_data_number_1 = 0;
+						statsjs_data_number_2 = 0;
+						statsjs_data_number_3 = 0;
+						statsjs_data_number_4 = 0;
+						statsjs_data_number_5 = 0;
+						statsjs_data_number_6 = 0;
+					{% else %}
+						var data_array = [0, 0, 0, 0, 0, 0]; //length of 6
+						{% if data_question_style == 4 %}
+							for (var i = 0; i < statsjs_data_answers_count; i++) {
+								data_array[i] = Math.floor(Math.random() * 100)/10;
+							}
+						{% else %}
+							for (var i = 0; i < 100; i++) {
+								data_array[ Math.floor(Math.random() * statsjs_data_answers_count) ]++;
+							}
+						{% endif %}
+						statsjs_data_number_1 = data_array[0];
+						statsjs_data_number_2 = data_array[1];
+						statsjs_data_number_3 = data_array[2];
+						statsjs_data_number_4 = data_array[3];
+						statsjs_data_number_5 = data_array[4];
+						statsjs_data_number_6 = data_array[5];
+						//Average for survey
+						statsjs_data_average = 0;
+						{% if data_question_style == 4 %}
+							if(statsjs_data_answers_count>0){
+								for (var i = 0; i < statsjs_data_answers_count; i++) {
+									statsjs_data_average += 10*data_array[i]; //We need to be based on 100points
+								}
+								statsjs_data_average = Math.floor(statsjs_data_average/statsjs_data_answers_count);
+							}
+						{% endif %}
+					{% endif %}
+					ppt_stats_statistics_refresh_screen();
+				{% else %}
+					$.getScript(ppt_stats_statistics_url, ppt_stats_statistics_refresh_screen);
+				{% endif %}
+			};
+		</script>
+	</div>
+
+	<div id="ppt_stats_statistics_participants" class="visibility_hidden" title="{{ _trans('screen', 0, 5, 'html') }}{# answers #}"><span id="ppt_stats_statistics_participants_nbr">{{ data_participants }}</span> <span>{{ _trans('screen', 0, 5, 'html') }}{# answers #}<span></div>
+
+	<div id="ppt_stats_statistics_wrapper">
+		<div id="ppt_stats_statistics_1" class="display_none ppt_stats_statistics_column">
+			<div id="ppt_stats_statistics_1_number" class="ppt_stats_statistics_number">{{ data_number_1 }}%</div>
+			<div id="ppt_stats_statistics_1_letter" class="ppt_stats_statistics_letter">A</div>
+		</div>
+		<div id="ppt_stats_statistics_2" class="display_none ppt_stats_statistics_column">
+			<div id="ppt_stats_statistics_2_number" class="ppt_stats_statistics_number">{{ data_number_2 }}%</div>
+			<div id="ppt_stats_statistics_2_letter" class="ppt_stats_statistics_letter">B</div>
+		</div>
+		<div id="ppt_stats_statistics_3" class="display_none ppt_stats_statistics_column">
+			<div id="ppt_stats_statistics_3_number" class="ppt_stats_statistics_number">{{ data_number_3 }}%</div>
+			<div id="ppt_stats_statistics_3_letter" class="ppt_stats_statistics_letter">C</div>
+		</div>
+		<div id="ppt_stats_statistics_4" class="display_none ppt_stats_statistics_column">
+			<div id="ppt_stats_statistics_4_number" class="ppt_stats_statistics_number">{{ data_number_4 }}%</div>
+			<div id="ppt_stats_statistics_4_letter" class="ppt_stats_statistics_letter">D</div>
+		</div>
+		<div id="ppt_stats_statistics_5" class="display_none ppt_stats_statistics_column">
+			<div id="ppt_stats_statistics_5_number" class="ppt_stats_statistics_number">{{ data_number_5 }}%</div>
+			<div id="ppt_stats_statistics_5_letter" class="ppt_stats_statistics_letter">E</div>
+		</div>
+		<div id="ppt_stats_statistics_6" class="display_none ppt_stats_statistics_column">
+			<div id="ppt_stats_statistics_6_number" class="ppt_stats_statistics_number">{{ data_number_6 }}%</div>
+			<div id="ppt_stats_statistics_6_letter" class="ppt_stats_statistics_letter">F</div>
+		</div>
+	</div>
+
+	<div id="end_ppt_stats_statistics" class="visibility_hidden">
+		<script type="text/javascript">
+			//-1 make sure to update the first time
+			$("#ppt_stats_statistics_1").data("number", -1);
+			$("#ppt_stats_statistics_2").data("number", -1);
+			$("#ppt_stats_statistics_3").data("number", -1);
+			$("#ppt_stats_statistics_4").data("number", -1);
+			$("#ppt_stats_statistics_5").data("number", -1);
+			$("#ppt_stats_statistics_6").data("number", -1);
+			{% if get_refresh %}
+				$("#ppt_stats_statistics_participants_nbr").html("");
+				$("#ppt_stats_statistics_participants").addClass("visibility_hidden");
+				$("#ppt_stats_statistics_1_number").html("");
+				$("#ppt_stats_statistics_2_number").html("");
+				$("#ppt_stats_statistics_3_number").html("");
+				$("#ppt_stats_statistics_4_number").html("");
+				$("#ppt_stats_statistics_5_number").html("");
+				$("#ppt_stats_statistics_6_number").html("");
+				$("#ppt_stats_statistics_1").css('height', "0%");
+				$("#ppt_stats_statistics_2").css('height', "0%");
+				$("#ppt_stats_statistics_3").css('height', "0%");
+				$("#ppt_stats_statistics_4").css('height', "0%");
+				$("#ppt_stats_statistics_5").css('height', "0%");
+				$("#ppt_stats_statistics_6").css('height', "0%");
+				ppt_stats_statistics_refresh();
+				setInterval(ppt_stats_statistics_refresh, 2500);
+			{% else %}
+				ppt_stats_statistics_refresh();
+			{% endif %}
+		</script>
+	</div>
+{% endblock %}
+

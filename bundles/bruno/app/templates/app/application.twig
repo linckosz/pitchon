@@ -1,0 +1,63 @@
+{% extends '/bundles/bruno/app/templates/generic/base.twig' %}
+
+{% block app_application %}
+	<div id="begin_app_application" class="visibility_hidden">
+		<script>
+			JSfiles.later("{{ _filelatest('/bruno/app/scripts/app/application.js') }}", 10);
+			//Some JS that are not linked to a twig file
+			JSfiles.later("{{ _filelatest('/bruno/app/scripts/generic/storage.js') }}", 40);
+			JSfiles.later("{{ _filelatest('/bruno/app/scripts/generic/velocity.js') }}");
+			JSfiles.later("{{ _filelatest('/bruno/app/scripts/generic/state.js') }}");
+
+			var app_application_icon_single_user = new Image();
+			app_application_icon_single_user.src = "{{ _filelatest('/bruno/app/images/submenu/settings/user.png') }}";
+			var app_application_loading_bar = new Image();
+			app_application_loading_bar.src = "{{ _filelatest('/bruno/app/images/generic/base/generic/loading_bar.gif') }}"
+			var app_application_logo_bruno = new Image();
+			app_application_logo_bruno.src = "{{ _filelatest('/bruno/app/images/generic/base/logo/bruno.png') }}";
+			var app_application_cloud = new Image();
+			app_application_cloud.src = "{{ _filelatest('/bruno/app/images/generic/base/bg02.png') }}";
+
+			var app_application_hashtag = false;
+			{% if hashtag %}
+				app_application_hashtag = "{{ hashtag }}";
+			{% endif %}
+
+			Bruno.storage = {
+				last_visit: null,
+				last_visit_clean: false,
+				data: {},
+			};
+
+		</script>
+		{# for Screenshot #}
+		<script src="{{ _filelatest('/scripts/libs/html2canvas/html2canvas.min.js') }}" type="text/javascript"></script>
+		<link rel="stylesheet" href="{{ _filelatest('/bruno/app/styles/app/application.css') }}" type="text/css" />
+		<style type="text/css">
+			.base_color_bg_main_gradient {
+				background-image: url("{{ _filelatest('/bruno/app/images/generic/base/bg02.png') }}"), linear-gradient(140deg, #023762, #00719C) !important;
+			}
+		</style>
+	</div>
+	<div id="app_application_main">
+		<div id="app_application_content">
+			{% include '/bundles/bruno/app/templates/app/content.twig' %}
+		</div>
+	</div>
+	<div id="app_application_submenu" class="display_none">
+		{% include '/bundles/bruno/app/templates/submenu/generic/submenu.twig' %}
+	</div>
+	<div id="app_application_submenu_block" class="base_color_text_grey">
+	</div>
+	<div class="app_application_upload">
+		{% include '/bundles/bruno/app/templates/app/upload.twig' %}
+	</div>
+	<div id="app_application_previewer">
+		{% include '/bundles/bruno/app/templates/generic/previewer.twig' %}
+	</div>
+	<div id="app_application_showppt">
+		{% include '/bundles/bruno/app/templates/generic/showppt.twig' %}
+	</div>
+	<div id="app_application_garbage" class="display_none"></div>
+	<div id="end_app_application" class="visibility_hidden"></div>
+{% endblock %}

@@ -1,0 +1,365 @@
+/*
+ *
+ */
+
+.account_wrapper {
+	background-color: rgba( 55, 55, 55, 0.8);
+	position: absolute;
+	font-size: 14px;
+	width: 100%;
+	height: 100%;
+	min-height: 100%;
+	display: table;
+	overflow: hidden;
+	z-index: 1500;
+	cursor: default;
+}
+
+.account_wrapper > div {
+	position: absolute;
+	top: 100px;
+	top: 25%;
+	left: 0;
+	right: 0;
+	margin: auto;
+	width: 262px;
+}
+
+.account_tab {
+	display: table;
+	position: relative;
+	margin: auto;
+	z-index: 100;
+	width: 262px;
+	text-align: center;
+	color: #F8F8F8;
+	font-size: 16px;
+}
+
+.account_reset_submit_disabled {
+	background-color: #CECECE !important;
+}
+
+.account_no_cursor {
+	cursor: default !important;
+}
+
+.account_tab > div {
+	display: table-cell;
+	width: 50%;
+	background-color: rgba(249, 249, 249, 0.6);
+	padding: 3px;
+	vertical-align: middle;
+	border-radius: 4px 4px 0px 0px;
+}
+
+.account_trans {
+	background-color: transparent !important;
+}
+
+.account_trans > div {
+	background-color: rgba(249, 249, 249, 0.6);
+	border-radius: 4px;
+	padding: 8px;
+	cursor: pointer;
+}
+
+#account_tab_bruno {
+	padding: 0;
+	padding-bottom: 3px;
+	position: relative;
+}
+
+#account_tab_bruno > div {
+	border-radius: 4px;
+	background-color: rgba(251, 160, 38, 0.5) !important;
+	font-size: 30px;
+	font-weight: 200;
+	width: 100%;
+}
+
+
+.account_form {
+	display: table;
+	position: relative;
+	margin: auto;
+	z-index: 100;
+}
+
+.account_form > div, .account_form > label {
+	display: block;
+	background-color: rgba(249, 249, 249, 0.6);
+	width: 222px;
+	padding: 10px 20px 10px 20px;
+	border-radius: 4px;
+	margin-bottom: 3px;
+}
+
+#account_signin_box {
+	display: block;
+}
+
+#account_joinus_email_format {
+	visibility: hidden;
+	font-size: 10px;
+	padding: 1px 4px;
+	color: #4377A0;
+	cursor: default;
+}
+
+.account_signin_box_div {
+	text-align: left;
+}
+
+.account_label_inside {
+	display: block;
+	position: relative;
+	font-size: 16px;
+	color: #3A3D41;
+	cursor: text;
+	margin-bottom: 10px;
+}
+
+.account_label_inside > span {
+	color: #BABDC0;
+	position: absolute;
+	padding: 6px 10px 6px 10px;
+}
+
+.account_label_inside > input {
+	padding: 6px 10px 6px 9px;
+	font-size: 16px;
+	background-color: #FFFFFF;
+	background: -webkit-linear-gradient(#FFFFFF, #F2F2F2) !important; /* For Safari 5.1 to 6.0 */
+	background: -o-linear-gradient(#FFFFFF, #F2F2F2) !important; /* For Opera 11.1 to 12.0 */
+	background: -moz-linear-gradient(#FFFFFF, #F2F2F2) !important; /* For Firefox 3.6 to 15 */
+	background: linear-gradient(#FFFFFF, #F2F2F2) !important; /* Standard syntax */
+	border-radius: 4px;
+	border-width: 1px;
+	width: 200px
+}
+
+.account_submit_progress {
+	margin-top: -10px;
+}
+
+#account_signin_submit {
+	position: relative;
+	display: block;
+	width: 100%;
+	text-align: center;
+	box-sizing: border-box;
+	padding: 8px 10px 8px 10px;
+	border-radius: 4px;
+	font-size: 16px;
+	color: #F8F8F8;
+	background-color: #2895F2;
+	border-style: none;
+	font-weight: bold;
+	cursor: pointer;
+	margin: 16px 0 6px 0;
+}
+
+#account_signin_submit:hover {
+	background-color: #4FA8F4;
+}
+
+.account_signin_submit_active, #account_signin_submit:active {
+	background-color: #2586D8 !important;
+}
+
+#account_signin_submit.account_signin_submit_running, #account_signin_submit:active.account_signin_submit_running {
+	cursor: progress !important;
+	background-color: #4FA8F4 !important;
+}
+
+#account_signin_remember {
+	vertical-align: middle;
+}
+
+#account_signin_remember_label {
+	display: block;
+	font-size: 13px;
+	color: #7E7E7E;
+	padding: 3px 0px 3px 0px;
+}
+
+#account_signin_forgot {
+	display: block;
+	font-size: 13px;
+	color: #2586D8;
+	padding: 3px 0px 3px 0px;
+	cursor: pointer;
+}
+
+#account_signin_forgot:hover {
+	text-decoration: underline;
+}
+
+.account_signin_appendix {
+	text-align: left;
+}
+
+#account_signin_tos_div {
+	margin-top: 3px;
+	font-size: 12px;
+	color: #7E7E7E;
+	cursor: pointer;
+	text-align: left;
+}
+
+#account_signin_tos_div:hover {
+	background-color: rgba(255, 246, 229, 0.9);
+	color: #3A3D41;
+}
+
+#account_error, #account_error_mobile {
+	display: none;
+	text-align: left;
+	background-color: rgba(255, 68, 68, 0.8);
+	width: 222px;
+	padding: 10px 20px 10px 20px;
+	border-radius: 4px;
+	color: #F8F8F8;
+	font-size: 13px;
+	cursor: default;
+}
+#account_error_mobile {
+	position: absolute;
+	z-index: 200;
+}
+
+#account_signin_email_format {
+	visibility: hidden;
+	font-size: 10px;
+	padding: 1px 4px;
+	color: #4377A0;
+	cursor: default;
+}
+
+#account_captcha {
+	width: 80px;
+	height: 30px;
+	border-radius: 3px;
+	border: 1px #B5B5B5 solid;
+	vertical-align: top;
+	cursor: pointer;
+}
+
+#account_signin_captcha {
+	width: 80px;
+}
+
+
+/* ToolTip classses */ 
+#account_signin_password_tooltip {
+	color: #4478A4 !important;
+	margin: 1px;
+	margin-top: -9px;
+	padding: 1px 6px !important;
+	cursor: default;
+	font-size: 10px;
+	visibility: hidden;
+	background-color: #FFFFFF;
+	border-radius: 4px;
+	border: 1px solid #88AECE;
+	position: fixed;
+	z-index: 1;
+	filter:alpha(opacity=0);
+	opacity:0;
+	-moz-opacity:0;
+	-khtml-opacity:0;
+	transition: opacity 1s;
+}
+
+.account_input_focus {
+	visibility: visible !important;
+	filter:alpha(opacity=100) !important;
+	opacity: 1 !important;
+	-moz-opacity: 1 !important;
+	-khtml-opacity: 1 !important;
+}
+
+#account_signin_password_show {
+	position: absolute;
+	cursor: pointer;
+	font-size: 20px;
+	color: #000000;
+	top: 50%;
+	right: 0;
+	padding: 4px 8px;
+	cursor: pointer;
+	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	-o-transform: translateY(-50%);
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	ofilter:alpha(opacity=10);
+	opacity:0.1;
+	-moz-opacity:0.1;
+	-khtml-opacity:0.1;
+}
+#account_signin_password_show:hover {
+	ofilter:alpha(opacity=30);
+	opacity:0.3;
+	-moz-opacity:0.3;
+	-khtml-opacity:0.3;
+}
+#account_signin_password_show:active {
+	ofilter:alpha(opacity=40);
+	opacity:0.4;
+	-moz-opacity:0.4;
+	-khtml-opacity:0.4;
+}
+
+#account_language {
+	position: absolute;
+	bottom: 4px;
+	right: 4px;
+}
+
+.account_language_select {
+	padding: 4px 8px 4px 8px;
+	height: 32px;
+	min-height: 32px;
+	background-color: transparent;
+	color: #FFFFFF;
+	border-color: #FFFFFF;
+	border-width: 1px;
+	border-style: none;
+	background: transparent;
+	max-width: 160px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	font-size: 12px;
+}
+
+.account_language_select option {
+	color: #696F79;
+}
+
+.account_language_select:hover {
+	color: #D4D4D4;
+	border-color: #D4D4D4;
+}
+
+@media only screen and (max-height: 350px){
+	.account_wrapper > div {
+		top: 3px;
+	}
+}
+
+@media only screen and (min-height: 351px) and (max-height: 479px){
+	.account_wrapper > div {
+		top: 60px;
+	}
+}
+
+@media only screen and (max-height: 460px){
+	#account_language {
+		display: none;
+	}
+}

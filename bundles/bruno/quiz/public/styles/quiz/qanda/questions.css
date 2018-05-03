@@ -1,0 +1,129 @@
+.quiz_qanda_questions_wrapper {
+	display: table-row;
+	position: relative;
+}
+
+.quiz_qanda_questions_wrapper.odd {
+	background-color: rgba(0, 0, 0, 0.016);
+	box-shadow: 0 0 14px 6px rgba(0, 0, 0, 0.016);
+	-moz-box-shadow: 0 0 14px 6px rgba(0, 0, 0, 0.016);
+	-webkit-box-shadow: 0 0 14px 6px rgba(0, 0, 0, 0.016);
+}
+
+.quiz_qanda_questions_wrapper.selected {
+	background-color: rgba(255, 255, 255, 0.16) !important;
+	box-shadow: 0 0 14px 6px rgba(255, 255, 255, 0.16) !important;
+	-moz-box-shadow: 0 0 14px 6px rgba(255, 255, 255, 0.16) !important;
+	-webkit-box-shadow: 0 0 14px 6px rgba(255, 255, 255, 0.16) !important;
+}
+
+.quiz_qanda_questions_wrapper_separate {
+	display: table-row;
+	position: relative;
+	width: 100%;
+	height: 1.5em;
+}
+
+.quiz_qanda_questions_wrapper_separate.bottom {
+	height: 3em;
+}
+
+.quiz_qanda_questions_cell {
+	display: table-cell;
+	padding: 2vw 1.5vw;
+	padding: 2vmin 1.5vmin;
+	vertical-align: top;
+}
+
+.quiz_qanda_questions_number {
+}
+
+.quiz_qanda_questions_picture {
+	padding-left: 0;
+	padding-right: 0;
+	vertical-align: top;
+	text-align: center;
+	font-size: 0;
+}
+
+.quiz_qanda_questions_title {
+	width: 100%;
+}
+
+.quiz_qanda_questions_stats {
+	padding-left: 1vw;
+	padding-left: 1vmin;
+}
+
+.quiz_qanda_questions_picture_img {
+	font-size: 0;
+	max-width: 90%;
+	max-height: 30%;
+	max-height: 30vh;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	margin-top: 1.0vw;
+	margin-top: 1.0vmax;
+}
+
+.quiz_qanda_questions_wrapper.not_correct {
+	opacity: 0.2;
+}
+
+.quiz_qanda_questions_wrapper.correct {
+	background-color: rgb(52, 109, 141);
+	box-shadow: 0 0 11px 6px rgba(255, 255, 255, 0.40);
+	-moz-box-shadow: 0 0 11px 6px rgba(255, 255, 255, 0.40);
+	-webkit-box-shadow: 0 0 11x 6px rgba(255, 255, 255, 0.40);
+}
+
+.quiz_qanda_questions_tickbox_icon {
+	position: relative;
+	margin: auto;
+	cursor: pointer;
+	border: 1.5px solid #8DB1BF;
+	width: 28px;
+	height: 28px;
+	border-radius: 100%;
+	background-color: rgba(255, 255, 255, 0.96);
+	box-shadow: inset 3px 4px 10px -5px #313335;
+	-moz-box-shadow: inset 3px 4px 10px -5px #313335;
+	-webkit-box-shadow: inset 3px 4px 10px -5px #313335;
+}
+
+.quiz_qanda_questions_tickbox_check {
+	font-size: 36px;
+	color: rgba(73, 184, 74, 0.94);
+	position: absolute;
+	z-index: 3;
+	top: -5px;
+	right: -8px;
+}
+
+
+#quiz_confirm {
+	z-index: 3;
+	position: fixed;
+	display: inline-block;
+	color: rgba(255, 255, 255, 0.85);
+	border: 1px solid rgba(255, 255, 255, 0.65);
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 20px;
+	background-color: rgba(70, 211, 129, 0.6);
+	text-align: center;
+	padding: 8px 36px;
+	right: 5%;
+	bottom: 5%;
+}
+
+#quiz_confirm:hover {
+	color: rgba(255, 255, 255, 0.90);
+	border: 1px solid rgba(255, 255, 255, 0.80);
+	background-color: rgba(70, 211, 129, 0.7);
+}
+
+#quiz_confirm:active {
+	color: rgba(255, 255, 255, 1);
+	border: 1px solid rgba(255, 255, 255, 1);
+	background-color: rgba(70, 211, 129, 0.9);
+}

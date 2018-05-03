@@ -1,0 +1,79 @@
+{% extends '/bundles/bruno/quiz/templates/quiz/frame.twig' %}
+{% block qanda %}
+	<div id="begin_quiz_qanda_questions" class="visibility_hidden">
+		<link rel="stylesheet" href="{{ _filelatest('/bruno/quiz/styles/quiz/qanda/questions.css') }}" type="text/css" />
+		{% if data_question_style == 2 %}
+			<style type="text/css">
+				.quiz_qanda_questions_picture_img {
+					max-width: 100%;
+					max-height: 40%;
+					max-height: 40vh;
+				}
+			</style>
+		{% endif %}
+		<script type="text/javascript">
+			{% if data_statisticsid_enc %}
+				var base_answer_url = location.protocol+'//quiz.'+document.domainRoot+"/a/{{ data_statisticsid_enc|raw }}/";
+			{% else %}
+				var base_answer_url = location.protocol+'//quiz.'+document.domainRoot+"/a/preview/"; {# Demo mode (note: it works because "i" is not recognized by STR::integer_map) #}
+			{% endif %}
+		</script>
+	</div>
+
+	<div class="quiz_qanda_questions_wrapper_separate"></div>
+
+	{% set has_picture = false %}
+	{% for bullet, prefix in data_answers %}
+		{% set id = attribute(_context, prefix~'_id') %}
+		{% set title = attribute(_context, prefix~'_title') %}
+		{% set picture = attribute(_context, prefix~'_picture') %}
+		{% set braket = ')' %}
+		{% if data_question_style == 3 %}
+			{% set braket = '.' %}
+		{% endif %}
+		<div find="quiz_answer" answerid="{{ id }}" class="quiz_qanda_questions_wrapper">
+			<div class="quiz_qanda_questions_cell quiz_qanda_questions_number">{{ bullet }}{{ braket }}</div>
+			<div class="quiz_qanda_questions_cell quiz_qanda_questions_title">
+				{% if data_question_style != 2 %}
+					<div>{{ title }}</div>
+				{% endif %}
+				{% if picture %}
+					{% set has_picture = true %}
+					<img class="quiz_qanda_questions_picture_img" src="{{ picture }}" />
+				{% endif %}
+			</div>
+			<div class="quiz_qanda_questions_cell quiz_qanda_questions_tickbox">
+				<div class="quiz_qanda_questions_tickbox_icon">
+					<div find="check" class="quiz_qanda_questions_tickbox_check fa fa-check display_none"></div>
+				</div>
+			</div>
+		</div>
+		<div class="quiz_qanda_questions_wrapper_separate"></div>
+	{% endfor %}
+
+	<div class="quiz_qanda_questions_wrapper_separate bottom"></div>
+
+	<span id="quiz_confirm" class="showppt_button display_none">
+		{% if data_question_style == 3 %}
+			{{ _trans('quiz', 0, 19, 'html') }}{# Send #}
+		{% else %}
+			{{ _trans('quiz', 0, 3, 'html') }}{# Confirm #}
+		{% endif %}
+	</span>
+
+	<div id="end_quiz_qanda_questions" class="visibility_hidden">
+		{% if has_picture %}
+			<style type="text/css">
+				.quiz_qanda_questions_cell {
+					display: table-cell;
+					padding-top: 0.5vw;
+					padding-top: 0.5vmin;
+					padding-bottom: 0.5vw;
+					padding-bottom: 0.5vmin;
+				}
+			</style>
+		{% endif %}
+		<script src="{{ _filelatest('/bruno/quiz/scripts/quiz/qanda/questions.js') }}" type="text/javascript"></script>
+	</div>
+{% endblock %}
+

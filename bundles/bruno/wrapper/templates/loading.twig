@@ -1,0 +1,26 @@
+{# category 9 #}
+<div id="begin_wrapper_loading" class="visibility_hidden">
+	<script>
+		wrapper_load_progress.progress_bar = 'wrapper_loading_progress_bar';
+		wrapper_load_progress.progress_wall = 'wrapper_loading_progress_wall';
+	</script>
+	<link rel="stylesheet" href="{{ _filelatest('/bruno/wrapper/styles/loading.css') }}" type="text/css" />
+</div>
+<div id="wrapper_loading_progress_wall">
+	<div id="wrapper_loading_progress_wall_cell">
+		<table id="wrapper_loading_table">
+			<tr>
+				<td></td>
+				<td id="wrapper_loading_cell_center">
+					<div id="wrapper_loading_content">{{ title }}</div>
+					<div id="wrapper_loading_progress">
+						<div id="wrapper_loading_progress_bar"></div>
+					</div>
+				</td>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+</div>
+<div id="end_wrapper_loading" class="visibility_hidden"></div>
+

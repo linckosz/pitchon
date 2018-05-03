@@ -1,0 +1,92 @@
+{% extends '/bundles/bruno/quiz/templates/quiz/frame.twig' %}
+{% block qanda %}
+	<div id="begin_quiz_qanda_survey" class="visibility_hidden">
+		<link rel="stylesheet" href="{{ _filelatest('/bruno/quiz/styles/quiz/qanda/survey.css') }}" type="text/css" />
+		<script type="text/javascript">
+			var score_total = 0;
+			{% if data_statisticsid_enc %}
+				var base_answer_url = location.protocol+'//quiz.'+document.domainRoot+"/s/{{ data_statisticsid_enc|raw }}";
+			{% else %}
+				var base_answer_url = location.protocol+'//quiz.'+document.domainRoot+"/s/preview"; {# Demo mode (note: it works because "i" is not recognized by STR::integer_map) #}
+			{% endif %}
+			var trans_unfinshed = "{{ _trans('quiz', 0, 20, 'js') }}"; ////You haven't scored all, those not scored will be ignored. Do you want to send your result?
+		</script>
+	</div>
+
+	<div class="quiz_qanda_survey_wrapper_separate"></div>
+
+	{% set has_picture = false %}
+	{% for bullet, prefix in data_answers %}
+		{% set id = attribute(_context, prefix~'_id') %}
+		{% set title = attribute(_context, prefix~'_title') %}
+		{% set picture = attribute(_context, prefix~'_picture') %}
+		{% set number = attribute(_context, prefix~'_number') %}
+		{% set braket = ')' %}
+		<script type="text/javascript">
+			score_total++;
+		</script>
+		<div find="quiz_answer" number="{{ id }}" class="quiz_qanda_survey_wrapper">
+			<div class="quiz_qanda_survey_cell quiz_qanda_survey_number">{{ bullet }}{{ braket }}</div>
+			<div class="quiz_qanda_survey_cell quiz_qanda_survey_title">
+				<div>{{ title }}</div>
+				<div find="quiz_number_{{ number }}" class="quiz_qanda_survey_stars">
+					<span find="quiz_star" class="fa fa-star-o quiz_qanda_survey_star" title="1"  score="1"  number="{{ number }}">
+						<span class="quiz_qanda_survey_star_score">1</span>
+					</span>
+					<span find="quiz_star" class="fa fa-star-o quiz_qanda_survey_star" title="2"  score="2"  number="{{ number }}">
+						<span class="quiz_qanda_survey_star_score">2</span>
+					</span>
+					<span find="quiz_star" class="fa fa-star-o quiz_qanda_survey_star" title="3"  score="3"  number="{{ number }}">
+						<span class="quiz_qanda_survey_star_score">3</span>
+					</span>
+					<span find="quiz_star" class="fa fa-star-o quiz_qanda_survey_star" title="4"  score="4"  number="{{ number }}">
+						<span class="quiz_qanda_survey_star_score">4</span>
+					</span>
+					<span find="quiz_star" class="fa fa-star-o quiz_qanda_survey_star" title="5"  score="5"  number="{{ number }}">
+						<span class="quiz_qanda_survey_star_score">5</span>
+					</span>
+					<span find="quiz_star" class="fa fa-star-o quiz_qanda_survey_star" title="6"  score="6"  number="{{ number }}">
+						<span class="quiz_qanda_survey_star_score">6</span>
+					</span>
+					<span find="quiz_star" class="fa fa-star-o quiz_qanda_survey_star" title="7"  score="7"  number="{{ number }}">
+						<span class="quiz_qanda_survey_star_score">7</span>
+					</span>
+					<span find="quiz_star" class="fa fa-star-o quiz_qanda_survey_star" title="8"  score="8"  number="{{ number }}">
+						<span class="quiz_qanda_survey_star_score">8</span>
+					</span>
+					<span find="quiz_star" class="fa fa-star-o quiz_qanda_survey_star" title="9"  score="9"  number="{{ number }}">
+						<span class="quiz_qanda_survey_star_score">9</span>
+					</span>
+					<span find="quiz_star" class="fa fa-star-o quiz_qanda_survey_star" title="10" score="10" number="{{ number }}">
+						<span class="quiz_qanda_survey_star_score">10</span>
+					</span>
+				</div>
+				{% if picture %}
+					{% set has_picture = true %}
+					<img class="quiz_qanda_survey_picture_img" src="{{ picture }}" />
+				{% endif %}
+			</div>
+		</div>
+		<div class="quiz_qanda_survey_wrapper_separate"></div>
+	{% endfor %}
+
+	<div class="quiz_qanda_survey_wrapper_separate bottom"></div>
+
+	<span id="quiz_confirm" class="showppt_button">{{ _trans('quiz', 0, 19, 'html') }}{# Send #}</span>
+
+	<div id="end_quiz_qanda_survey" class="visibility_hidden">
+		{% if has_picture %}
+			<style type="text/css">
+				.quiz_qanda_survey_cell {
+					display: table-cell;
+					padding-top: 0.5vw;
+					padding-top: 0.5vmin;
+					padding-bottom: 0.5vw;
+					padding-bottom: 0.5vmin;
+				}
+			</style>
+		{% endif %}
+		<script src="{{ _filelatest('/bruno/quiz/scripts/quiz/qanda/survey.js') }}" type="text/javascript"></script>
+	</div>
+{% endblock %}
+

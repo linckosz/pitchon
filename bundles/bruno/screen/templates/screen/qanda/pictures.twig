@@ -1,0 +1,45 @@
+{% extends '/bundles/bruno/screen/templates/screen/frame.twig' %}
+{% block qanda %}
+	<div id="begin_ppt_qanda_pictures" class="visibility_hidden">
+		<link rel="stylesheet" href="{{ _filelatest('/bruno/screen/styles/screen/qanda/pictures.css') }}" type="text/css" />
+	</div>
+
+	<div class="ppt_qanda_pictures_wrapper">
+
+		<div class="ppt_qanda_pictures_wrapper_row">
+
+			{% for number, prefix in data_answers %}
+				{% set picture = attribute(_context, prefix~'_picture') %}
+				{% set correct = attribute(_context, prefix~'_correct') %}
+				{% set class_correct = '' %}
+				{% if get_style == 'answer' and data_question_style not in [3, 4] %}{# Exclude statistics and survey #}
+					{% set class_correct = 'not_correct' %}
+					{% if correct %}
+						{% set class_correct = 'correct' %}
+					{% endif %}
+				{% endif %}
+
+				{% if (data_answers|length <= 4 and number == 3) or (data_answers|length > 4 and number == 4) %}
+					</div>
+					<div class="ppt_qanda_pictures_wrapper_row">
+				{% endif %}
+
+				<style type="text/css">
+					#ppt_qanda_pictures_picture_{{ number }} {
+						background-image: url("{{ picture }}");
+					}
+				</style>
+
+				<div id="ppt_qanda_pictures_picture_{{ number }}" class="ppt_qanda_pictures_picture {{ class_correct }}">
+					<div class="ppt_qanda_pictures_number">{{ number }}</div>
+					<div class="ppt_qanda_pictures_check fa fa-check {{ class_correct }}"></div>
+				</div>
+
+			{% endfor %}
+
+		</div>
+
+	</div>
+
+	<div id="end_ppt_qanda_pictures" class="visibility_hidden"></div>
+{% endblock %}

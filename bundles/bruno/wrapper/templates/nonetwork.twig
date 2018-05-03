@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-barstyle" content="default">
+<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="date=no">
+<meta name="format-detection" content="address=no">
+<style type="text/css">
+	html, body {
+		color: #FFFFFF;
+		font-family: "Helvetica Neue", Roboto, "San Francisco", Helvetica, Tahoma, Verdana, "Nimbus Sans L", "URW Gothic L", "Lucida Grande", Geneva, "DejaVu Sans", "Microsoft Sans Serif", sans-serif;
+		font-size: 24px;
+		padding: 0;
+		margin: 0;
+		height: 100%;
+		width: 100%;
+		position: relative;
+		text-align: center;
+		vertical-align: middle;
+		background-color: #00719c !important;
+		background: -webkit-linear-gradient(#00719c, #023762) !important; /* For Safari 5.1 to 6.0 */
+		background: -o-linear-gradient(#00719c, #023762) !important; /* For Opera 11.1 to 12.0 */
+		background: -moz-linear-gradient(#00719c, #023762) !important; /* For Firefox 3.6 to 15 */
+		background: linear-gradient(#00719c, #023762) !important; /* Standard syntax */
+	}
+	#nonetwork {
+		top: 40%;
+		position: absolute;
+		width: 100%;
+		text-align: center;
+	}
+	#domain {
+		bottom: 4px;
+		right: 4px;
+		position: absolute;
+		text-align: right;
+		font-size: 14px;
+	}
+</style>
+
+</head>
+<body>
+	<div id="nonetwork">
+		No Network
+	</div>
+	<div id="domain">
+		{{ http_host }}
+	</div>
+</div>
+</body>
+</html>

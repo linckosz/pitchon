@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+<title>{{ title }}</title>
+<link rel="shortcut icon" href="{{ _filelatest('/favicon.ico') }}" />
+<link rel="icon" href="{{ _filelatest('/favicon.png') }}" type="image/png" />
+<link rel="apple-touch-icon" href="{{ _filelatest('/favicon.png') }}" type="image/png" />
+{# remove address bar for some mobile browsers #}
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-barstyle" content="default">
+
+<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="date=no">
+<meta name="format-detection" content="address=no">
+
+<!-- Start SEO -->
+<meta name="description" content="Make your pitch more interactive and please your audience!" />
+<meta name="Keywords" content="pitch" />
+<!-- End SEO -->
+
+<link rel="stylesheet" href="{{ _filelatest('/styles/libs/jquery-ui.min.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ _filelatest('/styles/libs/font-awesome.min.css') }}" type="text/css" />
+
+<link rel="stylesheet" href="{{ _grouplatest('wrapper.css',[
+	'/bruno/wrapper/styles/responsive.css',
+	'/bruno/wrapper/styles/divers.css',
+	'/bruno/wrapper/styles/wrapper.css',
+	'/styles/libs/roboto.css',
+]) }}" type="text/css" />
+
+<!--[if lte IE 8]>
+	console.log('addEventlisterner bugs in IE8');
+	<script src="{{ _filelatest('/scripts/libs/ie8.js') }}" type="text/javascript"></script>
+<![endif]-->
+
+<script>
+	var wrapper_user_ip = "{{ user_info_3 }}";
+</script>
+
+<script src="{{ _filelatest('/scripts/libs/jquery-3.2.1.min.js') }}" type="text/javascript"></script>
+<script src="{{ _filelatest('/scripts/libs/jquery-ui.min.js') }}" type="text/javascript"></script>
+
+{# can only regroup files that does not have absolute path access #}
+<script src="{{ _grouplatest('wrapper.wrapper.js', [
+	'/bruno/wrapper/scripts/polyfill.js',
+	'/scripts/libs/js.cookie.js',
+	'/scripts/libs/json3.min.js',
+	'/scripts/libs/blueimp.md5.min.js',
+	'/scripts/libs/amplify.store.min.js',
+	'/scripts/libs/fastclick.min.js',
+	'/scripts/libs/velocity.min.js',
+	'/scripts/libs/velocity.ui.min.js',
+	'/scripts/libs/verge.min.js',
+	'/scripts/libs/media.match.min.js',
+	'/scripts/libs/enquire.min.js',
+	'/bruno/wrapper/scripts/php.js',
+	'/scripts/libs/base64.js',
+	'/scripts/libs/object-keys-polyfill.js',
+	'/scripts/libs/iscroll.js',
+	'/scripts/libs/jquery.selection.js',
+	'/scripts/libs/es6-promise.min.js',
+	'/scripts/libs/clipboard.min.js',
+	'/bruno/wrapper/scripts/error.js',
+	'/bruno/wrapper/scripts/static.js',
+	'/bruno/wrapper/scripts/responsive.js',
+]) }}" type="text/javascript"></script>
+
+<script type="text/javascript" src="https://l2.io/ip.js?var=wrapper_user_ipp&{{ 'now'|date('Ymd') }}"></script>
+
+<script>
+
+var wrapper_user_info = [
+	"{{ user_info_0 }}",
+	"{{ user_info_1 }}",
+	"{{ user_info_2 }}",
+	wrapper_user_ip, //Because of nginx stream we need to get IP in a different way
+];
+
+var wrapper_hash = document.location.hash;
+var wrapper_href = window.location.href;
+//Delete URI
+window.history.replaceState(null, null, document.location.pathname);
+
+window.name = 'pitchon';
+document.domainRoot = '{{ domain }}';
+document.brunoDev = '{{ bruno_dev }}';
+var wrapper_show_error = {{ bruno_show_dev }};
+var wrapper_title = "";
+var wrapper_main_title = "{{ title }}";
+
+//In IE console is undefined if the dev tool is closed
+if(!window.console){
+	console = {
+		log: function() {
+			return true;
+		}
+	};
+}
+
+var wrapper_link = [];
+wrapper_link['root'] = location.protocol+'//'+document.domain;
+wrapper_link['support'] = "{{ support }}";
+
+//Do not use "success", it can bug for some files, use "complete" as callback
+$.cachedScript = function( url ) {
+	options = $.extend( {}, {
+		dataType: "script",
+		cache: true, //Do not need to care here, the cacheability is handle by PHP header
+		url: url, //Note: A different sub domain will not cache the file
+	});
+	return $.ajax( options );
+};
+
+//Global namespace (extend or create)
+var Bruno = Bruno || {}; //Create singleton object
+
+//Keep a record of JS files to be launch at the end of the page loading
+//Can only add methods, cannot add property because it migth bug the page loading
+var JSfiles = {};
+
+//This timeout help some window resize, or scroll, to not be called continuously
+var wrapper_timeout_timer = 200;
+
+//Number of priorities load to helps the progress bar to move
+var wrapper_load_progress = {
+	progress_bar: null, //ID of HTML element. A % will be given to it's width.
+	progress_wall: null, //ID of HTML element. The element will progressively disappear after the progress match 100%
+	progress: 0,
+	done: false,
+	cb_complete: [],
+	JSfiles_total: 0,
+	JSfiles_current: 0,
+	JSfiles_pourcentage_start: 10,
+	JSfiles_pourcentage_end: 60,
+
+	add_cb_complete: function(cb){
+		if(typeof cb == "function"){
+			this.cb_complete.push(cb);
+		}
+	},
+	
+	JSfiles_load: function(){
+		this.JSfiles_current++;
+		var pc = 0;
+		if(this.JSfiles_total>0){
+			pc = this.JSfiles_current/this.JSfiles_total;
+		}
+		var result = 50;
+		if(pc<0){ pc=0; }
+		else if(pc>1){ pc=1; }
+		result = Math.ceil(
+			this.JSfiles_pourcentage_start + pc*(this.JSfiles_pourcentage_end - this.JSfiles_pourcentage_start)
+		);
+		if(result<this.JSfiles_pourcentage_start){ result=this.JSfiles_pourcentage_start; }
+		else if(result>this.JSfiles_pourcentage_end){ result=this.JSfiles_pourcentage_end; }
+		this.move(result);
+		return true;
+	},
+
+	hide_progress_wall: function(){
+		if(this.progress_wall && $('#'+this.progress_wall).length>0){
+			$('#'+this.progress_wall).velocity(
+				{
+					opacity: 0,
+				},
+				{
+					delay: 150,
+					duration: 100,
+					begin: function(){
+						for(var i in wrapper_load_progress.cb_complete){
+							if(typeof wrapper_load_progress.cb_complete[i] == "function"){
+								wrapper_load_progress.cb_complete[i]();
+							}
+						}
+					},
+					complete: function(){
+						$(this).hide().recursiveRemove();
+						$('#wrapper_loading').addClass('display_none');
+					},
+				}
+			);
+		}
+	},
+
+	move: function(value){
+		if(this.done){
+			//Do nothing since the page is open already
+			return true;
+		}
+		var time = 2000;
+		var that = this;
+		if(typeof value === 'number'){
+			if(value < 0){ value = 0; }
+			else if(value > 100){ value = 100; }
+			else if(value <= this.progress) { return true; } //We do nothing, because we only go forward
+			this.progress = value;
+			if(value>=100){
+				time = 300;
+			}
+			if(!this.done && this.progress_bar && $('#'+this.progress_bar).length>0){
+				value = Math.ceil(value);
+				if(value>=100){
+					this.done = true;
+				}
+				$('#'+this.progress_bar).clearQueue().stop().animate(
+					{
+						width: value+'%',
+					},
+					{
+						duration: time,
+						complete: function(){
+							if(wrapper_load_progress.progress>=100){
+								wrapper_load_progress.hide_progress_wall();
+								wrapper_load_progress.done = true;
+							}
+						},
+					}
+				);
+			} else {
+				that.hide_progress_wall();
+				that.done = true;
+			}
+		}
+	},
+};
+
+//Keep a record of all functions we need to run once all JS files are loaded
+var wrapper_after_dom = {};
+
+JSfiles.finish = function(action, priority){
+	if(typeof priority !== 'number'){ priority = 50;}
+	if(typeof wrapper_after_dom[priority] === 'undefined'){
+		wrapper_after_dom[priority] = [];
+	}
+	wrapper_after_dom[priority].push(action);
+};
+
+//It keeps a record of all libraries that must be loaded after DOM load, it has priority level too
+//Libraries with priority lower than 50 might be a dependency of other libraries, higher than 50 are sure other library will not need it (default).
+JSfiles.later = function(url, priority){
+	if(typeof priority !== 'number'){ priority = 50; }
+	if(typeof JSfiles[priority] === 'undefined'){
+		JSfiles[priority] = [];
+	}
+	JSfiles[priority].push(url);
+};
+
+JSfiles.loadLibraries = function(){
+	var files = [];
+	var url = '';
+	var length = 0;
+	var pri_tp = false;
+	//It will help to start from the smallest number
+	for(var pri in this){
+		if($.isNumeric(pri) && ($.type(this[pri]) == 'array' || $.type(this[pri]) == 'object')){
+			if(pri_tp === false || pri < pri_tp){
+				pri_tp = pri;
+			}
+		}
+	}
+	if(pri_tp !== false){
+		files = this[pri_tp];
+		length = files.length;
+		for(var key in files){
+			url = files[key];
+			$.cachedScript(url).always(function() {
+				length--;
+				if(length<=0){
+					wrapper_load_progress.JSfiles_load();
+					delete JSfiles[pri_tp];
+					JSfiles.loadLibraries();
+				}
+			});
+		}
+		return true;
+	}
+	//Once it reach a string, it means there is no more js files to load, so we can launch the ultimate functions
+	var asc_order = Object.keys(wrapper_after_dom).sort(function(a, b) { return a - b; }); //From small(high priority) to big(low priority)
+	for(var i in asc_order){
+		pri_tp = asc_order[i];
+		for(var action in wrapper_after_dom[pri_tp]){
+			wrapper_after_dom[pri_tp][action]();
+		}
+	}
+	//The latest operation would be to trigger the window resize event to be sure the display fit the screen
+	$(window).trigger('resize');
+	//After 20s wait we always force to display
+	setTimeout(function(){
+		wrapper_load_progress.move(80);
+	}, 3000);
+	setTimeout(function(){
+		wrapper_load_progress.move(90);
+	}, 6000);
+	setTimeout(function(){
+		wrapper_load_progress.move(95);
+	}, 20000);
+	setTimeout(function(){
+		wrapper_load_progress.move(99);
+	}, 30000);
+	setTimeout(function(){//In all cases open the page after 45s
+		wrapper_load_progress.move(100);
+	}, 45000);
+};
+
+var wrapper_localstorage = {
+	user_id: parseInt('{{ user_id }}', 10),
+	user_md5: '{{ user_md5 }}',
+};
+wrapper_localstorage.prefix = wrapper_localstorage.user_id+"_";
+
+var wrapper_neutral = new Image();
+wrapper_neutral.src = "{{ _filelatest('/bruno/wrapper/images/generic/neutral.png') }}";
+
+//Load all JS libraries only after DOM load
+$(function() {
+	wrapper_load_progress.move(5);
+	for(var pri in JSfiles){
+		if($.isNumeric(pri) && ($.type(JSfiles[pri]) == 'array' || $.type(JSfiles[pri]) == 'object')){
+			wrapper_load_progress.JSfiles_total++;
+		}
+	}
+	JSfiles.loadLibraries();
+});
+
+//Minimal libraries
+JSfiles.later("{{ _filelatest('/bruno/wrapper/scripts/null.js') }}", 0); //This empty file helps to load the first 304
+JSfiles.later("{{ _filelatest('/bruno/wrapper/scripts/divers.js') }}", 1);
+JSfiles.later("{{ _filelatest('/bruno/wrapper/scripts/language.js') }}", 30);
+JSfiles.later("{{ _filelatest('/bruno/wrapper/scripts/date.js') }}", 30);
+JSfiles.later("{{ _filelatest('/bruno/wrapper/scripts/wrapper.js') }}", 40);
+JSfiles.later("{{ _filelatest('/bruno/wrapper/scripts/mobile.js') }}", 50);
+
+//Check if WebWorker is available
+var webworker = false;
+if (typeof Worker != 'undefined') {
+	webworker = new Worker("{{ _filelatest('/bruno/wrapper/scripts/worker.js') }}");
+}
+
+if(webworker){
+	//Return message
+	webworker.addEventListener("message", function(event){
+		webworker_operation.launch_operation(event);
+	});
+}
+
+</script>
+
+{# Warning: The following JS files are dynamically built by PHP, so cannot be regrouped #}
+<script src="{{ _filelatest('/wrapper/translation/list.js') }}" type="text/javascript"></script>
+<script src="{{ _filelatest('/wrapper/translation/date.js') }}" type="text/javascript"></script>
+
+</head>
+<body id="body_bruno" class="base_color_text_white unselectable">
+	<div id="wrapper_loading">
+		{% include '/bundles/bruno/wrapper/templates/loading.twig' %}
+	</div>
+	<div id="wrapper_offline" class="display_none">
+		{{ _trans('wrapper', 0, 5, 'html') }}{# offline #}
+	</div>
+	{% block base %}
+	{% endblock %}
+</body>
+</html>

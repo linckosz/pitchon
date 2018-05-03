@@ -1,0 +1,100 @@
+{% extends '/bundles/bruno/screen/templates/base.twig' %}
+{% block frame %}
+	<div id="begin_ppt_stats_questions" class="visibility_hidden">
+		<link rel="stylesheet" href="{{ _filelatest('/bruno/screen/styles/screen/stats/questions.css') }}" type="text/css" />
+		<style type="text/css">
+			#ppt_stats_questions_correct {
+				height: {{ data_correct }}%;
+			}
+			#ppt_stats_questions_not_correct {
+				height: {{ data_not_correct }}%;
+			}
+		</style>
+		<script type="text/javascript">
+			var ppt_stats_questions_url = "/statsjs/{{ data_questionid_enc }}.js";
+			{% if data_preview %}
+				ppt_stats_questions_url += '?preview=1';
+			{% endif %}
+
+			var statsjs_data_participants = parseInt({{ data_participants }}, 10);
+			var statsjs_data_correct = parseInt({{ data_correct }}, 10);
+			var statsjs_data_not_correct = parseInt({{ data_not_correct }}, 10);
+
+			var ppt_stats_questions_refresh_screen = function(){
+				
+				statsjs_data_participants = parseInt(statsjs_data_participants, 10);
+				if(statsjs_data_participants){
+					$("#ppt_stats_questions_participants_nbr").html(statsjs_data_participants);
+				} else {
+					$("#ppt_stats_questions_participants_nbr").html("");
+				}
+
+				statsjs_data_correct = parseInt(statsjs_data_correct, 10);
+				if(statsjs_data_correct){
+					$("#ppt_stats_questions_number_correct").html(statsjs_data_correct+"%");
+				} else {
+					$("#ppt_stats_questions_number_correct").html("");
+				}
+
+				statsjs_data_not_correct = parseInt(statsjs_data_not_correct, 10);
+				if(statsjs_data_not_correct){
+					$("#ppt_stats_questions_number_not_correct").html(statsjs_data_not_correct+"%");
+				} else {
+					$("#ppt_stats_questions_number_not_correct").html("");
+				}
+
+				$("#ppt_stats_questions_correct").stop(true).animate({height: statsjs_data_correct+"%"}, 1000);
+				$("#ppt_stats_questions_not_correct").stop(true).animate({height: statsjs_data_not_correct+"%"}, 1000);
+			};
+			
+			var ppt_stats_questions_refresh = function(){
+				{% if data_preview %}
+					statsjs_data_participants = 200 + Math.floor(Math.random() * 100);
+					statsjs_data_correct = 20 + Math.floor(Math.random() * 80);
+					statsjs_data_not_correct = 100 - statsjs_data_correct;
+					ppt_stats_questions_refresh_screen();
+				{% else %}
+					$.getScript(ppt_stats_questions_url, function(){
+						if(
+							   typeof statsjs_data_participants != 'undefined'
+							&& typeof statsjs_data_correct != 'undefined'
+							&& typeof statsjs_data_not_correct != 'undefined'
+						){
+							ppt_stats_questions_refresh_screen();
+						}
+					});
+				{% endif %}
+			};
+		</script>
+	</div>
+
+	<div id="ppt_stats_questions_participants" class="visibility_hidden" title="{{ _trans('screen', 0, 5, 'html') }}{# answers #}"><span id="ppt_stats_questions_participants_nbr">{{ data_participants }}</span> <span>{{ _trans('screen', 0, 5, 'html') }}{# answers #}<span></div>
+
+	<div id="ppt_stats_questions_wrapper">
+		<div id="ppt_stats_questions_correct">
+			<div id="ppt_stats_questions_number_correct" class="ppt_stats_questions_number">{{ data_correct }}%</div>
+			<div class="ppt_stats_questions_check fa fa-check"></div>
+		</div>
+		<div id="ppt_stats_questions_not_correct">
+			<div id="ppt_stats_questions_number_not_correct" class="ppt_stats_questions_number">{{ data_not_correct }}%</div>
+		</div>
+	</div>
+
+	<div id="end_ppt_stats_questions" class="visibility_hidden">
+		<script type="text/javascript">
+			{% if get_refresh %}
+				$("#ppt_stats_questions_participants_nbr").html("");
+				$("#ppt_stats_questions_participants").addClass("visibility_hidden");
+				$("#ppt_stats_questions_number_correct").html("");
+				$("#ppt_stats_questions_number_not_correct").html("");
+				$("#ppt_stats_questions_correct").css('height', "0%");
+				$("#ppt_stats_questions_not_correct").css('height', "0%");
+				ppt_stats_questions_refresh();
+				setInterval(ppt_stats_questions_refresh, 2500);
+			{% else %}
+				ppt_stats_questions_refresh();
+			{% endif %}
+		</script>
+	</div>
+{% endblock %}
+

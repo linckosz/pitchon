@@ -1,0 +1,49 @@
+{% extends '/bundles/bruno/screen/templates/screen/frame.twig' %}
+{% block qanda %}
+	<div id="begin_ppt_qanda_questions" class="visibility_hidden">
+		<link rel="stylesheet" href="{{ _filelatest('/bruno/screen/styles/screen/qanda/questions.css') }}" type="text/css" />
+	</div>
+
+	{% set has_picture = false %}
+	{% for number, prefix in data_answers %}
+		{% set title = attribute(_context, prefix~'_title') %}
+		{% set picture = attribute(_context, prefix~'_picture') %}
+		{% set correct = attribute(_context, prefix~'_correct') %}
+		{% set class_correct = '' %}
+		{% if get_style == 'answer' and data_question_style not in [3, 4] %}{# Exclude statistics and survey #}
+			{% set class_correct = 'not_correct' %}
+			{% if correct %}
+				{% set class_correct = 'correct' %}
+			{% endif %}
+		{% endif %}
+		{% set braket = ')' %}
+		{% if data_question_style in [3] %}
+			{% set braket = '.' %}
+		{% endif %}
+		<div class="ppt_qanda_questions_wrapper {{ class_correct }}">
+			<div class="ppt_qanda_questions_cell ppt_qanda_questions_number">{{ number }}{{ braket }}</div>
+			<div class="ppt_qanda_questions_cell ppt_qanda_questions_picture">
+				{% if picture %}
+					{% set has_picture = true %}
+					<img class="ppt_qanda_questions_picture_img" src="{{ picture }}" />
+				{% endif %}
+			</div>
+			<div class="ppt_qanda_questions_cell ppt_qanda_questions_title">{{ title }}</div>
+		</div>
+	{% endfor %}
+
+	<div id="end_ppt_qanda_questions" class="visibility_hidden">
+		{% if has_picture %}
+			<style type="text/css">
+				.ppt_qanda_questions_cell {
+					display: table-cell;
+					padding-top: 0.5vw;
+					padding-top: 0.5vmin;
+					padding-bottom: 0.5vw;
+					padding-bottom: 0.5vmin;
+				}
+			</style>
+		{% endif %}
+	</div>
+{% endblock %}
+

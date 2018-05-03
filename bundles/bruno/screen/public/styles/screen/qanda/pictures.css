@@ -1,0 +1,78 @@
+.ppt_qanda_pictures_wrapper {
+	display: table;
+	border-spacing: 1vh;
+	border-spacing: 1vmin;
+	border-collapse: separate;
+	table-layout: fixed;
+	position: relative;
+	width: 90%;
+	max-width: 90%;
+	height: 70%;
+	max-height: 70%;
+	margin: auto;
+	padding: 0;
+	font-size: 0;
+	top: 1%;
+}
+
+.ppt_qanda_pictures_wrapper_row {
+	display: table-row;
+}
+
+.ppt_qanda_pictures_picture {
+	width: auto;
+	height: 49%;
+	position: relative;
+	display: table-cell;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	background-color: rgba(255, 255, 255, 0.01);
+	box-sizing: border-box;
+	border: 1px solid rgba(255, 255, 255, 0.10);
+	margin: 0;
+	padding: 0;
+	font-size: 0;
+}
+
+.ppt_qanda_pictures_picture.correct {
+	background-color: rgba(255, 255, 255, 0.15);
+	box-shadow: 0 0 11px 6px rgba(255, 255, 255, 0.40);
+	-moz-box-shadow: 0 0 11px 6px rgba(255, 255, 255, 0.40);
+	-webkit-box-shadow: 0 0 11x 6px rgba(255, 255, 255, 0.40);
+}
+
+.ppt_qanda_pictures_picture.not_correct {
+	filter: alpha(opacity=20);
+	opacity: 0.20;
+	-moz-opacity: 0.20;
+	-khtml-opacity: 0.20;
+}
+
+.ppt_qanda_pictures_number {
+	position: absolute;
+	font-size: 1.6vw;
+	font-size: 1.6vmax;
+	padding: 0.5vw 1vw;
+	padding: 0.5vmax 1vmax;
+	background-color: rgba(164, 164, 164, 0.45);
+	color: #FFFFFF;
+	z-index: 2;
+	top: 2px;
+	left: 2px;
+}
+
+.ppt_qanda_pictures_check {
+	display: none;
+	font-size: 3.4vw;
+	font-size: 3.4vmax;
+	color: rgba(73, 184, 74, 0.94);
+	position: absolute;
+	z-index: 3;
+	top: 2px;
+	right: 2px;
+}
+
+.ppt_qanda_pictures_check.correct {
+	display: block !important;
+}

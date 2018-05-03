@@ -1,0 +1,46 @@
+{# category 3 #}
+<div id="begin_app_layers" class="visibility_hidden">
+	<script>
+		JSfiles.later("{{ _filelatest('/bruno/app/scripts/app/layers.js') }}", 40);
+
+		var app_layers_img_answers = new Image();
+		app_layers_img_answers.src = "{{ _filelatest('/bruno/app/images/app/layers/icons/answers.png') }}";
+		var app_layers_img_pictures = new Image();
+		app_layers_img_pictures.src = "{{ _filelatest('/bruno/app/images/app/layers/icons/pictures.png') }}";
+		var app_layers_img_statistics = new Image();
+		app_layers_img_statistics.src = "{{ _filelatest('/bruno/app/images/app/layers/icons/statistics.png') }}";
+		var app_layers_img_survey = new Image();
+		app_layers_img_survey.src = "{{ _filelatest('/bruno/app/images/app/layers/icons/survey.png') }}";
+
+		var app_layers_img_answers30 = new Image();
+		app_layers_img_answers30.src = "{{ _filelatest('/bruno/app/images/app/layers/icons/answers30.png') }}";
+		var app_layers_img_pictures30 = new Image();
+		app_layers_img_pictures30.src = "{{ _filelatest('/bruno/app/images/app/layers/icons/pictures30.png') }}";
+		var app_layers_img_statistics30 = new Image();
+		app_layers_img_statistics30.src = "{{ _filelatest('/bruno/app/images/app/layers/icons/statistics30.png') }}";
+		var app_layers_img_survey30 = new Image();
+		app_layers_img_survey30.src = "{{ _filelatest('/bruno/app/images/app/layers/icons/survey30.png') }}";
+	</script>
+	<link rel="stylesheet" href="{{ _filelatest('/bruno/app/styles/app/layers.css') }}" type="text/css" />
+</div>
+
+{% set bundle = 'bruno/app' %}
+
+{# MODELS #}
+{# Loop the folder to include automaticaly all files #}
+{% set folder = '/models' %}
+{% set files = _loop_twig_folder(bundle, folder) %}
+{% for key, value in files %}
+	{% include value %}
+{% endfor %}
+
+{# LAYERS #}
+{# Loop the folder to include automaticaly all files #}
+{% set folder = '/app/layers' %}
+{% set files = _loop_twig_folder(bundle, folder) %}
+{% for key, value in files %}
+	{% include value %}
+{% endfor %}
+
+<div id="app_layers_content"></div>
+<div id="end_app_layers" class="visibility_hidden"></div>

@@ -1,0 +1,65 @@
+<div id="begin_models_showppt" class="visibility_hidden">
+	<script>
+		JSfiles.later("{{ _filelatest('/bruno/app/scripts/generic/showppt.js') }}");
+
+		var showppt_pitch = new Image();
+		showppt_pitch.src = "{{ _filelatest('/bruno/app/images/generic/pitch.png') }}";
+
+		var video_webviewer = "{{ _filelatest('/bruno/app/images/generic/webviewer.mp4') }}";
+	</script>
+	<link rel="stylesheet" href="{{ _filelatest('/bruno/app/styles/generic/showppt.css') }}" type="text/css" />
+	<style type="text/css">
+		#showppt_quiz_wrapper {
+			background-image: url("{{ _filelatest('/bruno/app/images/generic/showppt/huawei.png') }}");
+		}
+	</style>
+</div>
+
+<div id="showppt" class="display_none">
+	
+	<div id="showppt_picture"></div>
+	
+	<div id="showppt_width_wrapper">
+
+		<div id="showppt_scrollbar_ppt" class="fa fa-download display_none" title="{{ _trans('app', 4, 22, 'html') }}{# Download PPT #}"></div>
+		
+		<div class="showppt_top">
+			<span id="showppt_top_clipboard" class="showppt_top_wrapper">
+				<span find="clipboard" class="showppt_button showppt_button_url">
+					<div>
+						{{ _trans('app', 4, 28, 'html') }}{# Copy Presentation URL #}
+					</div>
+					<div find="url" class="showppt_link"></div>
+				</span>
+			</span>
+		</div>
+		
+		<span id="showppt_close" class="showppt_button">{{ _trans('app', 1, 3, 'html') }}{# Close #}</span>
+
+		<span id="showppt_slide">
+			<span id="showppt_prev" class="showppt_button"><span class="fa fa-angle-left"></span> <span>{{ _trans('app', 4, 24, 'html') }}{# Prev #}</span></span>
+			<span id="showppt_next" class="showppt_button"><span>{{ _trans('app', 4, 19, 'html') }}{# Next #}</span> <span class="fa fa-angle-right"></span></span>
+		</span>
+
+		<div id="showppt_scrollbar">
+			<div id="showppt_scrollbar_indicator"></div>
+			<div id="showppt_scrollbar_list"></div>
+		</div>
+
+		<img id="showppt_scanner" class="display_none" src="{{ _filelatest('/bruno/app/images/generic/showppt/phone.png') }}" />
+		<img id="showppt_lazer" class="display_none" src="{{ _filelatest('/bruno/app/images/generic/showppt/lazer.png') }}" />
+
+	</div>
+
+	<iframe id="showppt_iframe" name="showppt_iframe" class="base_color_bg_main_gradient" frameborder="0" scrolling="no" src=""></iframe>
+
+	<div id="showppt_quiz_wrapper" class="display_none">
+		<iframe id="showppt_iframe_quiz" name="showppt_iframe_quiz" class="base_color_bg_main_gradient" frameborder="0" scrolling="no" src=""></iframe>
+		<span id="showppt_iframe_quiz_close" class="showppt_button">{{ _trans('app', 1, 3, 'html') }}{# Close #}</span>
+	</div>
+
+</div>
+
+<div id="end_models_showppt" class="visibility_hidden">
+	<div id="-showppt_scrollbar_list_slide" class="showppt_scrollbar_list_slide" index="-1"><div find="info" class="showppt_scrollbar_list_slide_info"></div></div>
+</div>

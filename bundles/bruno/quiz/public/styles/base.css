@@ -1,0 +1,125 @@
+
+html, body {
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	overflow-y: auto;
+	background-color: #EFEFEF;
+	font-weight: 200;
+	backface-visibility: hidden;
+	padding: 0;
+	margin: 0;
+	position: relative;
+	font-size: 3.0vw;
+	font-size: 3.0vmax;
+}
+
+/* SANS-SERIF */
+html, .font_sans_serif {
+	/*font-family: Roboto, Calibri, Arial, "Helvetica Neue", Helvetica, Tahoma, Verdana, "Nimbus Sans L", "URW Gothic L", "Lucida Grande", Geneva, "DejaVu Sans", "Microsoft Sans Serif", sans-serif;*/
+	font-family: Calibri, "Microsoft Sans Serif", sans-serif;
+}
+
+/* MONOSPACE */
+.font_monospace {
+	font-family: monospace, Monaco, Courier, "Bitstream Vera Sans Mono", "Courier 10 Pitch", "Nimbus Mono L","Courier New", "OCR A Extended", "DejaVu Sans Mono", "Lucida Console";
+}
+
+.unselectable {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: default;
+}
+
+.ellipsis {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.perfect_center {
+	position: absolute;
+	text-align: center;
+	vertical-align: middle;
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	-o-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	top: 50%;
+	left: 50%;
+}
+
+.display_none {
+	display: none !important;
+}
+
+.visibility_hidden {
+	width: 0 !important;
+	height: 0 !important;
+	visibility: hidden !important;
+	z-index: 0 !important;
+	position: absolute !important;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+.base_pointer {
+	cursor: pointer;
+}
+
+.base_tapHighlight_off {
+	-moz-tap-highlight-color: rgba(0,0,0,0);
+	-moz-tap-highlight-color: transparent;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	-webkit-tap-highlight-color: transparent;
+}
+
+.base_color_text_white { color: #FFFFFF; }
+
+.base_color_bg_main_gradient {
+	background-color: #023762;
+	background: -webkit-linear-gradient(140deg, #023762, #00719C) !important; /* For Safari 5.1 to 6.0 */
+	background: -o-linear-gradient(140deg, #023762, #00719C) !important; /* For Opera 11.1 to 12.0 */
+	background: -moz-linear-gradient(140deg, #023762, #00719C) !important; /* For Firefox 3.6 to 15 */
+	background: linear-gradient(140deg, #023762, #00719C) !important; /* Standard syntax */
+}
+
+#base_website {
+	position: fixed;
+	bottom: 3vw;
+	bottom: 3vmin;
+	left: 5vw;
+	left: 5vmin;
+	font-size: 4.2vw;
+	font-size: 4.2vmin;
+	color: #FFFFFF;
+}
+
+#base_website_logo {
+	height: 5.4vw;
+	height: 5.4vmin;
+	line-height: 5.4vmin;
+	width: 5.4vw;
+	width: 5.4vmin;
+	border: 0 solid;
+	border-radius: 0.6vw;
+	border-radius: 0.6vmin;
+	background-color: #FBA026;
+	display: inline-block;
+	font-size: 5.2vw;
+	font-size: 5.2vmin;
+	padding: 0.1vw;
+	padding: 0.1vmin;
+	box-sizing: border-box;
+	vertical-align: middle;
+}
+
+#base_website_link {
+	padding-left: 1.2vw;
+	padding-left: 1.2vmin;
+}

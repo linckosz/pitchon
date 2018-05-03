@@ -1,0 +1,111 @@
+<div id="-submenu_wrapper" class="submenu_wrapper unselectable">
+	<div class="base_content submenu_content" find="submenu_wrapper_content">
+	</div>
+	<div find="submenu_wrapper_bottom">
+	</div>
+</div>
+
+<span id="-submenu_top_button" class="submenu_title">
+</span>
+
+<div id="-submenu_button" class="base_optionTab submenu_deco">
+	<span class="submenu_padding" find="submenu_button_title"></span>
+	<span class="submenu_padding submenu_value" find="submenu_button_value"></span>
+</div>
+
+<div id="-submenu_info" class="base_optionTab submenu_deco submenu_deco_info_wrap">
+	<span class="submenu_padding" find="submenu_info_title" class="submenu_info_title"></span>
+</div>
+
+
+<span id="-submenu_menu_list_main" class="icon-Actions submenu_menu_list_main" title="{{ _trans('app', 13, 18, 'html') }} {#More actions (delete)#}"></span>
+
+<div id="-submenu_menu_list_container" class="submenu_menu_list" style="display:none;">
+	<ul tabindex="0">
+	</ul>
+	<div class="submenu_menu_list_more">
+		<span class="icon-Actions submenu_menu_list_icon"></span>
+	</div>
+</div>
+
+<li id="-submenu_menu_list_item" class="submenu_menu_list_item">
+	<div class="submenu_menu_list_item_icon_wrapper"><i find="icon"></i></div>
+	<div class="submenu_menu_list_item_title_warpper"><span find="title"></span></div>
+</li>
+
+<div id="-submenu_next" class="base_optionTab submenu_deco">
+	<span class="submenu_padding" find="submenu_next_title"></span>
+	<span class="submenu_padding submenu_value">
+		<span find="submenu_next_value" class="submenu_next_value"></span>
+		<img find="submenu_next_image" class="submenu_icon submenu_icon_next floatright" src="{{ _filelatest('/bruno/app/images/submenu/next.png') }}">
+	</span>
+</div>
+
+<div id="-submenu_top" class="base_menu submenu_top" find="submenu_wrapper_top">
+	<span class="submenu_top_side submenu_back font_sans_serif submenu_hide" find="submenu_wrapper_back">
+		<div class="base_button submenu_back_div fa fa-angle-left" title="{{ _trans('app', 1, 2, 'html') }}{# Back #}"></div>
+	</span>
+	<span class="submenu_title font_sans_serif ellipsis" find="submenu_wrapper_title"></span>
+	<span class="submenu_top_side font_sans_serif" find="submenu_wrapper_side_right"></span>
+</div>
+
+<div id="-submenu_radio" class="base_optionTab submenu_deco">
+	<span class="submenu_padding" find="submenu_radio_title"></span>
+	<span class="submenu_padding submenu_radio" find="submenu_radio_value">
+		<span class='submenu_radio_text'><span find="submenu_radio_text"  class='submenu_radio_text_sub'></span></span>
+		<img find="submenu_radio_check" class='submenu_icon visibility_hidden' src='/bruno/app/images/submenu/check.png' />
+	</span>
+</div>
+
+<div id="-submenu_bottom" class="base_optionTab submenu_bottom_cell">
+	<button class="submenu_bottom_valid" find="submenu_bottom_button">
+		<span find="submenu_bottom_title"></span>
+		<img class="submit_progress_bar" find="submit_progress_bar" src="{{ _filelatest('/bruno/app/images/generic/base/generic/loading_bar.gif') }}"/>
+	</button>
+</div>
+
+<div id="-submenu_title_small" class="submenu_title_small">
+	<span find="submenu_title"></span>
+</div>
+
+<div id="-submenu_space" class="submenu_space">
+</div>
+
+<label id="-submenu_input" class="" for="">
+	<div class="unselectable" find="submenu_title"></div>
+</label>
+
+<div id="-submenu_input_flat" class="base_optionTab submenu_deco_read">
+	<span class="submenu_padding submenu_span_left" find="submenu_title"></span>
+	<span class="submenu_padding submenu_span_right">
+		<input type="text" maxlength="200" find="submenu_value" class="submenu_input_flat_value selectable" value="" />
+	</span>
+</div>
+
+<div id="-submenu_picture" class="base_optionTab submenu_deco_read">
+	<span class="submenu_padding submenu_span_left" find="submenu_title"></span>
+	<span class="submenu_padding submenu_span_right">
+		<img class="submenu_picture_picture clickable" find="submenu_value" src="" />
+	</span>
+</div>
+
+<label id="-submenu_select" class="base_optionTab submenu_select">
+	<span class="submenu_padding submenu_select_title" find="submenu_select_title"></span>
+	<span class="submenu_padding submenu_value submenu_select_value">
+		<span find="submenu_select_value"></span>
+		<img class="submenu_icon submenu_icon_next floatright" src="{{ _filelatest('/bruno/app/images/submenu/next.png') }}">
+	</span>
+</label>
+
+<div id="-submenu_small_button" class="base_optionTab submenu_deco_read submenu_deco_neutral">
+	<span find="submenu_small_button_title" class="submenu_small_button"></span>
+</div>
+
+<div id="-submenu_personal_profile" class="base_optionTab submenu_deco_read submenu_personal_profile_deco">
+	<span class="submenu_padding submenu_personal_profile_picture" find="submenu_profile_picture">
+		<span class="submenu_icon submenu_personal_profile_picture_image base_pointer needsclick" find="submenu_profile_upload_picture" preview="0"></span>
+	</span>
+	<span class="submenu_padding">
+		<input type="text" maxlength="200" find="submenu_value" class="submenu_input_flat_value submenu_personal_profile_user selectable no_focus" value="" />
+	</span>
+</div>

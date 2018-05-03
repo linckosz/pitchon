@@ -1,0 +1,144 @@
+#app_application_main {
+	width: 100%;
+	height: 100%;
+	min-height: 100%;
+	display: table;
+	table-layout: fixed;
+	overflow: hidden;
+	vertical-align: top;
+	position: relative;
+	z-index: 1;
+}
+
+#app_application_project {
+	position: relative; /* toto does allow animation of main menu */
+	display: table-cell;
+	width: 0;
+	height: 100%;
+	min-height: 100%;
+	overflow: hidden;
+	z-index: 1100;
+	visibility: hidden;
+	vertical-align: top;
+}
+
+#app_application_project p{
+	margin: 0;
+	padding: 0;
+}
+
+#app_application_content {
+	display: table-cell;
+	height: 100%;
+	min-height: 100%;
+	width: 100%;
+	z-index: 1;
+	overflow: hidden;
+	vertical-align: top;
+	position: relative;
+}
+
+.app_application_width {
+	width: 320px !important;
+}
+
+.app_application_show {}
+
+.app_application_visible {
+	visibility: visible !important;
+}
+
+.app_application_block {
+	display: none;
+	position: absolute;
+	cursor: default;
+	height: 100%;
+	min-height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	background-color: transparent;
+	z-index: 1000;
+	overflow: hidden;
+}
+.app_application_block_visible {
+	display: table;
+	table-layout: fixed;
+	vertical-align: top;
+}
+
+#app_application_submenu_block {
+	display: none;
+	position: fixed;
+	cursor: default;
+	height: 0;
+	width: 0;
+	top: 0;
+	left: 0;
+	background-color: transparent;
+	z-index: 2000;
+	overflow: hidden;
+}
+
+.app_application_submenu_blur {}
+
+.app_application_upload {
+	position: absolute;
+	z-index: 0;
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 0;
+}
+
+.app_application_blur {}
+
+
+.app_application_width_child {}
+
+/* Maximum Tablet in Portrait */
+@media only screen and (max-width: 900px){
+	#app_application_project {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		left: 0;
+	}
+	#app_application_content {
+		width: 100%;
+	}
+}
+
+/* Mobile phone in Landscape and Tablet in Portrait */
+@media only screen and (min-width: 480px) and (max-width: 900px){
+	.app_application_blur {
+		-webkit-filter: blur(4px);
+		-moz-filter: blur(4px);
+		-o-filter: blur(4px);
+		-ms-filter: blur(4px);
+		filter: blur(4px);
+	}
+}
+
+/* Maximum Mobile in Portrait */
+@media only screen and (max-width: 479px){
+	.app_application_width {
+		width: 100% !important;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		left: 0;
+	}
+}
+
+/* Minimum Desktop */
+@media only screen and (min-width: 1280px){
+	.app_application_submenu_blur {
+		-webkit-filter: blur(2px);
+		-moz-filter: blur(2px);
+		-o-filter: blur(2px);
+		-ms-filter: blur(2px);
+		filter: blur(2px);
+	}
+}

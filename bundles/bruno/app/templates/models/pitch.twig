@@ -1,0 +1,23 @@
+{# category 6 #}
+<div id="begin_models_pitch" class="visibility_hidden">
+	<link rel="stylesheet" href="{{ _filelatest('/bruno/app/styles/models/pitch.css') }}" type="text/css" />
+</div>
+<div id="end_models_pitch" class="visibility_hidden"></div>
+
+<div class="display_none">
+
+	<div id="-models_pitch_top" class="models_pitch_top">
+		<div class="models_pitch_top_title">
+			<span class="models_pitch_top_title_front">{{ _trans('app', 4, 8, 'html') }}{# Pitch:  #}</span>
+			<textarea find="input_textarea" class="models_pitch_top_title_textarea font_sans_serif selectable" rows="1" maxrows="3"></textarea>
+			<span class="models_pitch_top_title_preview"><span find="preview" class="models_pitch_top_title_preview_icon fa fa-eye" title="{{ _trans('app', 1, 11, 'html') }}{# Preview #}"></span></span>
+		</div>
+	</div>
+	
+	<div id="-models_pitch" class="models_pitch_standard">
+		<div find="preview" class="models_pitch_standard_preview fa fa-eye display_none" title="{{ _trans('app', 1, 11, 'html') }}{# Preview #}"></div>
+		<div find="delete" class="models_pitch_standard_delete fa fa-trash-o" title="{{ _trans('app', 1, 5, 'html') }}{# Delete #}"></div>
+		<div find="title" class="models_pitch_standard_title"></div>
+	</div>
+
+</div>

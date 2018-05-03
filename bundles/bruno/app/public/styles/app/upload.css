@@ -1,0 +1,7 @@
+#app_upload_hidden {
+	position: absolute;
+	z-index: 0;
+	width: 0;
+	height: 0;
+	overflow: hidden;
+}

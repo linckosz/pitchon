@@ -1,0 +1,252 @@
+#ppt_frame {
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	padding: 3vw;
+	padding: 3vmin;
+	padding-bottom: 5vw;
+	padding-bottom: 5vmin;
+	overflow: visible;
+	color: #FFFFFF;
+}
+
+#ppt_frame_left {
+	display: table-cell;
+	width: 75%;
+	vertical-align: top;
+	box-sizing: border-box;
+	padding: 2vw;
+	padding: 2vmin;
+	padding-bottom: 0;
+	padding: 0;
+	padding-left: 0;
+	padding-right: 0.5vw;
+	padding-right: 0.2vmin;
+	overflow: visible;
+}
+
+#ppt_frame_left_top {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 2vw;
+	padding: 2vmin;
+	padding-top: 0;
+	overflow: hidden;
+	font-size: 1.4em;
+}
+
+#ppt_frame_left_bottom {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	padding: 2vw;
+	padding: 2vmin;
+	overflow: visible;
+}
+
+#ppt_frame_right {
+	display: table-cell;
+	width: 25%;
+	vertical-align: top;
+	box-sizing: border-box;
+	padding: 2vw;
+	padding: 2vmin;
+	padding-left: 0;
+	padding-bottom: 0;
+	overflow: visible;
+}
+
+#ppt_frame_right_top {
+	position: relative;
+	background-repeat: no-repeat;
+	background-position: top center;
+	background-size: contain;
+	width: 100%;
+	height: 40%;
+	box-sizing: border-box;
+	overflow: visible;
+	visibility: hidden;
+	text-align: right;
+}
+
+#ppt_frame_right_top_code {
+	position: relative;
+	width: 100%;
+	height: 10%;
+	box-sizing: border-box;
+	padding: 0.8vw;
+	padding: 0.8vmin;
+	overflow: visible;
+	white-space: nowrap;
+	font-size: 10vmin;
+	text-align: center;
+	vertical-align: middle;
+}
+#ppt_frame_right_top_code.ln6 {
+	font-size: 8vmin;
+}
+#ppt_frame_right_top_code.ln8 {
+	font-size: 6vmin;
+}
+
+#ppt_frame_right_top_code_div {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	text-align: center;
+	width: 100%;
+	max-width: 32vh;
+}
+
+#ppt_frame_right_top_qrcode {
+	width: 100%;
+	max-width: 32vh;
+	max-height: 32vh;
+	box-sizing: border-box;
+	font-size: 0;
+	vertical-align: middle; /* This cancel the auto bottom margin */
+	overflow: visible;
+}
+
+#ppt_frame_right_top_domain {
+	position: relative;
+	width: 100%;
+	height: 5%;
+	box-sizing: border-box;
+	padding: 0.8vw;
+	padding: 0.8vmin;
+	overflow: visible;
+	white-space: nowrap;
+	font-size: 0.7em;
+	text-align: center;
+	vertical-align: middle;
+}
+
+#ppt_frame_right_top_domain_div {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+#ppt_frame_right_top.answer,
+#ppt_frame_right_top_code.answer,
+#ppt_frame_right_top_qrcode.answer,
+#ppt_frame_right_top.hidden,
+#ppt_frame_right_top_code.hidden,
+#ppt_frame_right_top_qrcode.hidden {
+	visibility: hidden;
+}
+
+#ppt_frame_right_bottom {
+	width: 100%;
+	height: 48%;
+	box-sizing: border-box;
+	padding: 2vw;
+	padding: 2vmin;
+	padding-right: 0;
+	padding-left: 0;
+	overflow: hidden;
+}
+
+#quiz_question_picture {
+	display: inline-block;
+	max-width: 35%;
+	max-height: 256px;
+	max-height: 26vh;
+	border: 1px solid rgba(255, 255, 255, 0.10);
+	font-size: 0;
+	float: left;
+	margin: 0;
+	padding: 0;
+	margin-right: 12px;
+
+}
+
+#ppt_question_title {
+	font-weight: bold;
+}
+
+#ppt_frame_website {
+	position: fixed;
+	bottom: 3vw;
+	bottom: 3vmin;
+	left: 5vw;
+	left: 5vmin;
+	font-size: 3.2vw;
+	font-size: 3.2vmin;
+	color: #FFFFFF;
+}
+
+#ppt_frame_website_logo {
+	height: 4.4vw;
+	height: 4.4vmin;
+	line-height: 4.4vw;
+	line-height: 4.4vmin;
+	width: 4.4vw;
+	width: 4.4vmin;
+	border: 0 solid;
+	border-radius: 0.6vw;
+	border-radius: 0.6vmin;
+	display: inline-block;
+	font-size: 4.2vw;
+	font-size: 4.2vmin;
+	padding: 0.1vw;
+	padding: 0.1vmin;
+	box-sizing: border-box;
+	vertical-align: middle;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+#ppt_frame_website_link {
+	padding-left: 1.6vw;
+	padding-left: 1.6vmin;
+}
+
+#ppt_frame_style {
+	position: fixed;
+	bottom: 3vw;
+	bottom: 3vmin;
+	right: 5vw;
+	right: 5vmin;
+	font-size: 0;
+	height: 4.4vw;
+	height: 4.4vmin;
+	filter: alpha(opacity=30);
+	opacity: 0.30;
+	-moz-opacity: 0.30;
+	-khtml-opacity: 0.30;
+}
+
+#ppt_frame_average {
+	position: fixed;
+	bottom: 3vw;
+	bottom: 3vmin;
+	right: 11vw;
+	right: 11vmin;
+	font-size: 4vw;
+	font-size: 4vmin;
+	filter: alpha(opacity=90);
+	opacity: 0.90;
+	-moz-opacity: 0.90;
+	-khtml-opacity: 0.90;
+}
+
+#ppt_stats_qrcode {
+	width: 100%;
+	height: 100%;
+}
+
+#ppt_stats_iframe {
+	background: transparent;
+	width: 100%;
+	height: 100%;
+	border: 0 solid rgba(255, 255, 255, 0.39);
+	border-bottom-width: 1px;
+	box-sizing: border-box;
+}

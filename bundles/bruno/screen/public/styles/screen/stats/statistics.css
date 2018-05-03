@@ -1,0 +1,68 @@
+html, body {
+	background: transparent;
+	font-size: 8.0vw;
+	font-size: 8.0vmin;
+	color: #FFFFFF;
+}
+
+#ppt_stats_statistics_participants {
+	position: fixed;
+	z-index: 2;
+	top: 0;
+	right: 0;
+	font-size: 10.0vw;
+	font-size: 10.0vmax;
+}
+
+#ppt_stats_statistics_wrapper {
+	position: fixed;
+	width: 100%;
+	bottom: 0;
+	left: 0;
+	height: 80%;
+}
+
+.ppt_stats_statistics_column {
+	position: absolute;
+	bottom: 0;
+	width: 15.5%;
+	background-color: rgba(148, 196, 221, 0.67);
+	overflow: visible !important;
+}
+
+#ppt_stats_statistics_1 {
+	left: 1%;
+}
+#ppt_stats_statistics_2 {
+	left: 17.5%;
+}
+#ppt_stats_statistics_3 {
+	left: 34%;
+}
+#ppt_stats_statistics_4 {
+	left: 50.5%;
+}
+#ppt_stats_statistics_5 {
+	left: 67%;
+}
+#ppt_stats_statistics_6 {
+	left: 83.5%;
+}
+
+.ppt_stats_statistics_number {
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	bottom: 0;
+}
+
+.ppt_stats_statistics_letter {
+	position: absolute;
+	font-size: 12.0vw;
+	font-size: 12.0vmin;
+	top: -1em;
+	left: 0;
+	width: 100%;
+	text-align: center;
+	color: rgba(255, 255, 255, 0.65);
+}

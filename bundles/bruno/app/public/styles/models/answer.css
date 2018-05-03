@@ -1,0 +1,117 @@
+
+.models_answer_standard {
+	position: relative;
+	vertical-align: top;
+	color: #FFFFFF;
+	background-color: #7BB1A9;
+	border-radius: 2px;
+	padding: 6px;
+	margin: 20px;
+	display: inline-block;
+	border: 2px solid transparent;
+	cursor: pointer;
+	width: 25%;
+	min-width: 220px;
+	max-width: 360px;
+	font-size: 12px;
+	overflow: hidden;
+	text-align: left;
+	box-sizing: border-box;
+	min-height: 80px;
+}
+
+.models_answer_standard_title {
+	display: block;
+	text-align: center;
+	vertical-align: middle;
+	width: 100%;
+	height: 100%;
+	font-size: 22px;
+	color: rgba(255, 255, 255, 0.9);
+	padding-right: 18px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.models_answer_standard:hover {
+	border-color: rgba(255, 255, 255, 0.5);
+}
+
+.models_answer_standard_delete {
+	position: absolute;
+	right: 6px;
+	top: 6px;
+	font-size: 22px;
+	color: rgba(255, 255, 255, 0.4);
+}
+.models_answer_standard_delete:hover {
+	color: rgba(255, 255, 255, 0.85);
+}
+.models_answer_standard_delete:active {
+	color: #FFFFFF;
+}
+
+.models_answer_standard_details {
+	white-space: nowrap;
+	width: 100%;
+	box-sizing: border-box;
+	font-size: 0;
+	text-align: left;
+}
+
+.models_answer_standard_picture {
+	vertical-align: middle;
+	display: inline-block;
+	box-sizing: border-box;
+	width: 25%;
+	min-width: 40px;
+}
+
+.models_answer_standard_picture > img {
+	height: 32px;
+	width: 32px;
+	padding: 8px;
+}
+
+.models_answer_standard_last {}
+
+
+/* Mobile phone in Portrait */
+@media only screen and (max-width: 479px){
+	.models_answer_standard {
+		border-radius: 0;
+		border-width: 0;
+		border-color: transparent;
+		border-bottom-width: 2px;
+		border-bottom-color: rgba(255, 255, 255, 0.25) !important;
+		width: 100%;
+		max-width: none;
+		min-width: none;
+		margin: 0px;
+		padding: 10px;
+	}
+	.models_answer_standard_last{
+		border-bottom-color: transparent !important;
+	}
+	.models_answer_standard:hover {
+		border-color: transparent;
+		filter:alpha(opacity=90);
+		opacity:0.90;
+		-moz-opacity:0.90;
+		-khtml-opacity:0.90;
+	}
+}
+
+/* Mobile phone in Landscape and Tablet in Portrait */
+@media only screen and (min-width: 480px) and (max-width: 900px){
+	.models_answer_standard {
+		width: 45%;
+	}
+}
+
+/* Tablet in Landscape */
+@media only screen and (min-width: 901px) and (max-width: 1279px){
+	.models_answer_standard {
+		width: 30%;
+	}
+}

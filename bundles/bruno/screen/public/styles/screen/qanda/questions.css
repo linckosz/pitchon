@@ -1,0 +1,53 @@
+.ppt_qanda_questions_wrapper {
+	display: table-row;
+	position: relative;
+}
+
+.ppt_qanda_questions_cell {
+	display: table-cell;
+	padding: 2vw 1.5vw;
+	padding: 2vmin 1.5vmin;
+}
+
+.ppt_qanda_questions_number {
+}
+
+.ppt_qanda_questions_picture {
+	padding-left: 0;
+	padding-right: 0;
+	vertical-align: top;
+	text-align: center;
+	font-size: 0;
+}
+
+.ppt_qanda_questions_title {
+}
+
+.ppt_qanda_questions_stats {
+	padding-left: 1vw;
+	padding-left: 1vmin;
+}
+
+.ppt_qanda_questions_picture_img {
+	font-size: 0;
+	max-width: 25vw;
+	max-width: 25vmin;
+	max-height: 20vw;
+	max-height: 20vmin;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+
+.ppt_qanda_questions_wrapper.not_correct {
+	filter: alpha(opacity=20);
+	opacity: 0.20;
+	-moz-opacity: 0.20;
+	-khtml-opacity: 0.20;
+}
+
+.ppt_qanda_questions_wrapper.correct {
+	background-color: rgb(52, 109, 141);
+	box-shadow: 0 0 11px 6px rgba(255, 255, 255, 0.40);
+	-moz-box-shadow: 0 0 11px 6px rgba(255, 255, 255, 0.40);
+	-webkit-box-shadow: 0 0 11x 6px rgba(255, 255, 255, 0.40);
+}

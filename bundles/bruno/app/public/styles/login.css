@@ -1,0 +1,239 @@
+/*
+ * List of default Icons and Menu buttons
+ */
+
+.base_button {
+	height: 32px;
+	line-height: 32px;
+	width: 32px;
+	border-style: none;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.base_buttonImportant {
+	height: 40px;
+	line-height: 40px;
+	width: 40px;
+	border-style: none;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.base_userIcon {
+	height: 40px;
+	line-height: 40px;
+	width: 40px;
+	border-style: none;
+}
+
+.base_infoTab {
+	height: 68px;
+	width: 100%;
+	border-style: none;
+}
+
+.base_optionTab {
+	height: 48px;
+	width: 100%;
+	border-style: none;
+}
+
+.base_infoMini {
+	height: 24px;
+	line-height: 24px;
+	border-style: none;
+	white-space: nowrap;
+}
+
+.base_menu {
+	height: 48px;
+	border-style: none;
+}
+
+.base_menu_line {
+	line-height: 48px;
+}
+
+.base_menuBottom {
+	height: 52px;
+	width: 100%;
+	border-style: none;
+}
+
+.base_pointer {
+	cursor: pointer;
+}
+
+html, body {
+	height: 100%;
+}
+
+.base_table {
+	min-height: 100%;
+	width: 100%;
+	border-spacing: 0px;
+	border-style: none;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+.base_table td {
+	padding: 0px;
+	text-align: left;
+	vertical-align: top;
+}
+
+.base_body {
+	min-height: 100%;
+}
+
+.base_foot {
+	height: 1px; /* If not "main_body" will share the height */
+}
+
+/*
+ * Here is a list of multiplatform and OS font rendering
+ * http://www.logz.org/art-416-tit-Best-font-family-for-linux-mac-and-linux
+ * http://logz.org/font-family/font.php fonts recommended for Linux / Windows / Mac
+ */
+
+/* SERIF */
+.font_serif {
+	font-family: "URW Palladio L", "URW Bookman L", "Century Schoolbook", Georgia,Times, "Times New Roman", "Palatino Linotype", serif;
+}
+
+/* SANS-SERIF */
+html, .font_sans_serif {
+	font-family: "Helvetica Neue", Roboto, "San Francisco", Helvetica, Tahoma, Verdana, "Nimbus Sans L", "URW Gothic L", "Lucida Grande", Geneva, "DejaVu Sans", "Microsoft Sans Serif", sans-serif;
+}
+
+/* MONOSPACE */
+.font_monospace {
+	font-family: "Bitstream Vera Sans Mono", "Courier 10 Pitch", "Nimbus Mono L", Monaco, "Courier New", Courier, "OCR A Extended", "DejaVu Sans Mono", "Lucida Console", monospace;
+}
+
+/* CURSIVE */
+.font_cursive {
+	font-family: "Comic Sans MS", "Domestic Manners", "URW Chancery L", "Brush Script MT", Zapfino, "Apple Chancery", "Bradley Hand ITC", "Monotype Corsiva";
+}
+
+/* FANTASY */
+.font_fantasy {
+	font-family: "Marked Fool", Junkyard, Balker, Papyrus, Haettenschweiler, Impact, fantasy;
+}
+
+/*
+ * Some CSS tricks
+ */
+
+/*
+ * Center DIV into DIV
+ * http://www.corelangs.com/css/box/divindiv.html
+ */
+
+.DIVcenter {
+	margin: 0 auto;
+}
+
+/*
+ * Get an image centered into any box
+ * <table class="table_center_image"><tr><td><img src='/img.png' /></td></tr></table>
+ */
+
+.table_center_image {
+	vertical-align: middle;
+	text-align: center;
+	height: 100%;
+	width: 100%;
+}
+
+/*
+ * Avoid text selection
+ */
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.floatleft {
+	float: left;
+}
+
+.floatright {
+	float: right;
+}
+
+.blur {
+	-webkit-filter: blur(4px);
+	-moz-filter: blur(4px);
+	-o-filter: blur(4px);
+	-ms-filter: blur(4px);
+	filter: blur(4px);
+}
+
+.submit_progress_bar {
+	height: 2px;
+	margin-left: 4px;
+	margin-top: -5px;
+	position: absolute;
+	z-index: 2;
+	display: none;
+}
+
+.base_input_text_error {
+	background-color: #FFFFFF;
+	background: -webkit-linear-gradient(#FFFFFF, #FFCFCF) !important; /* For Safari 5.1 to 6.0 */
+	background: -o-linear-gradient(#FFFFFF, #FFCFCF) !important; /* For Opera 11.1 to 12.0 */
+	background: -moz-linear-gradient(#FFFFFF, #FFCFCF) !important; /* For Firefox 3.6 to 15 */
+	background: linear-gradient(#FFFFFF, #FFCFCF) !important; /* Standard syntax */
+}
+
+.display_none {
+	display: none !important;
+}
+
+.visibility_hidden {
+	width: 0 !important;
+	height: 0 !important;
+	visibility: hidden !important;
+	z-index: 0 !important;
+	position: absolute !important;
+}
+
+#base_error {
+	display: none;
+	position: fixed;
+	text-align: left;
+	box-sizing: border-box;
+	z-index: 99999;
+	background-color: rgba(255, 68, 68, 0.80);
+	min-width: 300px;
+	max-width: 100%;
+	right: 0px;
+	top: 50px;
+	padding: 10px 20px 10px 20px;
+	color: #F8F8F8;
+	font-size: 13px;
+	cursor: default;
+	filter:alpha(opacity=80);
+	opacity:0.8;
+	-moz-opacity:0.8;
+	-khtml-opacity:0.8;
+}
+
+.base_message {
+	background-color: rgba(66, 159, 144, 0.80) !important;
+}
+
+/* Maximum Mobile phone in Portrait */
+@media only screen and (max-width: 479px) {
+	#base_error {
+		top: 48px !important;
+		width: 100% !important;
+	}
+}

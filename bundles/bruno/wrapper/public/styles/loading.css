@@ -1,0 +1,94 @@
+#wrapper_loading {
+	position: absolute;
+}
+
+#wrapper_loading_progress_wall {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	min-height: 100%;
+	display: table;
+	table-layout: fixed;
+	overflow: hidden;
+	vertical-align: middle;
+	text-align: center;
+	background-color: #FFFFFF;
+	background: -webkit-linear-gradient(#FFFFFF, #E8E8E8) !important; /* For Safari 5.1 to 6.0 */
+	background: -o-linear-gradient(#FFFFFF, #E8E8E8) !important; /* For Opera 11.1 to 12.0 */
+	background: -moz-linear-gradient(#FFFFFF, #E8E8E8) !important; /* For Firefox 3.6 to 15 */
+	background: linear-gradient(#FFFFFF, #E8E8E8) !important; /* Standard syntax */
+	z-index: 9000;
+}
+
+#wrapper_loading_progress_wall_cell {
+	width: 100%;
+	height: 100%;
+	min-height: 100%;
+	display: table-cell;
+	table-layout: fixed;
+	overflow: hidden;
+	vertical-align: middle;
+	text-align: center;
+}
+
+#wrapper_loading_table {
+	width: 100%;
+	overflow: hidden;
+}
+
+#wrapper_loading_table td {
+	width: 50%;
+	/*overflow: hidden;*/
+}
+
+#wrapper_loading_home {
+	position: fixed;
+	cursor: pointer;
+	right: 15px;
+	bottom: 5px;
+	padding: 5px;
+	font-size: 12px;
+	font-style: bold;
+	color: #CBCBCB;
+}
+#wrapper_loading_home:hover {
+	text-decoration: underline;
+}
+
+#wrapper_loading_cell_center {
+	width: auto !important;
+	color: #CBCBCB;
+	font-size: 60px;
+	vertical-align: top;
+	padding-bottom: 120px;
+	padding-right: 10px;
+	padding-left: 10px;
+	font-family: Roboto, "Helvetica Neue", Helvetica, Tahoma, Verdana;
+	font-weight: 200;
+}
+
+#wrapper_loading_content {
+	white-space: nowrap;
+}
+
+#wrapper_loading_progress {
+	text-align: left;
+}
+
+#wrapper_loading_progress_bar {
+	height: 3px;
+	width: 0%;
+	background-color: #CBCBCB;
+}
+
+.wrapper_loading_progress_bar_warning {
+	background-color: #FFB2B2 !important;
+}
+
+/* Mobile phone in Portrait */
+@media only screen and (max-width: 479px){
+	#wrapper_loading_cell_center {
+		font-size: 46px;
+		padding-bottom: 100px;
+	}
+}

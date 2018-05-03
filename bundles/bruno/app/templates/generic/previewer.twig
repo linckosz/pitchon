@@ -1,0 +1,16 @@
+<div id="begin_models_previewer" class="visibility_hidden">
+	<script>
+		JSfiles.later("{{ _filelatest('/bruno/app/scripts/generic/previewer.js') }}");
+	</script>
+	<link rel="stylesheet" href="{{ _filelatest('/bruno/app/styles/generic/previewer.css') }}" type="text/css" />
+</div>
+
+<div id="previewer_picture" class="display_none">
+	<div class="previewer_picture_top">
+		<span id="previewer_update">{{ _trans('app', 1, 10, 'html') }}{# Change #}</span>
+		<span id="previewer_delete">{{ _trans('app', 1, 5, 'html') }}{# Delete #}</span>
+	</div>
+	<span id="previewer_close" class="minMobileL">{{ _trans('app', 1, 3, 'html') }}{# Close #}</span>
+</div>
+
+<div id="end_models_previewer" class="visibility_hidden"></div>

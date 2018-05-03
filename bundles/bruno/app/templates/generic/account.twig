@@ -1,0 +1,73 @@
+{# category 5 #}
+<div id="begin_account" class="visibility_hidden">
+	<script>
+		JSfiles.later("{{ _filelatest('/bruno/app/scripts/generic/account.js') }}");
+	</script>
+	<link rel="stylesheet" href="{{ _filelatest('/bruno/app/styles/generic/account.css') }}" type="text/css" />
+</div>
+<div id="account_wrapper" class="account_wrapper">
+
+	<span id="account_language">
+		<select id="account_language_select" name="translation_language" class="account_language_select" >
+			{% set language = _language() %}
+			{% set languages = _languages_short('app') %}
+			{% for key, value in languages %}
+				<option value="{{ key }}" title="{{ value }}" {% if key == language %}selected="selected"{% endif %} >{{ value }}</option>
+			{% endfor %}
+		</select>
+	</span>
+
+	<div>
+
+		<div class="account_tab" id="account_tab_bruno">
+			<div>
+				{{ title }}
+			</div>
+		</div>
+		
+		<div id="account_error_mobile" class="maxMobile"></div>
+
+		<div id="account_signin_box" class="account_form">
+			<div class="account_signin_box_div">
+				<label class="account_label_inside selectable" for="account_signin_email">
+					<div id="account_signin_email_format">{{ _trans('app', 19, 1, 'html') }}{# Please ensure your e-mail format is correct. #}</div>
+					<span class="unselectable">{{ _trans('app', 19, 2, 'html') }}{# Email #}</span>
+					<input type="email" id="account_signin_email" name="email" value="{{ user_email|lower }}" class="selectable" />
+				</label>
+				<input type="password" name="foilautofill" value="" autocomplete="off" style="display:none;" />{# It avoids a behavior in Firefox which does not know Autocomplete tag, FF fulfill by default the first field #}
+				<label class="account_label_inside" for="account_signin_password">
+					<span id="account_signin_password_show" class="fa fa-eye base_input_text_error unselectable" title="{{ _trans('app', 19, 3, 'html') }}{# Show password #}"></span>
+					<span class="unselectable">{{ _trans('app', 19, 4, 'html') }}{# Password #}</span>
+					<input type="password" id="account_signin_password" name="password" value="" autocomplete="off" class="selectable" />
+				</label>
+				<span id="account_signin_password_tooltip">{{ _trans('app', 19, 5, 'html') }}{# between 6 and 60 characters #}</span>
+				<input type="hidden" id="account_signin_timeoffset" name="timeoffset" value="0" autocomplete="off" />
+				{% if wrapper_user_created %}
+					<label class="account_label_inside" for="account_signin_captcha">
+						<img name="captcha" id="account_captcha" src="" title="{{ _trans('app', 19, 6, 'brut') }}{# Refresh the captcha #}"/>
+						<span>{{ _trans('app', 19, 7, 'html') }}{# Captcha #}</span>
+						<input type="text" id="account_signin_captcha" name="captcha" value="" autocomplete="off" class="selectable" />
+						<input type="hidden" name="captcha_name" value="account_signin_form" autocomplete="off" />
+					</label>
+				{% endif %}
+				<div id="account_signin_submit">
+					<span>{{ _trans('app', 19, 8, 'html') }}{# Sign In / Register #}</span>
+					<img class="submit_progress_bar account_submit_progress" id="account_signin_submit_progress" src="{{ _filelatest('/bruno/app/images/base/loading_bar.gif') }}"/>
+				</div>
+				<label for="account_signin_remember" id="account_signin_remember_label">
+					<input type="checkbox" id="account_signin_remember" name="remember" {% if remember %}checked="checked"{% endif %} />
+					{{ _trans('app', 19, 9, 'html') }}{# Remember me #}
+				</label>
+				<div id="account_signin_forgot" class="display_none">
+					{{ _trans('app', 19, 10, 'html') }}{# Forgot your password? #}
+				</div>
+			</div>
+			<div id="account_signin_tos_div" onclick="device_download('{{ _filelatest('/bruno/app/files/tos.pdf') }}', '_blank', 'tos.pdf');">
+				{{ _trans('app', 19, 11, 'html') }}{# By creating an account, you agree to our Terms of use and Privacy policy. #}
+			</div>
+		</div>
+
+		<div id="account_error" class="minMobileL"></div>
+	</div>
+	
+</div>

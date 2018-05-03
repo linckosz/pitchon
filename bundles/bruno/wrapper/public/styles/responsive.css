@@ -1,0 +1,53 @@
+/* WEB RESPONSIVE CSS
+ * Author: Bruno Martin
+ * Date: January 7th, 2015
+ * Description:
+ * It helps to match as many as possible devices without zoom issue.
+ * 1~2% should not perfectly fit for touching, but stil readable
+ * Note: It must be used with the viewport meta tag
+ * <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+ */
+
+/* Mobile phone in Portrait */
+@media only screen and (max-width: 479px){
+	.isMobileL, .isTablet, .isDesktop { display:none !important; }
+	.minMobileL, .minTablet, .minDesktop { display:none !important; }
+	/* no max */
+	.noMobile { display:none !important; }
+	.isMobile {  }
+	.maxMobile, .maxMobileL, .maxTablet, .maxDesktop {  }
+	.minMobile {  }
+}
+
+/* Mobile phone in Landscape and Tablet in Portrait */
+@media only screen and (min-width: 480px) and (max-width: 900px){
+	.isMobile, .isTablet, .isDesktop { display:none !important; }
+	.minTablet, .minDesktop { display:none !important; }
+	.maxMobile { display:none !important; }
+	.noMobileL { display:none !important; }
+	.isMobileL { }
+	.maxMobileL, .maxTablet, .maxDesktop {  }
+	.minMobile, .minMobileL {  }
+}
+
+/* Tablet in Landscape */
+@media only screen and (min-width: 901px) and (max-width: 1279px){
+	.isMobile, .isMobileL, .isDesktop { display:none !important; }
+	.minDesktop { display:none !important; }
+	.maxMobile, .maxMobileL { display:none !important; }
+	.noTablet { display:none !important; }
+	.isTablet {  }
+	.maxTablet, .maxDesktop {  }
+	.minMobile, .minMobileL, .minTablet {  }
+}
+
+/* Notebook and PC */
+@media only screen and (min-width: 1280px){
+	.isMobile, .isMobileL, .isTablet { display:none !important; }
+	/* no min */
+	.maxMobile, .maxMobileL, .maxTablet { display:none !important; }
+	.noDesktop { display:none !important; }
+	.isDesktop {  }
+	.maxDesktop {  }
+	.minMobile, .minMobileL, .minTablet, .minDesktop {  }
+}

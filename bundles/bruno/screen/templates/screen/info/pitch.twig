@@ -1,0 +1,29 @@
+{% extends '/bundles/bruno/screen/templates/base.twig' %}
+{% block frame %}
+	<div id="begin_ppt_info_pitch" class="visibility_hidden">
+		<link rel="stylesheet" href="{{ _filelatest('/bruno/screen/styles/screen/info/pitch.css') }}" type="text/css" />
+		<style type="text/css">
+			.base_color_bg_main_gradient {
+				background-image: url("{{ _filelatest('/bruno/screen/images/bg01.jpg') }}") !important;
+				background-repeat: no-repeat !important;
+				background-position: center !important;
+				background-size: cover !important;
+			}
+		</style>
+		<script src="{{ _filelatest('/bruno/screen/scripts/screen/info/pitch.js') }}" type="text/javascript"></script>
+		<script src="{{ _filelatest('/bruno/screen/scripts/screen/event.js') }}" type="text/javascript"></script>
+	</div>
+
+	<div id="ppt_info_pitch_title">
+		{{ data_pitch_title }}
+	</div>
+	<div id="ppt_info_pitch_by">
+		{{ data_pitch_by }}
+	</div>
+
+	<div id="ppt_info_pitch_website">
+		<span id="ppt_info_pitch_website_logo" class="icon-projectBlack"></span><span id="ppt_info_pitch_website_link">{{ domain }}</span>
+	</div>
+
+	<div id="end_ppt_info_pitch" class="visibility_hidden"></div>
+{% endblock %}

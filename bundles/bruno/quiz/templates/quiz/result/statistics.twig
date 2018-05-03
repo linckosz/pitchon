@@ -1,0 +1,38 @@
+{% extends '/bundles/bruno/quiz/templates/base.twig' %}
+{% block frame %}
+	<div id="begin_quiz_result_statistics" class="visibility_hidden">
+		<link rel="stylesheet" href="{{ _filelatest('/bruno/quiz/styles/quiz/result/statistics.css') }}" type="text/css" />
+		<script src="{{ _filelatest('/bruno/quiz/scripts/quiz/result/statistics.js') }}" type="text/javascript"></script>
+	</div>
+
+	<div class="quiz_result_statistics_top">
+		<div>
+			{{ _trans('quiz', 0, 11, 'html') }}{# Thank you for your participation 👍 ! #}
+		</div>
+		<img id="quiz_result_statistics_gif" src="{{ _filelatest('/bruno/quiz/images/gif/thankyou' ~ random(['01', '02']) ~ '.gif') }}" />
+	</div>
+
+	<div id="quiz_result_statistics_scan">
+		<span id="quiz_result_statistics_scan_sentence">{{ _trans('quiz', 0, 15, 'html') }}{# Scan next quiz #}</span>
+		<img id="quiz_result_statistics_scan_picture" src="{{ _filelatest('/bruno/quiz/images/phone.png') }}" />
+	</div>
+
+	<div class="quiz_result_statistics_followus">
+		<div find="ad_link">{{ data_ad }}</div>
+		<img find="ad_link" class="quiz_result_statistics_picture" src="{{ data_ad_pic|raw }}" />
+	</div>
+
+	
+
+	<div id="end_quiz_result_statistics" class="visibility_hidden">
+		{% if data_ad_link %}
+			<script type="text/javascript">
+				$('[find=ad_link]')
+					.addClass('base_pointer')
+					.on('click', function(){
+						window.open("{{ data_ad_link|raw }}", '_blank');
+					});
+			</script>
+		{% endif %}
+	</div>
+{% endblock %}

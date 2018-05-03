@@ -1,0 +1,8 @@
+Feb 16th, 2017
+Bruno & Evan'
+1) We manual changed jwplayer.js => repo:"/scripts/libs/jwplayer-7.9.1-lincko/"
+2) Create a folder 7.9.1
+3) create 2 files inside this folder:
+ - related.js
+ - jwpsrv.js
+4) do not send stat ping.gif inside jwpsrv.js

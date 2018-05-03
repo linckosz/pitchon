@@ -1,0 +1,10 @@
+{% extends '/bundles/bruno/wrapper/templates/wrapper.twig' %}
+{% block base %}
+	<script>
+		JSfiles.later("{{ _filelatest('/bruno/app/scripts/generic/base.js') }}", 30);
+		JSfiles.later("{{ _filelatest('/bruno/app/scripts/login.js') }}");
+	</script>
+	<link rel="stylesheet" href="{{ _filelatest('/bruno/app/styles/generic/base.css') }}" type="text/css" />
+	{% include '/bundles/bruno/app/templates/generic/account.twig' %}
+	<div id="base_error"></div>
+{% endblock %}

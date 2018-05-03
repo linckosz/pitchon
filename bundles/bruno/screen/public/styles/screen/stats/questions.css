@@ -1,0 +1,58 @@
+html, body {
+	background: transparent;
+	font-size: 8.0vw;
+	font-size: 8.0vmax;
+	color: #FFFFFF;
+}
+
+#ppt_stats_questions_participants {
+	position: fixed;
+	z-index: 2;
+	top: 0;
+	right: 0;
+	font-size: 10.0vw;
+	font-size: 10.0vmax;
+}
+
+#ppt_stats_questions_wrapper {
+	position: fixed;
+	width: 100%;
+	bottom: 0;
+	left: 0;
+	height: 80%;
+}
+
+#ppt_stats_questions_correct {
+	position: absolute;
+	bottom: 0;
+	width: 20%;
+	left: 27.5%;
+	background-color: rgba(129, 234, 106, 0.8);
+	overflow: visible !important;
+}
+
+#ppt_stats_questions_not_correct {
+	position: absolute;
+	bottom: 0;
+	width: 20%;
+	left: 52.5%;
+	background-color: rgba(203, 203, 203, 0.44);
+	overflow: visible !important;
+}
+
+.ppt_stats_questions_number {
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	bottom: 0;
+}
+
+.ppt_stats_questions_check {
+	position: absolute;
+	top: 0;
+	left: 0;
+	font-size: 1em;
+	width: 100%;
+	text-align: center;
+	color: rgba(255, 255, 255, 0.65);
+}

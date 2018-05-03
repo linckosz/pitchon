@@ -1,0 +1,198 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?snmw1i');
+  src:  url('fonts/icomoon.eot?snmw1i#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?snmw1i') format('truetype'),
+    url('fonts/icomoon.woff?snmw1i') format('woff'),
+    url('fonts/icomoon.svg?snmw1i#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-audio2:before {
+  content: "\e935";
+}
+.icon-audio1:before {
+  content: "\e936";
+}
+.icon-audioopposite2:before {
+  content: "\e937";
+}
+.icon-audioopposite1:before {
+  content: "\e938";
+}
+.icon-audioopposite:before {
+  content: "\e934";
+}
+.icon-audio:before {
+  content: "\e932";
+}
+.icon-scan:before {
+  content: "\e933";
+}
+.icon-CopyLink:before {
+  content: "\e931";
+}
+.icon-ghost:before {
+  content: "\e930";
+}
+.icon-BrunoBotMonk2Icon:before {
+  content: "\e92f";
+}
+.icon-BrunoBotFaceIcon:before {
+  content: "\e92d";
+}
+.icon-BrunoBotMonk1:before {
+  content: "\e92e";
+}
+.icon-simplifiedViewIcon:before {
+  content: "\e92a";
+}
+.icon-viewIcon:before {
+  content: "\e92b";
+}
+.icon-cardViewIcon:before {
+  content: "\e92c";
+}
+.icon-projectActivity:before {
+  content: "\e926";
+}
+.icon-largerIndividual:before {
+  content: "\e929";
+}
+.icon-largerGroup:before {
+  content: "\e928";
+}
+.icon-Remove:before {
+  content: "\e925";
+}
+.icon-links:before {
+  content: "\e927";
+}
+.icon-projectBlack:before {
+  content: "\e924";
+}
+.icon-SmallPersonaiconBlack:before {
+  content: "\e923";
+}
+.icon-Pencil:before {
+  content: "\e902";
+}
+.icon-AddPerson:before {
+  content: "\e90e";
+}
+.icon-ExclamationCloud:before {
+  content: "\e90f";
+}
+.icon-PauseCloud:before {
+  content: "\e919";
+}
+.icon-ResumeCloud:before {
+  content: "\e91d";
+}
+.icon-SpacesHash:before {
+  content: "\e922";
+}
+.icon-Forward:before {
+  content: "\e903";
+}
+.icon-Hash:before {
+  content: "\e904";
+}
+.icon-Plus-no-circle:before {
+  content: "\e905";
+}
+.icon-Search:before {
+  content: "\e906";
+}
+.icon-Trash:before {
+  content: "\e907";
+}
+.icon-Accordion:before {
+  content: "\e908";
+}
+.icon-Actions:before {
+  content: "\e909";
+}
+.icon-Add:before {
+  content: "\e90a";
+}
+.icon-Big-Add:before {
+  content: "\e90b";
+}
+.icon-Calendar:before {
+  content: "\e90c";
+}
+.icon-Chat:before {
+  content: "\e90d";
+}
+.icon-Cloud-Download:before {
+  content: "\e921";
+}
+.icon-Cloud-Files:before {
+  content: "\e910";
+}
+.icon-Collapsed:before {
+  content: "\e900";
+}
+.icon-Docs:before {
+  content: "\e911";
+}
+.icon-Filter:before {
+  content: "\e912";
+}
+.icon-Indicator:before {
+  content: "\e901";
+}
+.icon-Menu:before {
+  content: "\e913";
+}
+.icon-Multiple-People:before {
+  content: "\e914";
+}
+.icon-Multiple-People-Selected:before {
+  content: "\e915";
+}
+.icon-Multipler-Persona:before {
+  content: "\e916";
+}
+.icon-New-Notes:before {
+  content: "\e917";
+}
+.icon-Notes-3:before {
+  content: "\e918";
+}
+.icon-Settings:before {
+  content: "\e91a";
+}
+.icon-Single-Person:before {
+  content: "\e91b";
+}
+.icon-Single-Person-Selected:before {
+  content: "\e91c";
+}
+.icon-Tasks:before {
+  content: "\e91e";
+}
+.icon-Tasks-checked:before {
+  content: "\e91f";
+}
+.icon-Tasks-unchecked:before {
+  content: "\e920";
+}
+

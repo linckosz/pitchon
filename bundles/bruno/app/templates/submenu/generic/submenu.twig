@@ -1,0 +1,58 @@
+{# category 1 #}
+<div class="display_none">
+
+	<script>
+		var submenu_list = [];
+		JSfiles.later("{{ _filelatest('/bruno/app/scripts/submenu/generic/submenu.js') }}", 30);
+		{# Loop the folder to include automaticaly all files #}
+		{% set folder = '/bruno/app/scripts/submenu' %}
+		{% set files = _loop_public_folder(folder) %}
+		{% for key, value in files %}
+			JSfiles.later("{{ _filelatest(folder ~ '/' ~ value) }}", 40);
+		{% endfor %}
+
+		var submenu_language_full = "{{ _language_full() }}";
+		{% set language = _language() %}
+		{% set languages = _languages('app') %}
+		submenu_list['language'] = {
+			"_title": {
+				"style": "title",
+				"title": Bruno.Translation.get('app', 1, 'html'), //Language
+			},
+			
+			{% for key, value in languages %}
+				"{{ key }}": {
+					"style": "radio",
+					"title": "{{ value }}",
+					"selected": {% if key == language %}true{% else %}false{% endif %},
+					"action": function(){
+						wrapper_change_language("{{ key }}");
+					},
+					"hide": true,
+					"class": "",
+				},
+			{% endfor %}
+		};
+	</script>
+
+	{# Loop the folder to include automaticaly all files #}
+	{% set folder = '/bruno/app/styles/submenu' %}
+	{% set files = _loop_public_folder(folder) %}
+	{% for key, value in files %}
+		<link rel="stylesheet" href="{{ _filelatest(folder ~ '/' ~ value) }}" type="text/css" />
+	{% endfor %}
+
+</div>
+<div class="display_none">
+	
+	{# Loop the folder to include automaticaly all files #}
+	{% set folder = '/submenu' %}
+	{% set bundle = 'bruno/app' %}
+	{% set files = _loop_twig_folder(bundle, folder) %}
+	{% for key, value in files %}
+		{% include value %}
+	{% endfor %}
+
+</div>
+
+<div id="end_submenu" class="visibility_hidden"></div>

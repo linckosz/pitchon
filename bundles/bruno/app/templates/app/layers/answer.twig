@@ -1,0 +1,108 @@
+{# category ? #}
+<div id="begin_app_layers_answer" class="visibility_hidden">
+	<script>
+		JSfiles.later("{{ _filelatest('/bruno/app/scripts/app/layers/answer.js') }}");
+	</script>
+	<link rel="stylesheet" href="{{ _filelatest('/bruno/app/styles/app/layers/answer.css') }}" type="text/css" />
+	<style type="text/css">
+		.app_layers_answer_question_image, .app_layers_answer_answers_picture_image {
+			background-image: url("{{ _filelatest('/bruno/app/images/generic/loadingpacman10.png') }}");
+		}
+	</style>
+</div>
+<div id="end_app_layers_answer" class="visibility_hidden"></div>
+
+<div class="display_none">
+
+	<div id="-app_layers_answer" class="app_layers_answer">
+	</div>
+
+	<div id="-app_layers_answer_style" class="app_layers_answer_style">
+		<select find="select_style" class="app_layers_answer_style_select" >
+			<option value="1" title="{{ _trans('app', 4, 11, 'html') }}{# Answers #}">{{ _trans('app', 4, 11, 'html') }}{# Answers #}</option>
+			<option value="2" title="{{ _trans('app', 4, 14, 'html') }}{# Pictures #}">{{ _trans('app', 4, 14, 'html') }}{# Pictures #}</option>
+			<option value="3" title="{{ _trans('app', 4, 15, 'html') }}{# Statistics #}">{{ _trans('app', 4, 15, 'html') }}{# Statistics #}</option>
+			<option value="4" title="{{ _trans('app', 4, 30, 'html') }}{# Survey #}">{{ _trans('app', 4, 30, 'html') }}{# Survey #}</option>
+		</select>
+	</div>
+
+	<div id="-app_layers_answer_question" class="app_layers_answer_question">
+		<img find="image" class="app_layers_answer_question_image display_none" />
+		<span find="add" class="app_layers_answer_question_icon fa fa-picture-o" title="{{ _trans('app', 4, 16, 'html') }}{# Add image #}">
+			<div find="progress" class="app_layers_answer_question_progress display_none"></div>
+		</span>
+	</div>
+
+	<div id="-app_layers_answer_tips" class="app_layers_answer_tips">
+		<div class="app_layers_answer_tips_answers">
+			{{ _trans('app', 4, 31, 'html') }}{# Let your audience find out the correct answer #}
+		</div>
+		<div class="app_layers_answer_tips_pictures">
+			{{ _trans('app', 4, 32, 'html') }}{# Ask your audience to find the correct picture #}
+		</div>
+		<div class="app_layers_answer_tips_statistics">
+			{{ _trans('app', 4, 33, 'html') }}{# Ask your audience their preference #}
+		</div>
+		<div class="app_layers_answer_tips_survey">
+			<div>
+				{{ _trans('app', 4, 34, 'html') }}{# Ask your audience what they think o a scale of 10 #}
+			</div>
+			<div class="app_layers_answer_tips_survey_stars">
+				<span class="fa fa-star" title="1"></span>
+				<span class="fa fa-star" title="2"></span>
+				<span class="fa fa-star" title="3"></span>
+				<span class="fa fa-star" title="4"></span>
+				<span class="fa fa-star" title="5"></span>
+				<span class="fa fa-star-o" title="6"></span>
+				<span class="fa fa-star-o" title="7"></span>
+				<span class="fa fa-star-o" title="8"></span>
+				<span class="fa fa-star-o" title="9"></span>
+				<span class="fa fa-star-o" title="10"></span>
+			</div>
+		</div>
+	</div>
+
+	<div id="-app_layers_answer_answers" find="answer" class="app_layers_answer_answers app_layers_answer_answers_table answers">
+		<div find="row" class="app_layers_answer_answers_row">
+			<div find="answer_tickbox" class="app_layers_answer_answers_select app_layers_answer_answers_cell">
+				<div find="answer_select" class="app_layers_answer_answers_select_icon">
+					<div find="answer_letter" class="app_layers_answer_answers_select_icon_letter perfect_center"></div>
+					<div find="answer_correct" class="app_layers_answer_answers_select_icon_correct fa fa-check perfect_center"></div>
+				</div>
+			</div>
+			<div find="answer_answer" class="app_layers_answer_answers_answer app_layers_answer_answers_cell">
+				<div class="app_layers_answer_answers_number_wrapper">
+					<div find="number" class="app_layers_answer_answers_number">
+					</div>
+				</div>
+				<textarea find="input_textarea" class="app_layers_answer_answers_answer_textarea font_sans_serif selectable" rows="1"></textarea>
+			</div>
+			<div find="answer_preview" class="app_layers_answer_answers_picture app_layers_answer_answers_cell">
+				<img find="answer_image" class="app_layers_answer_answers_picture_image display_none" />
+				<span find="answer_add" class="app_layers_answer_answers_picture_icon fa fa-picture-o" title="{{ _trans('app', 4, 16, 'html') }}{# Add image #}">
+					<div find="progress" class="app_layers_answer_answers_progress display_none"></div>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<span id="-app_layers_answer_settings" class="app_layers_answer_settings"><span find="eye" class="fa fa-cloud-download app_layers_answer_settings_eye"></span>{{ _trans('app', 4, 29, 'html') }}{# Get my presentation #}</span>
+
+	<div id="-app_layers_answer_url" class="app_layers_answer_url">
+		<span find="ppt_wrapper" class="app_layers_answer_url_wrapper app_layers_answer_url_wrapper_preview">
+			<span find="ppt" class="app_layers_answer_url_button">{{ _trans('app', 4, 22, 'html') }}{# Download PPT #}</span>
+			<span find="ppt_url" class="app_layers_answer_url_link selectable"></span>
+		</span>
+		<span find="question_wrapper" class="app_layers_answer_url_wrapper app_layers_answer_url_wrapper_question display_none">
+			<span find="question" class="app_layers_answer_url_button">{{ _trans('app', 4, 17, 'html') }}{# Copy Question URL #}</span>
+			<span find="question_url" class="app_layers_answer_url_link selectable"></span>
+		</span>
+		<span find="answer_wrapper" class="app_layers_answer_url_wrapper app_layers_answer_url_wrapper_answer display_none">
+			<span find="answer_button" class="app_layers_answer_url_button">{{ _trans('app', 4, 18, 'html') }}{# Copy Answer URL #}</span>
+			<span find="answer_url" class="app_layers_answer_url_link selectable"></span>
+		</span>
+	</div>
+
+	<div id="-app_layers_answer_mask" class="app_layers_answer_mask"></div>
+
+</div>
