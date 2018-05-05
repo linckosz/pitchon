@@ -42,7 +42,7 @@ $app->bruno->time_record = false; //Turn at true to track and \time_checkpoint('
 $app->bruno->time_start = 0;
 
 //Application title
-$app->bruno->title = 'PitchOn';
+$app->bruno->title = 'Lebonquiz';
 
 //Domain name
 if(isset($_SERVER['SERVER_HOST'])){
