@@ -13,12 +13,30 @@ class ControllerUser extends Controller {
 	public function signin_post(){
 		$app = ModelBruno::getApp();
 		$data = ModelBruno::getData();
+		$logged = false;
 
 		if(
 			   isset($data->email)
 			&& isset($data->password)
+			&& User::validEmail($data->email)
+			&& User::validPassword($data->password)
 		){
-			if($user = User::Where('email', $data->email)->where('pwd', $data->password)->first(array('id', 'md5', 'email', 'language'))){
+			$user = User::Where('email', $data->email)->first(array('id', 'md5', 'pwd', 'email', 'language'));
+			\libs\Watch::php($data->password, '$var', __FILE__, __LINE__, false, false, true);
+			\libs\Watch::php($user, '$var', __FILE__, __LINE__, false, false, true);
+			if($user && password_verify($data->password, $user->pwd)){
+				$logged = true;
+			} else if(!$user){ //New user
+				$user = new User;
+				$user->email = trim(mb_strtolower($data->email));
+				$user->username = trim(mb_strstr($data->email, '@', true));
+				$user->pwd = password_hash($data->password, PASSWORD_BCRYPT);
+				if($user->save()){
+					$logged = true;
+				}
+			}
+
+			if($logged && $user){
 				$app->bruno->data['user_id'] = $user->id;
 				$remember = false;
 				if(isset($data->remember) && $data->remember){

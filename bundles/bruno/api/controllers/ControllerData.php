@@ -33,7 +33,13 @@ class ControllerData extends Controller {
 			$lastvisit_ms = (int) $data->lastvisit_ms;
 		}
 
-		$refresh = User::getUser()->refresh;
+		$user = User::getUser();
+		if(!$user){
+			(new Json())->render();
+			return exit(0);
+		}
+
+		$refresh = $user->refresh;
 		if($refresh>$lastvisit_ms){
 			$lastvisit_ms = false;
 		} else {

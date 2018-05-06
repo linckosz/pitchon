@@ -26,14 +26,14 @@ ini_set('opcache.enable', '0');
 require_once $path.'/error/errorPHP.php';
 require_once $path.'/config/eloquent.php';
 
-$app->get('/get/:ip/:hostname/:deployment/:sub/:git', function($ip = null, $hostname = null, $deployment = null, $sub = null, $git = null) use ($app) {
+$app->get('/get/:ip/:hostname/:deployment', function($ip = null, $hostname = null, $deployment = null) use ($app) {
 	
 	$version = Version::find(1);
 	if(!$version){
 		$version = new Version;
 		$version->id = 1;
 	}
-	$version->version = $git;
+	$version->version = md5(uniqid('', true));
 	$version->save();
 
 	$list = array();
@@ -47,10 +47,6 @@ $app->get('/get/:ip/:hostname/:deployment/:sub/:git', function($ip = null, $host
 	if(strpos($domain, ':')){
 		$domain = strstr($domain, ':', true);
 	}
-	if(!preg_match("/^([a-z]+).(bruno.\w+)$/ui", $domain)){
-		echo "It has to use a hostname qualified\n";
-		return true;
-	}
 	//PASSWORD_DEFAULT
 	if( !password_verify($deployment, '$2y$10$3CJ0P3XGJj/8HTR8w9Sl0ubHoRBiXApmAKYQE/MwO0nquP/adCEuu') ){
 		echo "You are not authorized to modify the translation database\n";
@@ -61,7 +57,7 @@ $app->get('/get/:ip/:hostname/:deployment/:sub/:git', function($ip = null, $host
 	$data = json_encode(array(
 		'translation' => $list,
 		'deployment' => $deployment,
-		'git' => $git,
+		'git' => $version->version,
 	));
 	$ch = curl_init($ip.':8888/update');
 	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
@@ -76,7 +72,7 @@ $app->get('/get/:ip/:hostname/:deployment/:sub/:git', function($ip = null, $host
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			'Content-Type: application/json; charset=UTF-8',
 			'Content-Length: ' . mb_strlen($data),
-			'Host: '.$sub.'.'.$hostname,
+			'Host: api.'.$hostname,
 		)
 	);
 
@@ -104,8 +100,6 @@ $app->get('/get/:ip/:hostname/:deployment/:sub/:git', function($ip = null, $host
 	'ip' => '(?:[0-9]{1,3}\.){3}[0-9]{1,3}',
 	'hostname' => '([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}',
 	'deployment' => '\w+',
-	'sub' => '\w+',
-	'git' => '\w+',
 ))
 ->name('get_translation_data');
 
@@ -113,10 +107,6 @@ $app->post('/update', function() use ($app) {
 	$domain = $_SERVER['HTTP_HOST'];
 	if(strpos($domain, ':')){
 		$domain = strstr($domain, ':', true);
-	}
-	if(!preg_match("/^([a-z]+).(bruno.\w+)$/ui", $domain)){
-		echo "It has to use a hostname qualified\n";
-		return true;
 	}
 	$data = json_decode($app->request->getBody());
 	$app->bruno->deployment = $data->deployment;

@@ -52,6 +52,11 @@ class Question extends ModelBruno {
 		return $this->belongsTo('\\bundles\\bruno\\data\\models\\data\\Pitch', 'parent_id'); //parent_id => pitch_id
 	}
 
+	//One(Question) to Many(Answer)
+	public function answer(){
+		return $this->hasMany('\\bundles\\bruno\\data\\models\\data\\Answer', 'parent_id'); //parent_id => question_id
+	}
+
 ////////////////////////////////////////////
 
 	public static function setItem($form){
@@ -243,12 +248,12 @@ class Question extends ModelBruno {
 				$answer_1 = new Answer;
 				$answer_1->number = 1;
 				$answer_1->parent_id = $this->id;
-				$answer_1->title = $app->trans->getBRUT('api', 0, 12); //Yes
+				$answer_1->title = $app->trans->getBRUT('api', 0, 12); //Answer #1
 
 				$answer_2 = new Answer;
 				$answer_2->number = 2;
 				$answer_2->parent_id = $this->id;
-				$answer_2->title = $app->trans->getBRUT('api', 0, 13); //No
+				$answer_2->title = $app->trans->getBRUT('api', 0, 13); //Answer #2
 
 				$result = $answer_1->save() && $answer_2->save();
 

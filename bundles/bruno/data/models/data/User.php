@@ -200,6 +200,7 @@ class User extends ModelBruno {
 	public function save(array $options = array()){
 		$new = false;
 		if(!isset($this->id)){
+			$this->setLanguage(false);
 			$new = true;
 		}
 		$result = parent::save($options);
@@ -243,6 +244,12 @@ class User extends ModelBruno {
 			$file->saveParent();
 			$question->file_id = $file->id;
 			$question->save();
+			//Additional answers
+			$answer = new Answer;
+			$answer->number = 3;
+			$answer->parent_id = $question->id;
+			$answer->save();
+			//Edit all answers
 			$answers = $question->answer;
 			foreach ($answers as $answer) {
 				if($answer->number==1){
@@ -253,29 +260,6 @@ class User extends ModelBruno {
 					$question->save();
 				} else if($answer->number==3){
 					$answer->title = $app->trans->getBRUT('api', 4, 4); //Tourism
-				} else if($answer->number==4){
-					$answer->title = '';
-				}
-				$answer->save();
-			}
-
-			$question = new Question;
-			$question->style = 1;
-			$question->parent_id = $pitch->id;
-			$question->title = $app->trans->getBRUT('api', 4, 5); //(Mosquito question in chinese) According to a well-known piece of advice, "If you want something done right, you have to" what?
-			$question->save();
-			$answers = $question->answer;
-			foreach ($answers as $answer) {
-				if($answer->number==1){
-					$answer->title = $app->trans->getBRUT('api', 4, 6); //Use a calculator
-				} else if($answer->number==2){
-					$answer->title = $app->trans->getBRUT('api', 4, 7); //Call MacGyver
-				} else if($answer->number==3){ //correct
-					$answer->title = $app->trans->getBRUT('api', 4, 8); //Do it yourself
-					$question->number = $answer->number;
-					$question->save();
-				} else if($answer->number==4){
-					$answer->title = $app->trans->getBRUT('api', 4, 9); //Double-check everything
 				}
 				$answer->save();
 			}
@@ -285,6 +269,16 @@ class User extends ModelBruno {
 			$question->parent_id = $pitch->id;
 			$question->title = $app->trans->getBRUT('api', 4, 10); //(Fan Bingbing question in chinese) Which supercar is made in Lebanon?
 			$question->save();
+			//Additional answers
+			$answer = new Answer;
+			$answer->number = 3;
+			$answer->parent_id = $question->id;
+			$answer->save();
+			$answer = new Answer;
+			$answer->number = 4;
+			$answer->parent_id = $question->id;
+			$answer->save();
+			//Edit all answers
 			$answers = $question->answer;
 			foreach ($answers as $answer) {
 				if($answer->number==1){
@@ -317,36 +311,33 @@ class User extends ModelBruno {
 			}
 
 			$question = new Question;
-			$question->style = 3; //Statistics
+			$question->style = 1;
 			$question->parent_id = $pitch->id;
-			$question->title = $app->trans->getBRUT('api', 4, 11); //(Supper question in chinese) What is your favorite dessert?
+			$question->title = $app->trans->getBRUT('api', 4, 5); //(Mosquito question in chinese) According to a well-known piece of advice, "If you want something done right, you have to" what?
 			$question->save();
+			//Additional answers
+			$answer = new Answer;
+			$answer->number = 3;
+			$answer->parent_id = $question->id;
+			$answer->save();
+			$answer = new Answer;
+			$answer->number = 4;
+			$answer->parent_id = $question->id;
+			$answer->save();
+			//Edit all answers
 			$answers = $question->answer;
 			foreach ($answers as $answer) {
 				if($answer->number==1){
-					$file_id = 10009;
-					if($language=='en'){ $file_id = 10013; }
-					$answer->title = $app->trans->getBRUT('api', 4, 12); //Cakes
+					$answer->title = $app->trans->getBRUT('api', 4, 6); //Use a calculator
 				} else if($answer->number==2){
-					$file_id = 10010;
-					if($language=='en'){ $file_id = 10014; }
-					$answer->title = $app->trans->getBRUT('api', 4, 13); //Ice Cream
+					$answer->title = $app->trans->getBRUT('api', 4, 7); //Call MacGyver
 				} else if($answer->number==3){ //correct
-					$file_id = 10011;
-					if($language=='en'){ $file_id = 10015; }
-					$answer->title = $app->trans->getBRUT('api', 4, 14); //Cheese
+					$answer->title = $app->trans->getBRUT('api', 4, 8); //Do it yourself
+					$question->number = $answer->number;
+					$question->save();
 				} else if($answer->number==4){
-					$file_id = 10012;
-					if($language=='en'){ $file_id = 10016; }
-					$answer->title = $app->trans->getBRUT('api', 4, 15); //Fruits
+					$answer->title = $app->trans->getBRUT('api', 4, 9); //Double-check everything
 				}
-				$file = File::find($file_id)->replicate();
-				$file->updated_json = null;
-				$file->nosql = null;
-				$file->parent_type = $answer->getTable();
-				$file->parent_id = $answer->id;
-				$file->saveParent();
-				$answer->file_id = $file->id;
 				$answer->save();
 			}
 

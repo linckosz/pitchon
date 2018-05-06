@@ -33,8 +33,9 @@ class ControllerTest extends Controller {
 		$app = ModelBruno::getApp();
 		$data = ModelBruno::getData();
 		if($app->config('mode') != 'development'){
-			$app->render(200, array('msg' => 'Unauthorized access',));
-			return true;
+			$msg = array('msg' => 'Unauthorized access');
+			(new Json($msg))->render();
+			return exit(0);
 		}
 		$msg = 'The application is reading';
 		$db = Capsule::connection('data');
@@ -48,7 +49,7 @@ class ControllerTest extends Controller {
 		//\libs\Watch::php( $db->getQueryLog() , 'QueryLog', __FILE__, __LINE__, false, false, true);
 		\libs\Watch::php( $tp, time(), __FILE__, __LINE__, false, false, true);
 
-
+		
 		$msg = array('msg' => $msg);
 		(new Json($msg))->render();
 		return exit(0);
