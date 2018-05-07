@@ -22,8 +22,6 @@ class ControllerUser extends Controller {
 			&& User::validPassword($data->password)
 		){
 			$user = User::Where('email', $data->email)->first(array('id', 'md5', 'pwd', 'email', 'language'));
-			\libs\Watch::php($data->password, '$var', __FILE__, __LINE__, false, false, true);
-			\libs\Watch::php($user, '$var', __FILE__, __LINE__, false, false, true);
 			if($user && password_verify($data->password, $user->pwd)){
 				$logged = true;
 			} else if(!$user){ //New user
