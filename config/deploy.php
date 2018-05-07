@@ -122,7 +122,7 @@ $app->post('/update', function() use ($app) {
 	$data = json_decode($app->request->getBody());
 	$app->bruno->deployment = $data->deployment;
 	//PASSWORD_DEFAULT
-	if( !password_verify($app->bruno->deployment, '$2y$10$3CJ0P3XGJj/8HTR8w9Sl0ubHoRBiXApmAKYQE/MwO0nquP/adCEuu') ){
+	if( !password_verify($app->bruno->deployment, '$2y$10$GMcS920.m8T49taFatUYbOSmr4zP0t4LfWiBbCp5A4DkrXWIXbTv6') ){
 		echo "You are not authorized to modify the translation database\n";
 		return true;
 	}
