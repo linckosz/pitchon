@@ -92,8 +92,6 @@ $app->get('/get/:ip/:hostname/:deployment', function($ip = null, $hostname = nul
 	curl_setopt($ch, CURLOPT_STDERR, $verbose);
 	
 	if($result = curl_exec($ch)){
-		\libs\Watch::php(curl_getinfo($ch), '$ch', __FILE__, __LINE__, false, false, true);
-		\libs\Watch::php(stream_get_contents($verbose), '$verbose', __FILE__, __LINE__, false, false, true);
 		echo $result;
 	} else {
 		echo "cURL error!\n";
