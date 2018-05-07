@@ -70,7 +70,7 @@ $app->get('/get/:ip/:hostname/:deployment', function($ip = null, $hostname = nul
 		'deployment' => $deployment,
 		'git' => $version->version,
 	));
-	$ch = curl_init($ip.':8888/update');
+	$ch = curl_init($ip.':38890/update');
 	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 	curl_setopt($ch, CURLOPT_POST, true);
