@@ -141,9 +141,9 @@ $app->post('/update', function() use ($app) {
 						if($value){ //Check that there is a value inside the 
 							$original = $sentence->getOriginal();
 							if($sentence->querySave()){
-								foreach ($dirty as $key => $value) {
-									if(!isset($original[$key])){
-										unset($dirty[$key]);
+								foreach ($original as $key => $value) {
+									if(!isset($dirty[$key])){
+										unset($original[$key]);
 									}
 								}
 								$str_dirty = preg_replace( "/\r|\n/", "\\n", json_encode($dirty, JSON_UNESCAPED_UNICODE) );
