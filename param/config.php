@@ -2,6 +2,8 @@
 
 namespace param;
 
+use \libs\STR;
+
 ////////////////////////////////////
 // FOLDER PERMISSIONS
 ////////////////////////////////////
@@ -91,6 +93,28 @@ $app->config(array(
 //Root directory (which is different from landing page which is in public folder)
 $app->bruno->path = $_SERVER['DOCUMENT_WWW'];
 
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, 'http://101.1.16.88:88');
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_TIMEOUT, 2); //Cannot use MS, it will crash the request
+curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
+curl_setopt($ch, CURLOPT_FORBID_REUSE, true);
+curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+		'Content-Type: application/json; charset=UTF-8',
+		'Host: myip.com',
+	)
+);
+if($result = curl_exec($ch)){
+	$result = STR::break_line_conv($result, '');
+	if(filter_var($result, FILTER_VALIDATE_IP)){
+		$_SERVER['REMOTE_ADDR'] = $result;
+	}
+}
+@curl_close($ch);
+
 //Insure the the folder is writable by chown apache:apache slim.api/logs and is in share(=writable) path in gluster mode.
 //chown apache:apache /path/to/applilogs
 $app->bruno->logPath = $app->bruno->path.'/logs';
@@ -167,6 +191,7 @@ $app->bruno->translation = array(
 //Some generic data for translation twig
 $app->bruno->data = array(
 	'user_id' => false,
+	'user_ip' => $_SERVER['REMOTE_ADDR'],
 	'guest_id' => false,
 	'domain' => $app->bruno->domain,
 	'shortlink' => $app->bruno->shortlink,
