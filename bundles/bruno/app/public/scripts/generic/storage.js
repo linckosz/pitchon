@@ -126,24 +126,6 @@ var storage_cb_complete = function(msg, err, status, data){
 };
 
 Bruno.storage.onboarding_stop = false;
-Bruno.storage.onboarding = function(){
-	if(Bruno.storage.onboarding_stop){
-		return false;
-	}
-	setTimeout(function(){
-		var tuto = Bruno.storage.get('user', wrapper_localstorage.user_id, 'tuto');
-		if(tuto){
-			var item = app_generic_state.getItem(tuto);
-			if(typeof item.id != 'undefined' && item._type == 'question'){
-				//app_generic_state.openItem(true); //This line open automaticaly the question page (but may be too complex at first sight)
-			}
-		} else if(Bruno.storage.get('user', wrapper_localstorage.user_id)){
-			Bruno.storage.onboarding_stop = true;
-		}
-	}, 100);
-	return true;
-}
-app_application_bruno.add(Bruno.storage.onboarding, "user");
 
 Bruno.storage.getMD5 = function(category){
 	var md5id = md5(Math.random());

@@ -201,7 +201,7 @@ var app_layers_question_feedPage = function(param){
 		event.preventDefault();
 		return false;
 	});
-	Elem.find("[find=input_create]").on('click', param, function(event){
+	Elem.find("[find=input_create]").on('click', param, function(event){console.log('ok');return false;
 		app_layers_question_icon_create(event.data);
 		event.preventDefault();
 		return false;

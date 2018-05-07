@@ -53,11 +53,14 @@ if(isset($_SERVER['SERVER_HOST'])){
 	$app->bruno->domain = $_SERVER['HTTP_HOST'];
 }
 
+//Short link for mobile access
+$app->bruno->shortlink = 'quiz.'.$app->bruno->domain;
+
 if(!isset($_SERVER['SERVER_ADMIN'])){
-	$_SERVER['SERVER_ADMIN'] = 'webmaster@pitchon.net';
+	$_SERVER['SERVER_ADMIN'] = 'webmaster@'.$app->bruno->domain;
 }
 if(!isset($_SERVER['SERVER_HOST'])){
-	$_SERVER['SERVER_HOST'] = 'pitchon.net';
+	$_SERVER['SERVER_HOST'] = $app->bruno->domain;
 }
 if(!isset($_SERVER['BRUNO_DEV'])){
 	$_SERVER['BRUNO_DEV'] = '';
@@ -166,6 +169,7 @@ $app->bruno->data = array(
 	'user_id' => false,
 	'guest_id' => false,
 	'domain' => $app->bruno->domain,
+	'shortlink' => $app->bruno->shortlink,
 	'http_host' => $app->bruno->http_host,
 	'title' => $app->bruno->title,
 	'support' => 'support@pitchon.net',

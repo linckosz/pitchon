@@ -6,7 +6,7 @@ use \libs\Datassl;
 use \libs\Folders;
 use \libs\Version;
 
-$path = dirname(__FILE__).'/..';
+$path = $_SERVER['DOCUMENT_WWW'];
 
 require_once $path.'/vendor/autoload.php';
 
@@ -14,8 +14,19 @@ $app = new \Slim\Slim();
 
 require_once $path.'/config/global.php';
 require_once $path.'/config/language.php';
-require_once $path.'/param/common.php';
-require_once $path.'/param/unique/parameters.php';
+require_once $path.'/param/config.php';
+
+//Add manually all databases
+$app->bruno->databases['api'] = true;
+$app->bruno->databases['app'] = true;
+$app->bruno->databases['data'] = true;
+$app->bruno->databases['quiz'] = true;
+$app->bruno->databases['remote'] = true;
+$app->bruno->databases['screen'] = true;
+$app->bruno->databases['wrapper'] = true;
+$app->bruno->databases['www'] = true;
+
+require_once $path.'/param/unique/env.php';
 
 $app->config(array(
 	'log.enable' => false,
@@ -48,7 +59,7 @@ $app->get('/get/:ip/:hostname/:deployment', function($ip = null, $hostname = nul
 		$domain = strstr($domain, ':', true);
 	}
 	//PASSWORD_DEFAULT
-	if( !password_verify($deployment, '$2y$10$3CJ0P3XGJj/8HTR8w9Sl0ubHoRBiXApmAKYQE/MwO0nquP/adCEuu') ){
+	if( !password_verify($deployment, '$2y$10$GMcS920.m8T49taFatUYbOSmr4zP0t4LfWiBbCp5A4DkrXWIXbTv6') ){
 		echo "You are not authorized to modify the translation database\n";
 		return true;
 	}
@@ -79,7 +90,7 @@ $app->get('/get/:ip/:hostname/:deployment', function($ip = null, $hostname = nul
 	$verbose = fopen('php://temp', 'w+');
 	curl_setopt($ch, CURLOPT_VERBOSE, true);
 	curl_setopt($ch, CURLOPT_STDERR, $verbose);
-
+	
 	if($result = curl_exec($ch)){
 		echo $result;
 	} else {
