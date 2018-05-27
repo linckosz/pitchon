@@ -45,6 +45,8 @@ class Email extends \PHPMailer {
 				$text = $_SERVER['REQUEST_SCHEME'].'://'.$text;
 			}
 			return $text;
+		} else if($text && filter_var(trim($text), FILTER_VALIDATE_EMAIL)){
+			return 'mailto:'.$text;
 		}
 		return false;
 	}

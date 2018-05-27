@@ -43,6 +43,10 @@ if(navigator.userAgent.match(/iPhone|iPad|iPod/i) && navigator.userAgent.match(/
 	isSafariIOS = true;
 }
 
+var wrapper_is_mobile = function(){
+	return /webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);
+}
+
 /*
 	This commands help to track time spent in some functions
 	wrapper_time_checkpoint(false, true);

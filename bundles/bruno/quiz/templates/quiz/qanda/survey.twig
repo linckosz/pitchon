@@ -5,9 +5,9 @@
 		<script type="text/javascript">
 			var score_total = 0;
 			{% if data_statisticsid_enc %}
-				var base_answer_url = location.protocol+'//quiz.'+document.domainRoot+"/s/{{ data_statisticsid_enc|raw }}";
+				var base_answer_url = location.protocol+'//quiz.'+document.domainRoot+"/s/{{ data_statisticsid_enc|raw }}/{{ data_questionid_enc|raw }}";
 			{% else %}
-				var base_answer_url = location.protocol+'//quiz.'+document.domainRoot+"/s/preview"; {# Demo mode (note: it works because "i" is not recognized by STR::integer_map) #}
+				var base_answer_url = location.protocol+'//quiz.'+document.domainRoot+"/s/preview/{{ data_questionid_enc|raw }}"; {# Demo mode (note: it works because "i" is not recognized by STR::integer_map) #}
 			{% endif %}
 			var trans_unfinshed = "{{ _trans('quiz', 0, 20, 'js') }}"; ////You haven't scored all, those not scored will be ignored. Do you want to send your result?
 		</script>

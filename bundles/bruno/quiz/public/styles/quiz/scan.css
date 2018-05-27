@@ -1,0 +1,125 @@
+video {
+	position: relative;
+	object-fit: cover;
+	width: 100%;
+	height: 100%;
+}
+
+#quiz_scan {
+	text-align: center;
+	margin-top: 1.5em;
+	margin-bottom: 2.5em;
+	font-size: 4.0vw;
+    font-size: 4.0vmax;
+}
+
+#quiz_scan_qrcode_video {
+	position: relative;
+	overflow: hidden;
+	width: 80%;
+	width: 80vw;
+	margin: 0.5em 10%;
+	margin: 0.5em 10vw;
+}
+
+.quiz_scan_qrcode_video_corner {
+	position: absolute;
+	border: none 3px #00FF00;
+	z-index: 2;
+	opacity: 0.90;
+	width: 20%;
+	height: 10%;
+}
+
+#quiz_scan_qrcode_video_tl {
+	top: 0;
+	border-top-style: solid;
+	left: 0;
+	border-left-style: solid;
+}
+
+#quiz_scan_qrcode_video_tr {
+	top: 0;
+	border-top-style: solid;
+	right: 0;
+	border-right-style: solid;
+}
+
+#quiz_scan_qrcode_video_bl {
+	bottom: 0;
+	border-bottom-style: solid;
+	left: 0;
+	border-left-style: solid;
+}
+
+#quiz_scan_qrcode_video_br {
+	bottom: 0;
+	border-bottom-style: solid;
+	right: 0;
+	border-right-style: solid;
+}
+
+#quiz_scan_qrcode_video_bar {
+	position: absolute;
+	z-index: 3;
+	left: 10%;
+	width: 80%;
+	height: 3px;
+	top: 10%;
+	opacity: 0.70;
+	background-color: #00FF00;
+	box-shadow: 0 0 4px 3px rgba(0, 255, 0, 0.40);
+	-moz-box-shadow: 0 0 4px 3px rgba(0, 255, 0, 0.40);
+	-webkit-box-shadow: 0 0 4px 3px rgba(0, 255, 0, 0.40);
+	border-radius: 3px;
+
+	-webkit-animation: quiz_scan_qrcode_video_bar_move 1.5s infinite;
+	-webkit-animation-timing-function: ease-in-out;
+	-webkit-animation-direction: alternate;
+	animation: quiz_scan_qrcode_video_bar_move 1.5s infinite;
+	animation-direction: alternate;
+	animation-timing-function: ease-in-out;
+}
+
+@-webkit-keyframes quiz_scan_qrcode_video_bar_move {
+	from {top: 10%;}
+	to {top: 90%;}
+}
+@keyframes quiz_scan_qrcode_video_bar_move {
+	from {top: 10%;}
+	to {top: 90%;}
+}
+
+#quiz_scan_qrcode_video_done {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255, 255, 255, 0);
+	text-align: center;
+	vertical-align: middle;
+	z-index: 4;
+	-webkit-transition: background 0.2s;
+	-moz-transition: background 0.2s;
+	-o-transition: background 0.2s;
+	transition: background 0.2s
+}
+
+#quiz_scan_qrcode_video_done_wait {
+	font-size: 64px;
+	color: #00FF00;
+	position: absolute;
+	text-align: center;
+	vertical-align: middle;
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	-o-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	top: 50%;
+	left: 50%;
+	opacity: 0.70;
+}
+
+#quiz_scan_code {
+	margin-top: 3em;
+}

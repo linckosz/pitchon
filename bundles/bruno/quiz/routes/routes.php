@@ -7,6 +7,15 @@ use \libs\Vanquish;
 $app = \Slim\Slim::getInstance();
 
 $app->get(
+	'/',
+	'\bundles\bruno\quiz\controllers\ControllerQuiz:scan_get'
+)
+->conditions(array(
+	'sessionid' => '[a-z0-9]+',
+))
+->name('quiz_session_get');
+
+$app->get(
 	'/:sessionid',
 	'\bundles\bruno\quiz\controllers\ControllerQuiz:session_get'
 )
@@ -35,7 +44,7 @@ $app->get(
 ->name('quiz_answer_get');
 
 $app->get(
-	'/s/:statisticsid',
+	'/s/:statisticsid(/:questionid)',
 	'\bundles\bruno\quiz\controllers\ControllerQuiz:survey_get'
 )
 ->conditions(array(

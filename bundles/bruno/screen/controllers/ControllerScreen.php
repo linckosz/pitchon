@@ -465,7 +465,6 @@ class ControllerScreen extends Controller {
 					}
 				}
 			} else if($question->style==3){
-				//toto => here we can use statistics data to be faster
 				$column_width = 20;
 				$column_between = 5;
 				$column_side = 40;
@@ -508,25 +507,6 @@ class ControllerScreen extends Controller {
 								$data['data_number_'.$answers_count] = $app->bruno->data['data_number_'.$answers_count] = round(100 * $statistics->$letter / $total);
 							}
 						}
-						/*
-						//toto => To delete
-						$answers = Answer::Where('parent_id', $question->id)
-							->where(function($query) {
-								$query
-									->whereNotNull('file_id')
-									->orWhere('title', '!=', '');
-							})
-							->take(6)
-							->orderBy('number')
-							->get(array('id', 'number'));
-						$answers_count = count($answers);
-						foreach ($answers as $answer) {
-							if($statistics){
-								$letter = $answer->letter();
-								$data['data_number_'.$answer->number] = $app->bruno->data['data_number_'.$answer->number] = round(100 * $statistics->$letter / $total);
-							}
-						}
-						*/
 					}
 				}
 
@@ -586,24 +566,6 @@ class ControllerScreen extends Controller {
 								$data['data_number_'.$answers_count] = $app->bruno->data['data_number_'.$answers_count] = 10 * round($statistics->{'t_'.$letter} / $statistics->$letter);
 							}
 						}
-						/*
-						$answers = Answer::Where('parent_id', $question->id)
-							->where(function($query) {
-								$query
-									->whereNotNull('file_id')
-									->orWhere('title', '!=', '');
-							})
-							->take(6)
-							->orderBy('number')
-							->get(array('id', 'number'));
-						$answers_count = count($answers);
-						foreach ($answers as $answer) {
-							if($statistics){
-								$letter = $answer->letter();
-								$data['data_number_'.$answer->number] = $app->bruno->data['data_number_'.$answer->number] = round(100 * $statistics->$letter / $total);
-							}
-						}
-						*/
 					}
 				}
 

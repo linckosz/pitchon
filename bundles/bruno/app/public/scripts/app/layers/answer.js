@@ -733,11 +733,9 @@ var app_layers_answer_answers_correct = function(number, force_update){
 					var items = Bruno.storage.list('answer', 6, [{ title: ['!=', ''], }, { file_id: ['!=', null], }], 'question', app_layers_answer_question['id']);
 					items = Bruno.storage.sort_items(items, 'number');
 					for(var i in items){
-						if(Bruno.storage.get('file', items[i]['file_id'])){
-							answer = items[i];
-							number = answer['number'];
-							break;
-						}
+						answer = items[i];
+						number = answer['number'];
+						break;
 					}
 				}
 			}

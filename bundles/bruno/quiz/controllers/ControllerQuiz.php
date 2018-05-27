@@ -29,7 +29,7 @@ class ControllerQuiz extends Controller {
 		$data = ModelBruno::getData();
 		$app = ModelBruno::getApp();
 
-		$app->bruno->data['data_statisticsid_enc'] = false;
+		$app->bruno->data['data_statisticsid_enc'] = false; //If false, we are in preview mode
 		$app->bruno->data['html_zoom'] = false;
 		if(isset($data->zoom)){
 			$app->bruno->data['html_zoom'] = (float) $data->zoom;
@@ -40,11 +40,13 @@ class ControllerQuiz extends Controller {
 
 	protected function question_display($question_id){
 		$app = ModelBruno::getApp();
+		$app->bruno->data['data_questionid_enc'] = '';
 		if($question = Question::Where('id', $question_id)->first(array('id', 'u_at', 'parent_id', 'number', 'file_id', 'title', 'style'))){
 
 			$base_url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'];
 
 			$app->bruno->data['data_question'] = true;
+			$app->bruno->data['data_questionid_enc'] = STR::integer_map($question->id);
 			$app->bruno->data['data_question_title'] = $question->title; //Twig will do a HTML encode
 			$app->bruno->data['data_question_picture'] = false;
 			$app->bruno->data['data_question_style'] = $question->style;
@@ -120,6 +122,13 @@ class ControllerQuiz extends Controller {
 		$app->render('/bundles/bruno/quiz/templates/generic/sorry.twig');
 		return true;
 	}
+
+	public function scan_get(){
+		$app = ModelBruno::getApp();
+		$app->render('/bundles/bruno/quiz/templates/quiz/scan.twig');
+		return true;
+	}
+
 
 	public function session_get($sessionid_enc){
 		$app = ModelBruno::getApp();
@@ -246,7 +255,7 @@ class ControllerQuiz extends Controller {
 		return true;
 	}
 
-	public function survey_get($statisticsid_enc){
+	public function survey_get($statisticsid_enc, $questionid_enc=false){
 		$app = ModelBruno::getApp();
 		$this->prepare();
 		$app->bruno->data['data_answered'] = false;
@@ -255,6 +264,20 @@ class ControllerQuiz extends Controller {
 		$app->bruno->data['data_ad_pic'] = $base_url.'/bruno/screen/images/logo.png';
 		$app->bruno->data['data_ad'] = $app->bruno->data['domain'];
 		if($statisticsid_enc=='preview'){ //Mode demo
+			if($questionid_enc){
+				$question_id = STR::integer_map($questionid_enc, true);
+				if($question = Question::Where('id', $question_id)->first(array('id', 'style', 'number', 'parent_id'))){
+					if($pitch = Pitch::find($question->parent_id)){
+						if($pitch->ad_pic && $file = File::Where('id', $pitch->ad_pic)->first(array('id', 'uploaded_by', 'link', 'ori_ext', 'u_at'))){
+							$app->bruno->data['data_ad_pic'] = $base_url.'/files/'.$file->uploaded_by.'/'.$file->link.'.'.$file->ori_ext.'?'.$file->u_at;
+						}
+						if($pitch->ad && strlen($pitch->ad)>0){
+							$app->bruno->data['data_ad'] = $pitch->ad;
+						}
+						$app->bruno->data['data_ad_link'] = Email::buildUrl($app->bruno->data['data_ad']);
+					}
+				}
+			}
 			$app->bruno->data['title'] = $app->trans->getBRUT('quiz', 0, 16); //Result
 			$app->render('/bundles/bruno/quiz/templates/quiz/result/statistics.twig');
 			return true;

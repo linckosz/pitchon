@@ -171,6 +171,14 @@ class User extends ModelBruno {
 		return static::$me;
 	}
 
+	public static function findUser($md5, $user_id){
+		$app = ModelBruno::getApp();
+		if(is_string($md5) && is_numeric($user_id)){
+			return self::where('md5', $md5)->where('id', $user_id)->first();
+		} 
+		return false;
+	}
+
 	public static function isAdmin(){
 		if(User::getUser()->admin){
 			return true;

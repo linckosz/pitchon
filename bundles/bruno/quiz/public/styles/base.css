@@ -98,6 +98,7 @@ html, .font_sans_serif {
 	font-size: 4.2vw;
 	font-size: 4.2vmin;
 	color: #FFFFFF;
+	cursor: pointer;
 }
 
 #base_website_logo {

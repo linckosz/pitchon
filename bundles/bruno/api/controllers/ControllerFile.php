@@ -170,20 +170,22 @@ class ControllerFile extends Controller {
 		return exit(0);
 	}
 
-	public function qrcode_get(){
+	public function qrcode_get($md5, $user_id){
 		$app = ModelBruno::getApp();
 		ob_clean();
 		flush();
-		$user_id = $app->bruno->data['user_id'];
-		$user = User::getUser();
+		$user = User::findUser($md5, $user_id);
+		if(!$user){
+			return self::unavailable();
+		}
 		$url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_HOST'].'/uid/'.Datassl::encrypt($user->id, 'invitation');
-		$timestamp = $user->c_at->timestamp; 
+		$timestamp = $user->c_at; 
 		$gmt_mtime = gmdate('r', $timestamp);
 		header('Last-Modified: '.$gmt_mtime);
 		header('Expires: '.gmdate(DATE_RFC1123, time()+16000000)); //About 6 months cached
-		header('ETag: "'.md5($user_id.'-'.$timestamp).'"');
+		header('ETag: "'.md5($user->id.'-'.$timestamp).'"');
 		if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) || isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
-			if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime || str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == md5($user_id.'-'.$timestamp)) {
+			if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime || str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == md5($user->id.'-'.$timestamp)) {
 				header('HTTP/1.1 304 Not Modified');
 				return exit(0);
 			}
@@ -193,7 +195,7 @@ class ControllerFile extends Controller {
 		$qrCode = new QrCode();
 
 		$folder = new Folders;
-		$folder->createPath($app->bruno->filePath.'/'.$app->bruno->data['user_id'].'/qrcode/');
+		$folder->createPath($app->bruno->filePath.'/'.$user->id.'/qrcode/');
 
 		$exists = false;
 		$basename = $_SERVER['REQUEST_SCHEME'].'-'.$_SERVER['SERVER_HOST'].'-';

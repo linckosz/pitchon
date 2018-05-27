@@ -297,18 +297,6 @@ submenu_list['app_answer_get_presentation'] = {
 				return value;
 			}
 			return document.domainRoot;
-			/*
-			//toto => this is to be done on phone (quiz)
-			var regex = /^(https?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm.exec(value);
-			if(regex){
-				var link = value;
-				//Make the link clickable
-				if(!regex[1]){
-					link = "https://"+link;
-				}
-				//_blank
-			}
-			*/
 		},
 		"action": function(Elem, subm, now){
 			if(typeof now == "undefined"){ now = false; }
