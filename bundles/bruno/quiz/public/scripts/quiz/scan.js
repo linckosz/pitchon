@@ -39,7 +39,7 @@ $(function() {
 					}
 				});
 				for (var i = 0; i < quiz_scan_scanner_camera.length; i++) {
-					if(quiz_scan_scanner_camera[i].name.toLowerCase().indexOf('back') >= 0 ){
+					if(quiz_scan_scanner_camera[i].name && quiz_scan_scanner_camera[i].name.toLowerCase().indexOf('back') >= 0 ){
 						quiz_scan_scanner_index = i;
 					}
 				}
