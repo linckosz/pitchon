@@ -10,7 +10,6 @@ var quiz_scan_scanner_change = function(){
 		}
 		quiz_scan_scanner.start(quiz_scan_scanner_camera[quiz_scan_scanner_index]);
 	}
-	//alert(quiz_scan_scanner_camera[quiz_scan_scanner_index].name);
 };
 
 $(function() {
@@ -39,6 +38,7 @@ $(function() {
 						window.location.href = content;
 					}
 				});
+				quiz_scan_scanner_index = quiz_scan_scanner_camera.length - 1; //There is more probabilty that the back camera is the last one registered, so we default on it
 				for (var i = 0; i < quiz_scan_scanner_camera.length; i++) {
 					if(quiz_scan_scanner_camera[i].name && quiz_scan_scanner_camera[i].name.toLowerCase().indexOf('back') >= 0 ){
 						quiz_scan_scanner_index = i;
@@ -53,7 +53,7 @@ $(function() {
 					$("#quiz_scan_qrcode_video").height(height);
 				});
 				$(window).resize();
-				quiz_scan_scanner.start(quiz_scan_scanner_camera[0]).then(function(){
+				quiz_scan_scanner.start(quiz_scan_scanner_camera[quiz_scan_scanner_index]).then(function(){
 					$(window).resize();
 					$("#quiz_scan_qrcode_video_bar").removeClass("display_none");
 					if(quiz_scan_scanner_camera.length >= 1) {
