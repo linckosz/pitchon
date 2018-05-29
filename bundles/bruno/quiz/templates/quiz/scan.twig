@@ -23,11 +23,9 @@
 			</div>
 		</div>
 		<div id="quiz_scan_code" class="display_none">
+			<div id="quiz_scan_code_or" class="display_none">{{ _trans('quiz', 0, 22, 'html') }}{# or #}</div>
 			<div>
-				<span id="quiz_scan_code_or" class="display_none">{{ _trans('quiz', 0, 22, 'html') }}{# or #}</span> {{ _trans('quiz', 0, 23, 'html') }}{# Enter code #}
-			</div>
-			<div>
-				<input type="number" id="quiz_scan_code_text" min="0" max="99999999" /> <span>{{ _trans('quiz', 0, 24, 'html') }}{# GO #}</span>
+				<input type="number" id="quiz_scan_code_text" min="0" max="99999999" placeholder="{{ _trans('quiz', 0, 23, 'js') }}{# Type code #}" /> <span>{{ _trans('quiz', 0, 24, 'html') }}{# GO #}</span>
 			</div>
 		</div>
 	</div>

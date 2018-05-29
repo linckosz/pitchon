@@ -14,7 +14,7 @@ var quiz_scan_scanner_change = function(){
 
 $(function() {
 	
-	if(true || wrapper_is_mobile()){
+	if(base_is_mobile()){ //wrapper_show_error is for dev
 		Instascan.Camera.getCameras().then(function(cameras){
 			quiz_scan_scanner_camera = cameras;
 			if(quiz_scan_scanner_camera.length > 0) {
@@ -56,7 +56,7 @@ $(function() {
 				quiz_scan_scanner.start(quiz_scan_scanner_camera[quiz_scan_scanner_index]).then(function(){
 					$(window).resize();
 					$("#quiz_scan_qrcode_video_bar").removeClass("display_none");
-					if(quiz_scan_scanner_camera.length >= 1) {
+					if(quiz_scan_scanner_camera.length > 1) {
 						$("#quiz_scan_qrcode_video_flip")
 							.removeClass("display_none")
 							.on("click", quiz_scan_scanner_change);
@@ -64,9 +64,17 @@ $(function() {
 				});
 			}
 		});
+	} else {
+		//We force to focus on input
+		$("#quiz_scan_code_text").focus().blur();
+		$("#quiz_scan_code_text").get(0).scrollIntoView(true);
 	}
 
 	$("#quiz_scan").removeClass("visibility_hidden");
+
+	$("#quiz_scan_code_text").on("focus", function(){
+		$("#quiz_scan_code_text").get(0).scrollIntoView(true);
+	})
 
 	$(window).resize();
 
