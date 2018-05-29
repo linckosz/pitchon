@@ -26,8 +26,6 @@ $(function() {
 					backgroundScan: false,
 					scanPeriod: 5,
 				});
-				$("#quiz_scan_qrcode").addClass("display_none");
-				$("#quiz_scan_code_or").addClass("display_none");
 				quiz_scan_scanner.addListener('scan', function (content) {
 					if(/^(https?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm.exec(content)){
 						$("#quiz_scan_qrcode_video_bar").addClass("display_none");
@@ -56,9 +54,6 @@ $(function() {
 				});
 				$(window).resize();
 				quiz_scan_scanner.start(quiz_scan_scanner_camera[quiz_scan_scanner_index]).then(function(){
-					$("#quiz_scan_qrcode").removeClass("display_none");
-					$("#quiz_scan_code_or").removeClass("display_none");
-					$(window).resize();
 					$("#quiz_scan_qrcode_video_bar").removeClass("display_none");
 					if(quiz_scan_scanner_camera.length > 1) {
 						$("#quiz_scan_qrcode_video_flip")
@@ -66,6 +61,9 @@ $(function() {
 							.on("click", quiz_scan_scanner_change);
 					}
 				}).catch(function (err) {
+					$("#quiz_scan_qrcode").addClass("display_none");
+					$("#quiz_scan_code_or").addClass("display_none");
+					$(window).resize();
 					//We force to focus on input
 					$("#quiz_scan_code_text").focus().blur();
 					$("#quiz_scan_code_text").get(0).scrollIntoView(true);

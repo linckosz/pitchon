@@ -9,8 +9,8 @@ video {
 	text-align: center;
 	margin-top: 1.1em;
 	margin-bottom: 2.5em;
-	font-size: 4.0vw;
-	font-size: 4.0vmax;
+	font-size: 7.0vw;
+	font-size: 7.0vmin;
 }
 
 #quiz_scan_qrcode_video {
@@ -154,8 +154,8 @@ video {
 	margin-top: 1.5em;
 	text-align: center;
 	padding: 6px 10px 6px 9px;
-	font-size: 4.0vw;
-	font-size: 4.0vmax;
+	font-size: 7.0vw;
+	font-size: 7.0vmin;
 	background-color: #FFFFFF;
 	background: -webkit-linear-gradient(#FFFFFF, #F2F2F2) !important;
 	background: -o-linear-gradient(#FFFFFF, #F2F2F2) !important;
@@ -163,8 +163,8 @@ video {
 	background: linear-gradient(#FFFFFF, #F2F2F2) !important;
 	border-radius: 6px;
 	border-width: 0px;
-	height: 6.0vw;
-	height: 6.0vmax;
+	height: 10.0vw;
+	height: 10.0vmin;
 }
 
 #quiz_scan_code_text:focus::placeholder {
@@ -173,8 +173,8 @@ video {
 
 #quiz_scan_code_text::placeholder {
 	color: #B9B9B9;
-	font-size: 3.0vw;
-	font-size: 3.0vmax;
+	font-size: 5.0vw;
+	font-size: 5.0vmin;
 	transition:all 0.7s ease;
 	-webkit-transition-delay:all 0.7s ease;
 	-moz-transition-delay:all 0.7s ease;
@@ -212,10 +212,10 @@ video {
 #quiz_scan_code_btn span {
 	display: block;
 	padding: 6px 12px;
-	height: 6.0vw;
-	height: 6.0vmax;
-	line-height: 6.0vw;
-	line-height: 6.0vmax;
+	height: 10.0vw;
+	height: 10.0vmin;
+	line-height: 10.0vw;
+	line-height: 10.0vmin;
 }
 
 #quiz_scan_code_btn:before {
