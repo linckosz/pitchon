@@ -10,6 +10,7 @@ var quiz_scan_scanner_change = function(){
 		}
 		quiz_scan_scanner.start(quiz_scan_scanner_camera[quiz_scan_scanner_index]);
 	}
+	//alert(quiz_scan_scanner_camera[quiz_scan_scanner_index].name);
 };
 
 $(function() {
@@ -29,7 +30,7 @@ $(function() {
 				quiz_scan_scanner.addListener('scan', function (content) {
 					if(/^(https?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm.exec(content)){
 						$("#quiz_scan_qrcode_video_bar").addClass("display_none");
-						$("#quiz_scan_qrcode_video_done").removeClass("display_none");
+						$("#quiz_scan_qrcode_video_done").removeClass("visibility_hidden"); //We must work with hidden, if not the clock does not load
 						quiz_scan_scanner.stop();
 						$("#quiz_scan_qrcode_video_done").css("background-color", "rgba(255, 255, 255, 0.80)");
 						setTimeout(function(){
@@ -55,6 +56,11 @@ $(function() {
 				quiz_scan_scanner.start(quiz_scan_scanner_camera[0]).then(function(){
 					$(window).resize();
 					$("#quiz_scan_qrcode_video_bar").removeClass("display_none");
+					if(quiz_scan_scanner_camera.length >= 1) {
+						$("#quiz_scan_qrcode_video_flip")
+							.removeClass("display_none")
+							.on("click", quiz_scan_scanner_change);
+					}
 				});
 			}
 		});
