@@ -236,8 +236,8 @@ video {
 }
 
 #quiz_scan_code_btn:active:before {
-  width: 120%;
-  padding-top: 120%;
+  width: 140%;
+  padding-top: 140%;
   transition: width 0.2s ease-out, padding-top 0.2s ease-out;
 }
 

@@ -140,9 +140,9 @@ class ControllerQuiz extends Controller {
 		$session_id = STR::integer_map($sessionid_enc, true);
 		if($session = Session::Where('id', $session_id)->first(array('id', 'question_id', 'code'))){
 			if($session->code){
-				setcookie('code', $session->code, time()+3600, '/', '.'.$app->bruno->http_host); //Only 1H
+				setcookie('code', $session->code, time()+1800, '/', '.'.$app->bruno->http_host); //Only 30min
 			} else {
-				setcookie('code', null, time()-3600, '/', '.'.$app->bruno->http_host); //Only 1H
+				setcookie('code', null, time()-3600, '/', '.'.$app->bruno->http_host);
 			}
 			if($session->question_id){
 				if($statistics = Statistics::unlock($session->id, $session->question_id)){
@@ -160,9 +160,9 @@ class ControllerQuiz extends Controller {
 		$this->prepare();
 		if($session = Session::Where('code', $code)->first(array('id', 'question_id', 'code'))){
 			if($session->code){
-				setcookie('code', $session->code, time()+3600, '/', '.'.$app->bruno->http_host); //Only 1H
+				setcookie('code', $session->code, time()+1800, '/', '.'.$app->bruno->http_host); //Only 30min
 			} else {
-				setcookie('code', null, time()-3600, '/', '.'.$app->bruno->http_host); //Only 1H
+				setcookie('code', null, time()-3600, '/', '.'.$app->bruno->http_host);
 			}
 			if($session->question_id){
 				if($statistics = Statistics::unlock($session->id, $session->question_id)){
