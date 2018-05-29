@@ -25,13 +25,22 @@ $app->get(
 ->name('quiz_session_get');
 
 $app->get(
+	'/c/:code',
+	'\bundles\bruno\quiz\controllers\ControllerQuiz:code_get'
+)
+->conditions(array(
+	'code' => '\d+',
+))
+->name('quiz_code_get');
+
+$app->get(
 	'/p/:questionid',
 	'\bundles\bruno\quiz\controllers\ControllerQuiz:question_get'
 )
 ->conditions(array(
 	'questionid' => '[a-z0-9]+',
 ))
-->name('quiz_preview_get');
+->name('quiz_question_get');
 
 $app->get(
 	'/a/:statisticsid/:answerid',

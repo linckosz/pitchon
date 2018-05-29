@@ -125,6 +125,10 @@ class ControllerQuiz extends Controller {
 
 	public function scan_get(){
 		$app = ModelBruno::getApp();
+		$app->bruno->data['data_scan_code'] = false;
+		if(isset($_COOKIE) && isset($_COOKIE['code']) && is_numeric($_COOKIE['code']) && $_COOKIE['code'] > 0){
+			$app->bruno->data['data_scan_code'] = intval($_COOKIE['code']);
+		}
 		$app->render('/bundles/bruno/quiz/templates/quiz/scan.twig');
 		return true;
 	}
@@ -134,9 +138,34 @@ class ControllerQuiz extends Controller {
 		$app = ModelBruno::getApp();
 		$this->prepare();
 		$session_id = STR::integer_map($sessionid_enc, true);
-		if($session = Session::Where('id', $session_id)->first(array('id', 'question_id'))){
+		if($session = Session::Where('id', $session_id)->first(array('id', 'question_id', 'code'))){
+			if($session->code){
+				setcookie('code', $session->code, time()+3600, '/', '.'.$app->bruno->http_host); //Only 1H
+			} else {
+				setcookie('code', null, time()-3600, '/', '.'.$app->bruno->http_host); //Only 1H
+			}
 			if($session->question_id){
-				if($statistics = Statistics::unlock($session_id, $session->question_id)){
+				if($statistics = Statistics::unlock($session->id, $session->question_id)){
+					$app->bruno->data['data_statisticsid_enc'] = STR::integer_map($statistics->id);
+				}
+				return $this->question_display($session->question_id);
+			}
+		}
+		$app->render('/bundles/bruno/quiz/templates/quiz/result/wait.twig');
+		return true;
+	}
+
+	public function code_get($code){
+		$app = ModelBruno::getApp();
+		$this->prepare();
+		if($session = Session::Where('code', $code)->first(array('id', 'question_id', 'code'))){
+			if($session->code){
+				setcookie('code', $session->code, time()+3600, '/', '.'.$app->bruno->http_host); //Only 1H
+			} else {
+				setcookie('code', null, time()-3600, '/', '.'.$app->bruno->http_host); //Only 1H
+			}
+			if($session->question_id){
+				if($statistics = Statistics::unlock($session->id, $session->question_id)){
 					$app->bruno->data['data_statisticsid_enc'] = STR::integer_map($statistics->id);
 				}
 				return $this->question_display($session->question_id);

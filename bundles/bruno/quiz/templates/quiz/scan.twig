@@ -22,10 +22,11 @@
 				<video id="quiz_scan_qrcode_scan" width="100%" height="100%"></video>
 			</div>
 		</div>
-		<div id="quiz_scan_code" class="display_none">
+		<div id="quiz_scan_code">
 			<div id="quiz_scan_code_or" class="display_none">{{ _trans('quiz', 0, 22, 'html') }}{# or #}</div>
 			<div>
-				<input type="number" id="quiz_scan_code_text" min="0" max="99999999" placeholder="{{ _trans('quiz', 0, 23, 'js') }}{# Type code #}" /> <span>{{ _trans('quiz', 0, 24, 'html') }}{# GO #}</span>
+				<input type="number" id="quiz_scan_code_text" min="0" max="99999999" placeholder="{{ _trans('quiz', 0, 23, 'js') }}{# Type code #}" {% if data_scan_code %}value="{{ data_scan_code }}"{% endif %} />
+				<span id="quiz_scan_code_btn" type="button"><span>{{ _trans('quiz', 0, 24, 'html') }}{# GO #}</span></span>
 			</div>
 		</div>
 	</div>

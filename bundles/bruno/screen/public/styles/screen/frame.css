@@ -151,7 +151,7 @@
 	overflow: hidden;
 }
 
-#quiz_question_picture {
+#ppt_question_picture {
 	display: inline-block;
 	max-width: 35%;
 	max-height: 256px;
@@ -162,7 +162,6 @@
 	margin: 0;
 	padding: 0;
 	margin-right: 12px;
-
 }
 
 #ppt_question_title {

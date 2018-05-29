@@ -2,11 +2,24 @@
 {% block frame %}
 	<div id="begin_quiz_frame" class="visibility_hidden">
 		<link rel="stylesheet" href="{{ _filelatest('/bruno/quiz/styles/quiz/frame.css') }}" type="text/css" />
+		{% if data_question_picture %}
+			<style type="text/css">
+				/* Mobile phone in Portrait */
+				@media only screen and (max-width: 479px){
+					#quiz_frame_cell_top {
+						font-size: 1.25em;
+					}
+				}
+			</style>
+		{% endif %}
 	</div>
 
 	<div id="quiz_frame">
 		<div id="quiz_frame_cell">
 			<div id="quiz_frame_cell_top">
+				{% if data_question_picture %}
+					<img id="quiz_question_picture" src="{{ data_question_picture }}" />
+				{% endif %}
 				<span id="quiz_question_prefix" class="display_none">{{ _trans('quiz', 0, 2, 'html') }}{# Q: #}</span>
 				<span id="quiz_question_title">{{ data_question_title }}</span>
 				{% if picture %}
