@@ -2,45 +2,48 @@
 
 namespace bundles\bruno\data\models\websocket;
 
-use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
-use \bundles\bruno\data\models\data\Session;
+use Ratchet\Wamp\WampServerInterface;
 
-//http://socketo.me/docs/hello-world
-class WSsession implements MessageComponentInterface {
-
-	protected $clients;
-
-	public function __construct() {
-		$this->clients = new \SplObjectStorage;
+class WSsession implements WampServerInterface {
+	
+	// A lookup of all the topics clients have subscribed to
+	protected $subscribedTopics = array();
+	
+	public function onSubscribe(ConnectionInterface $conn, $topic) {
+		$this->subscribedTopics[$topic->getId()] = $topic;
+	}
+	
+	public function onUnSubscribe(ConnectionInterface $conn, $topic) {
+	}
+	
+	public function onOpen(ConnectionInterface $conn) {
+	}
+	
+	public function onClose(ConnectionInterface $conn) {
+	}
+	
+	public function onCall(ConnectionInterface $conn, $id, $topic, array $params) {
+	}
+	
+	public function onPublish(ConnectionInterface $conn, $topic, $event, array $exclude, array $eligible) {
+	}
+	
+	public function onError(ConnectionInterface $conn, \Exception $e) {
 	}
 
-	public function onOpen(ConnectionInterface $conn){
-		//\libs\Watch::php('New connection! ({'.$conn->resourceId.'})', 'onOpen', __FILE__, __LINE__, false, false, true);
-		// Store the new connection to send messages to later
-		$this->clients->attach($conn);
-	}
-
-	public function onMessage(ConnectionInterface $from, $msg){
-		$numRecv = count($this->clients) - 1;
-		//\libs\Watch::php(sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n", $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's'), 'onMessage', __FILE__, __LINE__, false, false, true);
-		foreach ($this->clients as $client) {
-			if ($from !== $client) {
-				// The sender is not the receiver, send to each client connected
-				$client->send($msg);
-			}
+	 /**
+	 * @param string JSON'ified string we'll receive from ZeroMQ
+	 */
+	public function onBlogEntry($entry) {
+		$entryData = json_decode($entry, true);
+		// If the lookup topic object isn't set, there is no one to publish to
+		if (!array_key_exists($entryData['topicid'], $this->subscribedTopics)) {
+			return;
 		}
+		$topic = $this->subscribedTopics[$entryData['topicid']];
+		// Send the data to all clients who subscribed to that topic
+		$topic->broadcast($entryData);
 	}
-
-	public function onClose(ConnectionInterface $conn){
-		// The connection is closed, remove it, as we can no longer send it messages
-		//\libs\Watch::php('Connection {'.$conn->resourceId.'} has disconnected', 'onClose', __FILE__, __LINE__, false, false, true);
-		$this->clients->detach($conn);
-	}
-
-	public function onError(ConnectionInterface $conn, \Exception $e){
-		//\libs\Watch::php('An error has occurred: {'.$e->getMessage().'}', '$onError', __FILE__, __LINE__, false, false, true);
-		$conn->close();
-	}
-
+	
 }

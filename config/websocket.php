@@ -1,7 +1,6 @@
 <?php
 
 use \bundles\bruno\data\models\ModelBruno;
-use \bundles\bruno\data\models\websocket\WebSocket;
 use \bundles\bruno\data\models\websocket\WSsession;
 use Ratchet\Server\IoServer;
 use Ratchet\Http\HttpServer;
@@ -34,37 +33,21 @@ require_once $path.'/config/eloquent.php';
 
 $app->group('/api/websocket', function() use ($app) {
 
-	$app->post('/sessionold', function($ip = null, $hostname = null, $deployment = null) use ($app) {
-		$app = ModelBruno::getApp();
-
-		proc_nice(10); //Low priority run
-		$wsserver = new WsServer(new WSsession());
-		$server = IoServer::factory(
-			new HttpServer(
-				$wsserver
-			),
-			8080
-		);
-		//https://blogs.msdn.microsoft.com/whereismysolution/2018/03/12/does-system-net-websockets-includes-a-keepalive-mechanism-which-automatically-takes-care-of-pingpong-control-frames/
-		$wsserver->enableKeepAlive($server->loop, 30);
-		$server->run();
-		
-		return exit(0);
-	})
-	->name('api_websocket_session_post');
-
-
-
 	$app->post('/session', function($ip = null, $hostname = null, $deployment = null) use ($app) {
 		$app = ModelBruno::getApp();
 
 		$loop   = React\EventLoop\Factory::create();
-		$pusher = new WebSocket();
+		$pusher = new WSsession();
 
 		// Listen for the web server to make a ZeroMQ push after an ajax request
 		$context = new React\ZMQ\Context($loop);
-		$pull = $context->getSocket(ZMQ::SOCKET_PULL);
-		$pull->bind('tcp://127.0.0.1:5555'); // Binding to 127.0.0.1 means the only client that can connect is itself
+		$pull = $context->getSocket(ZMQ::SOCKET_PULL, 'session_code');
+		try {
+			$pull->bind('tcp://127.0.0.1:5555'); // Binding to 127.0.0.1 means the only client that can connect is itself
+		} catch (\Exception $e){
+			//Exception: Failed to bind the ZMQ: Address already in use
+			return exit(0);
+		}
 		$pull->on('message', array($pusher, 'onBlogEntry'));
 
 		// Set up our WebSocket server for clients wanting real-time updates
@@ -84,10 +67,7 @@ $app->group('/api/websocket', function() use ($app) {
 		
 		return exit(0);
 	})
-	->name('api_websocket_start_post');
-
-
-
+	->name('api_websocket_session_post');
 
 });
 

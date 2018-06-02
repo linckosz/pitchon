@@ -140,6 +140,7 @@ class ControllerScreen extends Controller {
 		}
 		$_SESSION['screen_page'] = $page;
 		
+		//[toto] For now (June 6th, 2018), I don't see another method than base quest/anser page base on modulo of the page. In the case we have 1 or 3 slide for a style it breaks the logic!
 		$style = 'question'; //off numbers = question (1, 3, 5)
 		if($page % 2 == 0){ //even numbers = answers (0, 2, 4)
 			$style = 'answer';
@@ -210,6 +211,21 @@ class ControllerScreen extends Controller {
 							} else if($length==8){
 								$app->bruno->data['data_pitch_code'] = substr($session->code, 0, 4).' '.substr($session->code, 3, 4);
 							}
+						}
+					}
+
+					//Start WAMP room
+					if(!self::$webviewer && $style=='question'){
+						if($app->bruno->data['data_pitch_code'] && $app->bruno->data['data_pitch_code'] > 0){
+							$entryData = array(
+								'topicid'	=> $app->bruno->data['data_pitch_code'],
+								'data'		=> $question->id,
+								'when'		=> time(),
+							);
+							$context = new \ZMQContext();
+							$socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'api_websocket_session'); //$persistent_id is the same as the route in config/websocket.php
+							$socket->connect("tcp://127.0.0.1:5555");
+							$socket->send(json_encode($entryData));
 						}
 					}
 

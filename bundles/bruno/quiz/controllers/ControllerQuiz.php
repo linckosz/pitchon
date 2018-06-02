@@ -140,7 +140,7 @@ class ControllerQuiz extends Controller {
 		$session_id = STR::integer_map($sessionid_enc, true);
 		if($session = Session::Where('id', $session_id)->first(array('id', 'question_id', 'code'))){
 			if($session->code){
-				setcookie('code', $session->code, time()+1800, '/', '.'.$app->bruno->http_host); //Only 30min
+				setcookie('code', $session->code, time()+1800, '/', '.'.$app->bruno->http_host); //Only 30min (because a pitch should not exceed 30 min)
 			} else {
 				setcookie('code', null, time()-3600, '/', '.'.$app->bruno->http_host);
 			}
@@ -160,7 +160,7 @@ class ControllerQuiz extends Controller {
 		$this->prepare();
 		if($session = Session::Where('code', $code)->first(array('id', 'question_id', 'code'))){
 			if($session->code){
-				setcookie('code', $session->code, time()+1800, '/', '.'.$app->bruno->http_host); //Only 30min
+				setcookie('code', $session->code, time()+1800, '/', '.'.$app->bruno->http_host); //Only 30min (because a pitch should not exceed 30 min)
 			} else {
 				setcookie('code', null, time()-3600, '/', '.'.$app->bruno->http_host);
 			}
@@ -187,6 +187,7 @@ class ControllerQuiz extends Controller {
 		$this->prepare();
 		$app->bruno->data['data_answered'] = false;
 		$app->bruno->data['data_correct'] = false;
+		$app->bruno->data['data_question_id'] = false;
 		$answer_id = STR::integer_map($answerid_enc, true);
 		$guest_id = $app->bruno->data['guest_id'];
 		$base_url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'];
@@ -197,6 +198,7 @@ class ControllerQuiz extends Controller {
 			if($answer = Answer::Where('id', $answer_id)->first(array('id', 'number', 'parent_id'))){
 				$letter = $answer->letter();
 				if($question = Question::Where('id', $answer->parent_id)->first(array('id', 'style', 'number', 'parent_id'))){
+					$app->bruno->data['data_question_id'] = $question->id;
 					if($pitch = Pitch::find($question->parent_id)){
 						if($pitch->ad_pic && $file = File::Where('id', $pitch->ad_pic)->first(array('id', 'uploaded_by', 'link', 'ori_ext', 'u_at'))){
 							$app->bruno->data['data_ad_pic'] = $base_url.'/files/'.$file->uploaded_by.'/'.$file->link.'.'.$file->ori_ext.'?'.$file->u_at;
@@ -221,6 +223,7 @@ class ControllerQuiz extends Controller {
 			$statistics_id = STR::integer_map($statisticsid_enc, true);
 			if($statistics = Statistics::Where('id', $statistics_id)->first()){
 				$question = Question::Where('id', $statistics->question_id)->first(array('id', 'style', 'number', 'parent_id'));
+				$app->bruno->data['data_question_id'] = $question->id;
 				if($question && $pitch = Pitch::find($question->parent_id)){
 					$base_url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'];
 					if($pitch->ad_pic && $file = File::Where('id', $pitch->ad_pic)->first(array('id', 'uploaded_by', 'link', 'ori_ext', 'u_at'))){

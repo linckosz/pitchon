@@ -54,7 +54,7 @@ $app->get(
 ))
 ->name('screen_statsjs_get');
 
-//This does redirect with the current open question
+//This does redirect the QRcode picture with the current open question
 $app->get(
 	'/session(/:questionid).jpg',
 	'\bundles\bruno\screen\controllers\ControllerScreen:session_get'
