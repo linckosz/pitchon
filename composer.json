@@ -13,6 +13,8 @@
         "endroid/qr-code": "1.*",
         "hbattat/verifyemail": "*",
         "overtrue/pinyin": "3.*",
-        "phpoffice/phppresentation": "dev-master"
+        "phpoffice/phppresentation": "dev-master",
+        "cboden/ratchet": "0.4.*",
+        "react/zmq": "0.2.*|0.3.*"
     }
 }

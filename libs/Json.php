@@ -23,11 +23,11 @@ class Json {
 		return true;
 	}
 
-	public function render(){
+	public function render($status=200){
 		ob_clean();
 		Vanquish::setCookies();
 		header("Content-type: application/json; charset=UTF-8");
-		http_response_code(200); //Always use positive response (must go through success)
+		http_response_code($status); //For mos5 of the cases always use positive response 200 (must go through success). there is only one case you don't it it, but I forgt which one, it might be linked to file uploading.
 		echo json_encode($this->json, JSON_UNESCAPED_UNICODE);
 		return exit(0);
 	}

@@ -368,15 +368,15 @@ abstract class ModelBruno extends Model {
 		return false;
 	}
 
-	protected static function errorMsg($detail='', $msg=false, $resignin=false){
+	protected static function errorMsg($detail='', $msg=false){
 		$app = ModelBruno::getApp();
 		if(!$msg){
-			$msg = $app->trans->getBRUT('api', 0, 5); //You are not allowed to edit the server data.
+			$msg = $app->trans->getBRUT('api', 0, 0); //You are not allowed to access the server data.
 		}
 		\libs\Watch::php($detail, $msg, __FILE__, __LINE__, true);
 		if(!self::$debugMode){
-			$json = new Json($msg, true, 406, false, $resignin, array(), false);
-			$json->render(406);
+			$json = new Json($msg, true, 406, false);
+			$json->render();
 		}
 		return false;
 	}

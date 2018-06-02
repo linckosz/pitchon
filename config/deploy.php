@@ -184,4 +184,3 @@ $app->map('/:catchall', function() use ($app) {
 ->via('GET', 'POST', 'PUT', 'DELETE');
 
 $app->run();
-//Checking $app (print_r) after run can make php crashed out of memory because it contains files data

@@ -1,0 +1,5 @@
+Open the following ports to make the application work
+80 => web
+443 => web
+8888 => Deployment
+9443 => WebSocket
