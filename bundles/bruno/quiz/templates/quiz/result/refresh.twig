@@ -11,6 +11,11 @@
 				begin_quiz_result_refresh_loop = false;
 			}, 3*3600*1000);
 
+			//Make sure we keep code cookie every minutes
+			setInterval(function(){
+				setCookie(document.brunoDev+'_quiz_code', 5546, 30/(60*24)); //Add 30min
+			}, 60*1000);
+
 			var begin_quiz_result_refresh_code = getCookie(document.brunoDev+"_quiz_code");
 			if(begin_quiz_result_refresh_code){
 				begin_quiz_result_refresh_code = parseInt(begin_quiz_result_refresh_code, 10);
