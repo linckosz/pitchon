@@ -45,7 +45,7 @@ class ControllerScreen extends Controller {
 
 	protected function get_session_code(){
 		//Clean unused codes (older than 24H)
-		$limit = ModelBruno::getMStime() - 8; //Cut 24H
+		$limit = ModelBruno::getMStime() - (24*3600*1000); //Cut 24H
 		Session::WhereNotNull('code')->where('u_at', '<', $limit)->whereNull('namecard')->getQuery()->update(['code' => null]);
 
 		//Get a unique code number

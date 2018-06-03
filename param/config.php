@@ -197,7 +197,7 @@ $app->bruno->data = array(
 	'shortlink' => $app->bruno->shortlink,
 	'http_host' => $app->bruno->http_host,
 	'title' => $app->bruno->title,
-	'support' => 'support@pitchon.net',
+	'support' => 'support@'.$app->bruno->domain,
 	'bruno_dev' => $_SERVER['BRUNO_DEV'],
 	'bruno_show_dev' => 'false', //Display some error for developpers on JS (NOTE: it has to be a string because of Twig conversion to JS)
 );
