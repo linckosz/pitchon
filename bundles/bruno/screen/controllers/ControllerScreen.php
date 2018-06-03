@@ -38,7 +38,7 @@ class ControllerScreen extends Controller {
 			}
 		}
 		$timelimit = time()+(8*3600); //8H maximum without consulting it
-		setcookie($app->bruno->data['bruno_dev'].'_screen_session_md5', $md5, $timelimit, '/', '.'.$app->bruno->http_host);
+		setcookie($app->bruno->data['bruno_dev'].'_screen_session_md5', $md5, $timelimit, '/');
 		$_COOKIE[$app->bruno->data['bruno_dev'].'_screen_session_md5'] = $md5;
 		return $md5;
 	}
@@ -99,7 +99,7 @@ class ControllerScreen extends Controller {
 			}
 		}
 		$timelimit = time()+(8*3600); //8H maximum without consulting it
-		setcookie($app->bruno->data['bruno_dev'].'_screen_session_id', $session->id, $timelimit, '/', '.'.$app->bruno->http_host);
+		setcookie($app->bruno->data['bruno_dev'].'_screen_session_id', $session->id, $timelimit, '/');
 		$_COOKIE[$app->bruno->data['bruno_dev'].'_screen_session_id'] = $session->id;
 		self::$session = $session;
 		return self::$session;

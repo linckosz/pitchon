@@ -118,11 +118,11 @@ class Vanquish {
 				$_SESSION['vanquish'] = self::$cookies;
 				//Do not use " $app->setCookie('vanquish', json_encode(self::$cookies)); " to avoid cookie issue that keeps its status accross non-ssl and ssl sites and different subdomains
 				$json = self::encodeSecureCookie(json_encode(self::$cookies), $app->bruno->cookies_lifetime);
-				setcookie($app->bruno->data['bruno_dev'].'_vanquish', $json, $app->bruno->cookies_lifetime, '/', '.'.$app->bruno->http_host);
+				setcookie($app->bruno->data['bruno_dev'].'_vanquish', $json, $app->bruno->cookies_lifetime, '/', '.'.$app->bruno->domain);
 			} else {
 				unset($_SESSION['vanquish']);
 				$app->deleteCookie($app->bruno->data['bruno_dev'].'_vanquish');
-				setcookie($app->bruno->data['bruno_dev'].'_vanquish', null, time()-3600, '/', '.'.$app->bruno->http_host);
+				setcookie($app->bruno->data['bruno_dev'].'_vanquish', null, time()-3600, '/', '.'.$app->bruno->domain);
 				self::$first = true;
 			}
 		}

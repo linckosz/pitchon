@@ -126,8 +126,8 @@ class ControllerQuiz extends Controller {
 	public function scan_get(){
 		$app = ModelBruno::getApp();
 		$app->bruno->data['data_scan_code'] = false;
-		if(isset($_COOKIE) && isset($_COOKIE['code']) && is_numeric($_COOKIE['code']) && $_COOKIE['code'] > 0){
-			$app->bruno->data['data_scan_code'] = intval($_COOKIE['code']);
+		if(isset($_COOKIE) && isset($_COOKIE['quiz_code']) && is_numeric($_COOKIE['quiz_code']) && $_COOKIE['quiz_code'] > 0){
+			$app->bruno->data['data_scan_code'] = intval($_COOKIE['quiz_code']);
 		}
 		$app->render('/bundles/bruno/quiz/templates/quiz/scan.twig');
 		return true;
@@ -140,9 +140,9 @@ class ControllerQuiz extends Controller {
 		$session_id = STR::integer_map($sessionid_enc, true);
 		if($session = Session::Where('id', $session_id)->first(array('id', 'question_id', 'code'))){
 			if($session->code){
-				setcookie('code', $session->code, time()+1800, '/', '.'.$app->bruno->http_host); //Only 30min (because a pitch should not exceed 30 min)
+				setcookie($app->bruno->data['bruno_dev'].'_quiz_code', $session->code, time()+1800, '/'); //Only 30min (because a pitch should not exceed 30 min)
 			} else {
-				setcookie('code', null, time()-3600, '/', '.'.$app->bruno->http_host);
+				setcookie($app->bruno->data['bruno_dev'].'_quiz_code', null, time()-3600, '/');
 			}
 			if($session->question_id){
 				if($statistics = Statistics::unlock($session->id, $session->question_id)){
@@ -160,9 +160,9 @@ class ControllerQuiz extends Controller {
 		$this->prepare();
 		if($session = Session::Where('code', $code)->first(array('id', 'question_id', 'code'))){
 			if($session->code){
-				setcookie('code', $session->code, time()+1800, '/', '.'.$app->bruno->http_host); //Only 30min (because a pitch should not exceed 30 min)
+				setcookie($app->bruno->data['bruno_dev'].'_quiz_code', $session->code, time()+1800, '/'); //Only 30min (because a pitch should not exceed 30 min)
 			} else {
-				setcookie('code', null, time()-3600, '/', '.'.$app->bruno->http_host);
+				setcookie($app->bruno->data['bruno_dev'].'_quiz_code', null, time()-3600, '/');
 			}
 			if($session->question_id){
 				if($statistics = Statistics::unlock($session->id, $session->question_id)){
