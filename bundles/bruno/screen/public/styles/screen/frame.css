@@ -50,6 +50,7 @@
 #ppt_frame_right {
 	display: table-cell;
 	width: 25%;
+	height: 100%;
 	vertical-align: top;
 	box-sizing: border-box;
 	padding: 2vw;

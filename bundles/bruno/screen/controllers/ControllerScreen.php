@@ -218,7 +218,7 @@ class ControllerScreen extends Controller {
 					if(!self::$webviewer && $style=='question'){
 						if($app->bruno->data['data_pitch_code'] && $app->bruno->data['data_pitch_code'] > 0){
 							$entryData = array(
-								'topicid'	=> $app->bruno->data['data_pitch_code'],
+								'topicid'	=> 'quiz_'.$app->bruno->data['data_pitch_code'],
 								'data'		=> $question->id,
 								'when'		=> time(),
 							);
@@ -435,12 +435,16 @@ class ControllerScreen extends Controller {
 		$question = Question::Where('id', $question_id)->first(array('id', 'style', 'number'));
 		$statistics = false;
 		$preview = false;
+		$app->bruno->data['data_pitch_code'] = false;
 		if(isset($get->preview) && $get->preview){
 			$preview = true;
 		} else {
 			if(isset($_COOKIE[$app->bruno->data['bruno_dev'].'_screen_session_id'])){
 				if($session = Session::find($_COOKIE[$app->bruno->data['bruno_dev'].'_screen_session_id'])){
 					$statistics = Statistics::Where('session_id', $session->id)->where('question_id', $question_id)->first();
+					if(!is_null($session->code)){
+						$app->bruno->data['data_pitch_code'] = $session->code;
+					}
 				}
 			}
 		}

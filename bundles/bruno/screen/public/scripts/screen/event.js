@@ -46,7 +46,10 @@ if(ppt_event_slide.listenevent){
 	$(document).on('mouseenter', function(event){
 		$('#ppt_event_slide').removeClass('display_none');
 	});
-	$(document).on('wheel mousewheel DOMMouseScroll keypress keydown keyup', function(event){
+	
+	// We don't need Mousewheel, key up and down are used for remote ppt controller mainly
+	//$(document).on('wheel mousewheel DOMMouseScroll keypress keydown keyup', function(event){
+	$(document).on('keypress keydown keyup', function(event){
 		var timer = 50;
 		if(event.type=='keydown'){
 			timer = 400;

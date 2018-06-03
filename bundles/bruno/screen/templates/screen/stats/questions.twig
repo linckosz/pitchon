@@ -47,13 +47,25 @@
 				$("#ppt_stats_questions_not_correct").stop(true).animate({height: statsjs_data_not_correct+"%"}, 1000);
 			};
 			
+			var ppt_stats_questions_refresh_running = false;
 			var ppt_stats_questions_refresh = function(){
+
+				//This avoid to overload the server, so we skip if we don't get answer yet
+				if(ppt_stats_questions_refresh_running){
+					return false;
+				}
+
+				if(typeof screen_refresh_interval_check == "function" && screen_refresh_interval_check() == false){
+					return false;
+				}
+
 				{% if data_preview %}
 					statsjs_data_participants = 200 + Math.floor(Math.random() * 100);
 					statsjs_data_correct = 20 + Math.floor(Math.random() * 80);
 					statsjs_data_not_correct = 100 - statsjs_data_correct;
 					ppt_stats_questions_refresh_screen();
 				{% else %}
+					ppt_stats_questions_refresh_running = true;
 					$.getScript(ppt_stats_questions_url, function(){
 						if(
 							   typeof statsjs_data_participants != 'undefined'
@@ -62,6 +74,8 @@
 						){
 							ppt_stats_questions_refresh_screen();
 						}
+					}).always(function(){
+						ppt_stats_questions_refresh_running = false;
 					});
 				{% endif %}
 			};
@@ -96,5 +110,10 @@
 			{% endif %}
 		</script>
 	</div>
+
+	{% if data_step == 'question' and data_pitch_code %}
+		{% include '/bundles/bruno/screen/templates/screen/refresh.twig' %}
+	{% endif %}
+
 {% endblock %}
 

@@ -152,6 +152,7 @@ video {
 
 #quiz_scan_code_text {
 	margin-top: 1.5em;
+	max-width: 50%;
 	text-align: center;
 	padding: 6px 10px 6px 9px;
 	font-size: 7.0vw;

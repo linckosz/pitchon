@@ -1,0 +1,65 @@
+	<div id="begin_screen_refresh" class="visibility_hidden">
+
+		{# Can use autobahn v0.8.2 max for it WAMPv! supprt (Ratchet limitation), because newer only support WAMPv2 (not Ratchet) #}
+		<script src="{{ _filelatest('/scripts/libs/autobahn.js') }}" type="text/javascript"></script>
+		<script type="text/javascript">
+			var screen_refresh_conn;
+			var screen_refresh_interval = false; //This helps to enable the result by interval, it will limit number of calls
+
+			var screen_refresh_interval_check = function(){
+				if(typeof screen_refresh_interval != "undefined"){
+					if(!screen_refresh_interval){ return false; }
+					if(typeof screen_refresh_interval == "number"){
+						screen_refresh_interval--;
+					}
+				}
+				return true;
+			};
+
+			var screen_refresh_loop = 60; //Allow only 60 restart (1min offline), after that the user must refresh manuall
+			//Force deconnection after 3H of listening
+			setTimeout(function(){
+				screen_refresh_loop = false;
+			}, 3*3600*1000);
+
+			var screen_refresh_code = {{ data_pitch_code }};
+			if(screen_refresh_code){
+				screen_refresh_code = parseInt(screen_refresh_code, 10);
+				if(screen_refresh_code > 0){
+					var screen_refresh_start = function(){
+						screen_refresh_conn = new ab.Session(
+							'wss://quiz.'+document.domainRoot+':9443',
+							function(){
+								screen_refresh_interval = false;
+								screen_refresh_loop = 60; //Reset
+								screen_refresh_conn.subscribe(
+									"screen_"+screen_refresh_code, //This is the TopicID (must be a string)
+									function(topic, data){
+										screen_refresh_interval = 3; //Run 3 calls in a row before waiting for 
+									}
+								);
+							},
+							function(){
+								screen_refresh_interval = true;
+								if(screen_refresh_loop && screen_refresh_loop>0){
+									screen_refresh_loop--;
+									setTimeout(function(){
+										screen_refresh_start();
+									}, 1000);
+								} else {
+									screen_refresh_interval = false;
+								}
+							},
+							{
+								'skipSubprotocolCheck': true,
+							}
+						);
+					}
+					screen_refresh_start();
+				}
+			}
+
+		</script>
+
+	</div>
+	<div id="end_screen_refresh" class="visibility_hidden"></div>

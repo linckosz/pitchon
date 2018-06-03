@@ -87,6 +87,10 @@
 
 			var ppt_stats_statistics_refresh_screen = function(){
 
+				if(typeof screen_refresh_interval_check == "function" && screen_refresh_interval_check() == false){
+					return false;
+				}
+
 				{% if data_question_style == 4 and data_step == 'question' %}
 					//We hide result
 					statsjs_data_average = 0;
@@ -217,8 +221,13 @@
 				{% endif %}
 			};
 
-
+			var ppt_stats_statistics_refresh_running = false;
 			var ppt_stats_statistics_refresh = function(){
+
+				//This avoid to overload the server, so we skip if we don't get answer yet
+				if(ppt_stats_statistics_refresh_running){
+					return false;
+				}
 				
 				{% if data_preview %}
 					statsjs_data_participants = 200 + Math.floor(Math.random() * 100);
@@ -263,7 +272,12 @@
 					{% endif %}
 					ppt_stats_statistics_refresh_screen();
 				{% else %}
-					$.getScript(ppt_stats_statistics_url, ppt_stats_statistics_refresh_screen);
+					ppt_stats_statistics_refresh_running = true;
+					$.getScript(ppt_stats_statistics_url, function(){
+						ppt_stats_statistics_refresh_screen();
+					}).always(function(){
+							ppt_stats_statistics_refresh_running = false;
+						});
 				{% endif %}
 			};
 		</script>
@@ -329,5 +343,10 @@
 			{% endif %}
 		</script>
 	</div>
+
+	{% if data_step == 'question' and data_pitch_code %}
+		{% include '/bundles/bruno/screen/templates/screen/refresh.twig' %}
+	{% endif %}
+
 {% endblock %}
 

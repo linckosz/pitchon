@@ -126,8 +126,9 @@ class ControllerQuiz extends Controller {
 	public function scan_get(){
 		$app = ModelBruno::getApp();
 		$app->bruno->data['data_scan_code'] = false;
-		if(isset($_COOKIE) && isset($_COOKIE['quiz_code']) && is_numeric($_COOKIE['quiz_code']) && $_COOKIE['quiz_code'] > 0){
-			$app->bruno->data['data_scan_code'] = intval($_COOKIE['quiz_code']);
+		$quiz_code = $app->bruno->data['bruno_dev'].'_quiz_code';
+		if(isset($_COOKIE) && isset($_COOKIE[$quiz_code]) && is_numeric($_COOKIE[$quiz_code]) && $_COOKIE[$quiz_code] > 0){
+			$app->bruno->data['data_scan_code'] = intval($_COOKIE[$quiz_code]);
 		}
 		$app->render('/bundles/bruno/quiz/templates/quiz/scan.twig');
 		return true;
@@ -173,6 +174,22 @@ class ControllerQuiz extends Controller {
 		}
 		$app->render('/bundles/bruno/quiz/templates/quiz/result/wait.twig');
 		return true;
+	}
+
+	protected function inform_screen($statistics){
+		if($session = Session::Where('id', $statistics->session_id)->whereNotNull('code')->first(array('id', 'code'))){
+			if(is_numeric($session->code) && $session->code > 0){
+				$entryData = array(
+					'topicid'	=> 'screen_'.$session->code,
+					'data'		=> true,
+					'when'		=> time(),
+				);
+				$context = new \ZMQContext();
+				$socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'api_websocket_session'); //$persistent_id is the same as the route in config/websocket.php
+				$socket->connect("tcp://127.0.0.1:5555");
+				$socket->send(json_encode($entryData));
+			}
+		}
 	}
 
 	public function question_get($questionid_enc){
@@ -271,6 +288,10 @@ class ControllerQuiz extends Controller {
 								//Do nothing
 							}
 							$app->bruno->data['title'] = $app->trans->getBRUT('quiz', 0, 16); //Result
+
+							//Inform the screen
+							$this->inform_screen($statistics);
+
 							if($question->style==1 || $question->style==2){
 								$app->render('/bundles/bruno/quiz/templates/quiz/result/answer.twig');
 							} else {
@@ -360,6 +381,10 @@ class ControllerQuiz extends Controller {
 						//Do nothing
 					}
 					$app->bruno->data['title'] = $app->trans->getBRUT('quiz', 0, 16); //Result
+
+					//Inform the screen
+					$this->inform_screen($statistics);
+
 					$app->render('/bundles/bruno/quiz/templates/quiz/result/statistics.twig');
 					return true;
 				}
