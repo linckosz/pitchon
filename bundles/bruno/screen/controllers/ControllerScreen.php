@@ -45,8 +45,8 @@ class ControllerScreen extends Controller {
 
 	protected function get_session_code(){
 		//Clean unused codes (older than 24H)
-		$limit = ModelBruno::getMStime() - 86400000; //Cut 24H
-		Session::WhereNotNull('code')->where('u_at', '<', $limit)->getQuery()->update(['code' => null]);
+		$limit = ModelBruno::getMStime() - 8; //Cut 24H
+		Session::WhereNotNull('code')->where('u_at', '<', $limit)->whereNull('namecard')->getQuery()->update(['code' => null]);
 
 		//Get a unique code number
 		$length = 4;
@@ -579,7 +579,13 @@ class ControllerScreen extends Controller {
 						foreach ($array_letters as $letter) {
 							if(!is_null($statistics->$letter)){
 								$answers_count++;
-								$data['data_number_'.$answers_count] = $app->bruno->data['data_number_'.$answers_count] = 10 * round($statistics->{'t_'.$letter} / $statistics->$letter);
+								if($statistics->$letter > 0 && !is_null($statistics->{'t_'.$letter})){
+									$data['data_number_'.$answers_count] = $app->bruno->data['data_number_'.$answers_count] = round($statistics->{'t_'.$letter} / $statistics->$letter);
+								} else {
+									$total = $total - intval($statistics->$letter);
+									$data['data_participants'] = $app->bruno->data['data_participants'] = $total;
+									$data['data_number_'.$answers_count] = $app->bruno->data['data_number_'.$answers_count] = 0;
+								}
 							}
 						}
 					}

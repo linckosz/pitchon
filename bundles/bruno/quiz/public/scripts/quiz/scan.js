@@ -29,6 +29,7 @@ $(function() {
 				quiz_scan_scanner.addListener('scan', function (content) {
 					if(/^(https?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm.exec(content)){
 						$("#quiz_scan_qrcode_video_bar").addClass("display_none");
+						$("#quiz_scan_qrcode_video_flip").addClass("display_none")
 						$("#quiz_scan_qrcode_video_done").removeClass("visibility_hidden"); //We must work with hidden, if not the clock does not load
 						quiz_scan_scanner.stop();
 						$("#quiz_scan_qrcode_video_done").css("background-color", "rgba(255, 255, 255, 0.80)");

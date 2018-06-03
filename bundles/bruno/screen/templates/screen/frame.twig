@@ -73,9 +73,11 @@
 	<div id="end_ppt_frame" class="visibility_hidden">
 		<script type="text/javascript">
 			$("#ppt_frame_right_top_code").addClass("ln{{ data_pitch_code_length }}");
-			$("#ppt_frame_right_top_qrcode").on('load', function(){
-				$("#ppt_frame_right_top").css("visibility", "visible");
-			});
+			{% if get_style == 'question' %}
+				$("#ppt_frame_right_top_qrcode").on('load', function(){
+					$("#ppt_frame_right_top").css("visibility", "visible");
+				});
+			{% endif %}
 			$("#ppt_frame_right_top_qrcode").attr('src', "{{ data_pitch_url|raw }}{% if body_preview %}&preview=1{% endif %}");
 		</script>
 	</div>
