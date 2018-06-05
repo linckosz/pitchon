@@ -1,0 +1,31 @@
+.submenu_app_statistics_loading {
+	font-size: 16px;
+	background-color: transparent;
+	border-color: transparent;
+	text-align: center;
+}
+
+.submenu_app_statistics_nodata {
+	font-size: 16px;
+	background-color: transparent;
+	border-color: transparent;
+	text-align: center;
+}
+
+.submenu_app_statistics_session {
+	text-align: left;
+	font-weight: 400;
+	font-size: 18px;
+	padding: 8px 16px;
+}
+
+.submenu_app_statistics_detail {
+	padding: 0px 16px 8px 16px;
+	height: 24px;
+	line-height: 24px;
+	vertical-align: middle;
+}
+
+.submenu_app_statistics_participants {
+	position: absolute;
+}

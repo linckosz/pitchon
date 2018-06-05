@@ -193,18 +193,21 @@ submenu_list['app_answer_get_presentation'] = {
 		"value": 20,
 	},
 
-	"statistics": {
+	/*"statistics": {
 		"style": "next",
 		"title": Bruno.Translation.get('app', 102, 'html'), //Statistics
 		"next": "statistics",
 		"class": "",
+		"action_param": function(Elem, subm){
+			return subm.param; //Pitch ID
+		},
 	},
 
 	"space2": {
 		"style": "space",
 		"title": "space",
 		"value": 20,
-	},
+	},*/
 
 	"brand_name": {
 		"style": "input_text_flat",

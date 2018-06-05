@@ -205,7 +205,11 @@ Submenu.prototype.style['next'] = function(submenu_wrapper, subm) {
 					}
 				}
 			}
-			Elem.click(attribute.action_param, function(event) {
+			var action_param = attribute.action_param;
+			if(typeof attribute.action_param == "function"){
+				action_param = attribute.action_param(Elem, that);
+			}
+			Elem.click(action_param, function(event) {
 				$.each(that.Wrapper().find('.submenu_deco_next'), function() {
 					$(this).removeClass('submenu_deco_next');
 				});

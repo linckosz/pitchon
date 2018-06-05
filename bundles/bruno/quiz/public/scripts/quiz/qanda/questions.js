@@ -2,9 +2,9 @@ var answerid = false;
 
 $("[find=quiz_answer]").on("click", function(){
 	$(".selected").removeClass("selected");
-	$("[find=check]").addClass("display_none");
+	$("[find=check]").addClass("visibility_hidden");
 	$(this).addClass("selected");
-	$(this).find("[find=check]").removeClass("display_none");
+	$(this).find("[find=check]").removeClass("visibility_hidden");
 	answerid = $(this).attr('answerid');
 	$("#quiz_confirm").removeClass("display_none");
 });

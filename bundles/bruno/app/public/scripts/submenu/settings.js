@@ -63,7 +63,6 @@ submenu_list['settings'] = {
 		"title": Bruno.Translation.get('app', 1, 'html'), //Language
 		"next": "language",
 		"value": submenu_language_full,
-		"class": "",
 	},
 	"support": {
 		"style": "button",
@@ -71,14 +70,13 @@ submenu_list['settings'] = {
 		"value": function(){
 			return wrapper_link['support'];
 		},
-		"action": function(Elem,subm){
+		"action": function(Elem, subm){
 			var link = "mailto:"
 				+ wrapper_link['support']
 				+ "?subject=" + escape("[ID:"+wrapper_localstorage.user_id+"] "+wrapper_main_title)
 			;
 			window.location.href = link;
 		},
-		"class": "",
 	},
 	"signout": {
 		"style": "button",
