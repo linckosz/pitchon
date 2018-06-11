@@ -4,6 +4,7 @@ namespace bundles\bruno\data\models;
 
 use Illuminate\Database\Eloquent\Model;
 use \bundles\bruno\data\models\ModelBruno;
+use \bundles\bruno\data\models\data\Pitch;
 use \bundles\bruno\data\models\data\Question;
 use \bundles\bruno\data\models\data\Answer;
 
@@ -20,7 +21,10 @@ class Statistics extends Model {
 
 ////////////////////////////////////////////
 
-// No relation needed
+	//Many(Answer) to One(Question)
+	public function question(){
+		return $this->belongsTo('\\bundles\\bruno\\data\\models\\data\\Question', 'question_id'); //parent_id => question_id
+	}
 
 ////////////////////////////////////////////
 
@@ -91,6 +95,18 @@ class Statistics extends Model {
 		}
 		usleep(50000); //This sleep insure to not double the save of statistics
 		return $statistics;
+	}
+
+	public function scopegetStats($query, $pitch_id, $pitch_md5){
+		//Check if the user is allowed to see the pitch
+		if(Pitch::Where('id', $pitch_id)->where('md5', $pitch_md5)->first(array('id'))){
+			$query = $query
+			->WhereHas('question', function($query) use ($pitch_id) {
+				$query->where('question.parent_id', $pitch_id);
+			});
+			return $query->get();
+		}
+		return null;
 	}
 
 }

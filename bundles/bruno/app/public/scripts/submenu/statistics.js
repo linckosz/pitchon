@@ -10,15 +10,13 @@ submenu_list['statistics'] = {
 		"title": "<span class='fa fa-spinner fa-spin'></span>",
 		"class": "submenu_app_statistics_loading",
 		"now": function(Elem, subm){
-			//Center the loading
-			//Elem.find("[find=submenu_info_title]").css("text-align", "center");
 			var pitch = Bruno.storage.get("pitch", subm.param);
 			var layer = subm.layer;
 			if(pitch){
 				wrapper_sendAction(
 					{
-						pitch_id: pitch['id'],
-						pitch_md5: pitch['md5'],
+						id: pitch['id'],
+						md5: pitch['md5'],
 					},
 					'post',
 					'api/stats/session',
@@ -89,14 +87,23 @@ var submenu_app_statistics_list = function(sessions){
 					"style": "statistics_button",
 					"title": "",
 					"value": {
-						time: function(){
-							return new wrapper_date(i).display('date_full');
+						that: sessions[i],
+						c_at: function(){
+							return new wrapper_date(this.that.c_at).display('date_full');
+						},
+						correct: function(){
+							var percentage = 0;
+							if(this.that.participants > 0){
+								percentage = Math.floor(100 * this.that.correct / this.that.participants);
+							}
+							return percentage + '%';
 						},
 						participants: sessions[i]['participants'],
+						ad_clicks: sessions[i]['ad_clicks'],
 					},
 					"action_param": {
-						id: 123,
-						md5: '123abc',
+						id: sessions[i]['id'],
+						md5: sessions[i]['md5'],
 					},
 					"action": function(Elem, subm, data){
 						console.log(data);
@@ -115,8 +122,10 @@ Submenu.prototype.style['statistics_button'] = function(submenu_wrapper, subm) {
 	var attribute = subm.attribute;
 	var Elem = $('#-submenu_app_statistics').clone();
 	Elem.prop("id", '');
-	Elem.find("[find=submenu_app_statistics_session]").html(attribute.value.time());
+	Elem.find("[find=submenu_app_statistics_session]").html(attribute.value.c_at());
 	Elem.find("[find=submenu_app_statistics_participants]").html(attribute.value.participants);
+	Elem.find("[find=submenu_app_statistics_correct]").html(attribute.value.correct());
+	Elem.find("[find=submenu_app_statistics_clicks]").html(attribute.value.ad_clicks);
 	if ("action" in attribute) {
 		if (!("action_param" in attribute)) {
 			attribute.action_param = null;

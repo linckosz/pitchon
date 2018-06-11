@@ -13,25 +13,42 @@ use \bundles\bruno\data\models\Answered;
 class ControllerStats extends Controller {
 
 	public function session_post(){
-		$app = ModelBruno::getApp();
 		$data = ModelBruno::getData();
-
-		//Check $pitch_id and $pitch_md5
-		
-		$msg = array();
-		$msg['msg'] = 'Sessions';
-		$msg['data'] = array();
-
-		$msg['data'][micro_seconds()] = array(
-			'participants' => rand(4, 5800)
-		);
-		$msg['data'][micro_seconds()-258457745] = array(
-			'participants' => rand(400, 2700)
-		);
-
-		ksort($msg['data']);
-
+		$msg = 'no record';
+		if(isset($data->id) && isset($data->md5)){
+			if($statistics = Statistics::getStats($data->id, $data->md5)){
+				$msg = array();
+				$msg['msg'] = 'Sessions';
+				$msg['data'] = array();
+				foreach ($statistics as $item) {
+					$participants = $item->a + $item->b + $item->c + $item->d + $item->e + $item->f;
+					$letter = ModelBruno::numToAplha($item->number);
+					$correct = $item->{$letter};
+					$msg['data'][$item->c_at] = array(
+						'id' => (int) $item->id,
+						'md5' => $item->md5,
+						'c_at' => (int) $item->c_at,
+						'participants' => (int) $participants,
+						'correct' => (int) $correct,
+						'ad_clicks' => (int) $item->ad_clicks,
+					);
+				}
+				krsort($msg['data']);
+			}
+		}
 		(new Json($msg))->render();
+		return exit(0);
+	}
+
+	public function adclick_post(){
+		$data = ModelBruno::getData();
+		if(isset($data->id) && isset($data->md5)){
+			if($statistics = Statistics::Where('id', $data->id)->where('md5', $data->md5)->first(array('id', 'ad_clicks'))){
+				$statistics->ad_clicks++;
+				$statistics->save();
+			}
+		}
+		(new Json('Thank you'))->render();
 		return exit(0);
 	}
 	

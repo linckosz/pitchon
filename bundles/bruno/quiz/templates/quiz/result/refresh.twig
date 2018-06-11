@@ -25,7 +25,7 @@
 							function(){
 								quiz_result_refresh_loop = 60; //Reset
 								quiz_result_refresh_conn.subscribe(
-									"quiz_"_quiz_result_refresh_code, //This is the TopicID (must be a string)
+									"quiz_"+quiz_result_refresh_code, //This is the TopicID (must be a string)
 									function(topic, data){
 										if(
 											   typeof data == 'object'

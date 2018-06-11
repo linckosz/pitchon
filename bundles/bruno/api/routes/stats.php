@@ -10,6 +10,12 @@ $app->group('/api/stats', function() use ($app) {
 		'/session',
 		'\bundles\bruno\api\controllers\ControllerStats:session_post'
 	)
-	->name('api_data_session_post');
+	->name('api_stats_session_post');
+
+	$app->post(
+		'/adclick',
+		'\bundles\bruno\api\controllers\ControllerStats:adclick_post'
+	)
+	->name('api_stats_adclick_post');
 
 });

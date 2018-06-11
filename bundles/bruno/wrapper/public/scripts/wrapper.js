@@ -35,7 +35,7 @@ var wrapper_sendAction = function(param, method, action, cb_success, cb_error, c
 	var timeout = 30000; //30s
 
 	wrapper_xhr = $.ajax({
-		url: action,
+		url: location.protocol+'//'+document.domain+'/'+action,
 		type: method,
 		data: JSON.stringify(param),
 		contentType: 'application/json; charset=UTF-8',

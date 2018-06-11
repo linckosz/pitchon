@@ -29,3 +29,13 @@
 .submenu_app_statistics_participants {
 	position: absolute;
 }
+
+.submenu_app_statistics_correct {
+	position: absolute;
+	margin-left: 70px;
+}
+
+.submenu_app_statistics_clicks {
+	position: absolute;
+	margin-left: 140px;
+}

@@ -679,7 +679,6 @@ abstract class ModelBruno extends Model {
 		}
 		$success = true;
 		$touch = false;
-		//checkAccess and CheckPermissionAllow are previously used in save()
 		if(is_object($this->pivots_var)){
 			foreach ($this->pivots_var as $type => $type_id_list) {
 				if(!$success){ break; }

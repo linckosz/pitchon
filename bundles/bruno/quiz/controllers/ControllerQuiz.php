@@ -205,6 +205,8 @@ class ControllerQuiz extends Controller {
 		$app->bruno->data['data_answered'] = false;
 		$app->bruno->data['data_correct'] = false;
 		$app->bruno->data['data_question_id'] = false;
+		$app->bruno->data['data_statistics_id'] = false;
+		$app->bruno->data['data_statistics_md5'] = false;
 		$answer_id = STR::integer_map($answerid_enc, true);
 		$guest_id = $app->bruno->data['guest_id'];
 		$base_url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'];
@@ -239,6 +241,8 @@ class ControllerQuiz extends Controller {
 		} else {
 			$statistics_id = STR::integer_map($statisticsid_enc, true);
 			if($statistics = Statistics::Where('id', $statistics_id)->first()){
+				$app->bruno->data['data_statistics_id'] = $statistics->id;
+				$app->bruno->data['data_statistics_md5'] = $statistics->md5;
 				$question = Question::Where('id', $statistics->question_id)->first(array('id', 'style', 'number', 'parent_id'));
 				$app->bruno->data['data_question_id'] = $question->id;
 				if($question && $pitch = Pitch::find($question->parent_id)){

@@ -55,6 +55,9 @@
 				$('[find=ad_link]')
 					.addClass('base_pointer')
 					.on('click', function(){
+						{% if data_statistics_id and data_statistics_md5 %}
+							base_sendAction({id: parseInt({{ data_statistics_id }}, 10), md5: "{{ data_statistics_md5 }}"}, 'post', 'api/stats/adclick');
+						{% endif %}
 						window.open("{{ data_ad_link|raw }}", '_blank');
 					});
 			</script>
