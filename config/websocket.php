@@ -41,7 +41,7 @@ $app->group('/api/websocket', function() use ($app) {
 
 		// Listen for the web server to make a ZeroMQ push after an ajax request
 		$context = new React\ZMQ\Context($loop);
-		$pull = $context->getSocket(ZMQ::SOCKET_PULL, 'session_code');
+		$pull = $context->getSocket(\ZMQ::SOCKET_PULL, 'session_code');
 		try {
 			$pull->bind('tcp://127.0.0.1:5555'); // Binding to 127.0.0.1 means the only client that can connect is itself
 		} catch (\Exception $e){
