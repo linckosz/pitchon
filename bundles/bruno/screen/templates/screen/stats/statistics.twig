@@ -87,10 +87,6 @@
 
 			var ppt_stats_statistics_refresh_screen = function(){
 
-				if(typeof screen_refresh_interval_check == "function" && screen_refresh_interval_check() == false){
-					return false;
-				}
-
 				{% if data_question_style == 4 and data_step == 'question' %}
 					//We hide result
 					statsjs_data_average = 0;
@@ -103,6 +99,7 @@
 					statsjs_data_number_6 = 0;
 				{% elseif data_question_style == 4 %}
 					//The score is on 10 points, but we need to base it on 100 to avoid display issue
+					statsjs_data_average = 10*statsjs_data_average;
 					statsjs_data_number_1 = 10*statsjs_data_number_1;
 					statsjs_data_number_2 = 10*statsjs_data_number_2;
 					statsjs_data_number_3 = 10*statsjs_data_number_3;
@@ -222,10 +219,15 @@
 			};
 
 			var ppt_stats_statistics_refresh_running = false;
-			var ppt_stats_statistics_refresh = function(){
+			var ppt_stats_statistics_refresh = function(force){
+				if(typeof force != "boolean"){ force = false; }
 
 				//This avoid to overload the server, so we skip if we don't get answer yet
 				if(ppt_stats_statistics_refresh_running){
+					return false;
+				}
+
+				if(!force && typeof screen_refresh_interval_check == "function" && screen_refresh_interval_check() == false){
 					return false;
 				}
 				
@@ -336,10 +338,14 @@
 				$("#ppt_stats_statistics_4").css('height', "0%");
 				$("#ppt_stats_statistics_5").css('height', "0%");
 				$("#ppt_stats_statistics_6").css('height', "0%");
-				ppt_stats_statistics_refresh();
+				ppt_stats_statistics_refresh(true);
 				setInterval(ppt_stats_statistics_refresh, 2500);
+				setInterval(function(){
+					//Force to refresh in case the WebSocket does not work
+					ppt_stats_statistics_refresh(true);
+				}, 15000);
 			{% else %}
-				ppt_stats_statistics_refresh();
+				ppt_stats_statistics_refresh(true);
 			{% endif %}
 		</script>
 	</div>

@@ -578,6 +578,7 @@ class ControllerScreen extends Controller {
 				} else if(!$statistics){
 					//Just display nothing
 				} else {
+					$data['data_participants'] = $app->bruno->data['data_participants'] = $statistics->answers;
 					if($total>0){
 						$array_letters = ['a', 'b', 'c', 'd', 'e', 'f'];
 						foreach ($array_letters as $letter) {
@@ -586,8 +587,6 @@ class ControllerScreen extends Controller {
 								if($statistics->$letter > 0 && !is_null($statistics->{'t_'.$letter})){
 									$data['data_number_'.$answers_count] = $app->bruno->data['data_number_'.$answers_count] = round($statistics->{'t_'.$letter} / $statistics->$letter);
 								} else {
-									$total = $total - intval($statistics->$letter);
-									$data['data_participants'] = $app->bruno->data['data_participants'] = $total;
 									$data['data_number_'.$answers_count] = $app->bruno->data['data_number_'.$answers_count] = 0;
 								}
 							}
@@ -617,7 +616,7 @@ class ControllerScreen extends Controller {
 					for($i=1; $i<=$answers_count; $i++){
 						$data_average += $data['data_number_'.$i];
 					}
-					$data_average = floor($data_average / $answers_count);
+					$data_average = floor(10 * $data_average / $answers_count) / 10;
 				}
 				$data['data_average'] = $app->bruno->data['data_average'] = $data_average;
 			}

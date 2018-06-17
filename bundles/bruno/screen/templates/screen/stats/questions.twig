@@ -25,8 +25,10 @@
 				statsjs_data_participants = parseInt(statsjs_data_participants, 10);
 				if(statsjs_data_participants){
 					$("#ppt_stats_questions_participants_nbr").html(statsjs_data_participants);
+					$("#ppt_stats_questions_participants").removeClass("visibility_hidden");
 				} else {
 					$("#ppt_stats_questions_participants_nbr").html("");
+					$("#ppt_stats_questions_participants").addClass("visibility_hidden");
 				}
 
 				statsjs_data_correct = parseInt(statsjs_data_correct, 10);
@@ -48,14 +50,15 @@
 			};
 			
 			var ppt_stats_questions_refresh_running = false;
-			var ppt_stats_questions_refresh = function(){
+			var ppt_stats_questions_refresh = function(force){
+				if(typeof force != "boolean"){ force = false; }
 
 				//This avoid to overload the server, so we skip if we don't get answer yet
 				if(ppt_stats_questions_refresh_running){
 					return false;
 				}
 
-				if(typeof screen_refresh_interval_check == "function" && screen_refresh_interval_check() == false){
+				if(!force && typeof screen_refresh_interval_check == "function" && screen_refresh_interval_check() == false){
 					return false;
 				}
 
@@ -103,10 +106,14 @@
 				$("#ppt_stats_questions_number_not_correct").html("");
 				$("#ppt_stats_questions_correct").css('height', "0%");
 				$("#ppt_stats_questions_not_correct").css('height', "0%");
-				ppt_stats_questions_refresh();
+				ppt_stats_questions_refresh(true);
 				setInterval(ppt_stats_questions_refresh, 2500);
+				setInterval(function(){
+					//Force to refresh in case the WebSocket does not work
+					ppt_stats_questions_refresh(true);
+				}, 15000);
 			{% else %}
-				ppt_stats_questions_refresh();
+				ppt_stats_questions_refresh(true);
 			{% endif %}
 		</script>
 	</div>
