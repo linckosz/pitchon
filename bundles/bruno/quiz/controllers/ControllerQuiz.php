@@ -264,9 +264,8 @@ class ControllerQuiz extends Controller {
 					$letter = $answer->letter();
 					if(isset($statistics->$letter)){
 						if($question){
-							$value = intval($statistics->$letter);
-							$value++;
-							$statistics->$letter = $value;
+							$statistics->$letter = intval($statistics->$letter)+1;
+							$statistics->answers = intval($statistics->answers)+1;
 							$statistics->save();
 							if($answer->number == $question->number){
 								$app->bruno->data['data_correct'] = true;
@@ -367,9 +366,10 @@ class ControllerQuiz extends Controller {
 					if(isset($data->score) && $data->score && $score = json_decode($data->score)){
 						foreach ($score as $key => $value) {
 							if($letter = ModelBruno::numToAplha($key)){
-								$answered->{'s_'.$letter} = $value;
+								$answered->{'s_'.$letter} = $value; //s_ stands for Score
 								$statistics->$letter = intval($statistics->$letter)+1;
-								$statistics->{'s_'.$letter} = intval($statistics->{'s_'.$letter}) + $value;
+								$statistics->answers = intval($statistics->answers)+1;
+								$statistics->{'t_'.$letter} = intval($statistics->{'t_'.$letter}) + $value; //t_ stands for Total (cumulated scores)
 							}
 						}
 					}

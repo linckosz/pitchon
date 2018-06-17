@@ -13,6 +13,12 @@ $app->group('/api/stats', function() use ($app) {
 	->name('api_stats_session_post');
 
 	$app->post(
+		'/statistics',
+		'\bundles\bruno\api\controllers\ControllerStats:statistics_post'
+	)
+	->name('api_stats_statistics_post');
+
+	$app->post(
 		'/adclick',
 		'\bundles\bruno\api\controllers\ControllerStats:adclick_post'
 	)

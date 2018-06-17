@@ -576,13 +576,6 @@
 
 /* Mobile phone in Portrait */
 @media only screen and (max-width: 479px){
-	.app_layers_answer_settings {
-		position: absolute;
-		right: 0;
-		margin-right: 10px;
-		padding: 4px 20px 4px 14px;
-		font-size: 16px;
-	}
 	.app_layers_answer_settings_eye {
 		margin-right: 10px;
 	}
@@ -596,11 +589,6 @@
 	}
 	.app_layers_answer_url_link {
 		text-align: left;
-	}
-	.app_layers_answer_style {
-		position: absolute;
-		right: 0;
-		margin-top: 50px;
 	}
 	.app_layers_answer {
 		text-align: center;
@@ -644,10 +632,22 @@
 
 /* Mobile phone in Portrait to Tablet in Portrait */
 @media only screen and (max-width: 900px){
+	.app_layers_answer_settings {
+		position: absolute;
+		right: 0;
+		margin-right: 10px;
+		padding: 4px 20px 4px 14px;
+		font-size: 16px;
+	}
 	.app_layers_answer_answers {
 		width: 100%;
 		margin-left: auto;
 		margin-right: auto;
+	}
+	.app_layers_answer_style {
+		position: absolute;
+		right: 0;
+		margin-top: 50px;
 	}
 }
 

@@ -19,11 +19,16 @@ class Statistics extends Model {
 
 	public $timestamps = false;
 
+	protected $hidden = array(
+		'md5',
+		'u_at',
+	);
+
 ////////////////////////////////////////////
 
-	//Many(Answer) to One(Question)
+	//Many(Statistics) to One(Question)
 	public function question(){
-		return $this->belongsTo('\\bundles\\bruno\\data\\models\\data\\Question', 'question_id'); //parent_id => question_id
+		return $this->belongsTo('\\bundles\\bruno\\data\\models\\data\\Question', 'question_id');
 	}
 
 ////////////////////////////////////////////
@@ -104,9 +109,8 @@ class Statistics extends Model {
 			->WhereHas('question', function($query) use ($pitch_id) {
 				$query->where('question.parent_id', $pitch_id);
 			});
-			return $query->get();
 		}
-		return null;
+		return $query;
 	}
 
 }

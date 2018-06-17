@@ -337,8 +337,7 @@ abstract class ModelBruno extends Model {
 		}
 		return self::$columns[$model->getTable()];
 	}
-
-	//Check if the user has access to the object
+	
 	public static function getModel($id, $with_trash=false){
 		if($with_trash){
 			$model = static::withTrashed()->find($id);

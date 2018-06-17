@@ -16,6 +16,11 @@ class Session extends Model {
 
 	public $timestamps = false;
 
+	protected $visible = array(
+		'id',
+		'c_at',
+	);
+
 ////////////////////////////////////////////
 
 // No relation needed

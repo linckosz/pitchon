@@ -1,12 +1,12 @@
 $.extend(wrapper_date.prototype, {
 
 	Constructor: function(timestamp_ms){
-		if(typeof timestamp_ms != 'number'){
-			this.time = new Date();
-			this.timestamp_ms = this.time.getTime();
-		} else {
+		if(typeof timestamp_ms == 'number' || (typeof timestamp_ms == 'string' && timestamp_ms.match(/\d+/))){
 			this.timestamp_ms = parseInt(timestamp_ms, 10);
 			this.time = new Date(this.timestamp_ms);
+		} else {
+			this.time = new Date();
+			this.timestamp_ms = this.time.getTime();
 		}
 		this.timezone_offset_ms = this.time.getTimezoneOffset()*60*1000;
 		this.server_offset_ms = 0; //Positive means the server has an earlier date

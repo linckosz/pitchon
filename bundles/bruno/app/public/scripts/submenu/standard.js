@@ -194,14 +194,13 @@ Submenu.prototype.style['next'] = function(submenu_wrapper, subm) {
 	}
 	if ("next" in attribute) {
 		if (attribute.next in submenu_list) {
-			if (attribute.style == "title") {
-				Elem.Add_MenuTitle(attribute);
-			}
-			for (var att in submenu_list[attribute.next]) {
-				next_attribute = submenu_list[attribute.next][att];
-				if ("style" in next_attribute && "title" in next_attribute) {
-					if (next_attribute.style == "title") {
-						attribute.title = next_attribute.title;
+			if (typeof attribute.keep_title != "boolean" || !attribute.keep_title) {
+				for (var att in submenu_list[attribute.next]) {
+					next_attribute = submenu_list[attribute.next][att];
+					if ("style" in next_attribute && "title" in next_attribute) {
+						if (next_attribute.style == "title") {
+							attribute.title = next_attribute.title;
+						}
 					}
 				}
 			}
@@ -463,10 +462,6 @@ Submenu.prototype.style['select_multiple'] = function(submenu_wrapper, subm) {
 	}
 	if ("next" in attribute) {
 		if (attribute.next in submenu_list) {
-			if (attribute.style == "title") {
-				Elem.Add_MenuTitle(attribute);
-			}
-			
 			var next_id = subm.id+"_"+md5(Math.random());
 			var next_elem = Elem.find("[find=submenu_select_value]");
 			next_elem.prop("id", next_id);

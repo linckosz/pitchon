@@ -148,6 +148,7 @@ Submenu.prototype.showSubmenu = function(time, delay, animate) {
 		that.Wrapper().find("[find=submenu_wrapper_content]").focus();
 		setTimeout(function(sub_that){
 			sub_that.Wrapper().find("[find=submenu_wrapper_content]").focus();
+			app_application_bruno.prepare(["submenu_show", "submenu_show_"+sub_that.id], true);
 		}, 1, that);
 	} else if (responsive.test("minDesktop")) {
 		if (that.layer <= 3) { submenu_wrapper.css('z-index', 2000); } //This insure for the 1/3 version to go below the previous one
@@ -172,6 +173,7 @@ Submenu.prototype.showSubmenu = function(time, delay, animate) {
 					$(window).resize();
 					setTimeout(function(sub_that){
 						sub_that.Wrapper().find("[find=submenu_wrapper_content]").focus();
+						app_application_bruno.prepare(["submenu_show", "submenu_show_"+sub_that.id], true);
 					}, 1, that);
 				}
 			}
@@ -198,6 +200,7 @@ Submenu.prototype.showSubmenu = function(time, delay, animate) {
 						$(window).resize();
 						setTimeout(function(sub_that){
 							sub_that.Wrapper().find("[find=submenu_wrapper_content]").focus();
+							app_application_bruno.prepare(["submenu_show", "submenu_show_"+sub_that.id], true);
 						}, 1, that);
 					}
 				}
@@ -244,7 +247,9 @@ Submenu.prototype.hideSubmenu = function(time, delay, animate) {
 				delay: delay,
 				easing: [.38, .1, .13, .9],
 				complete: function() {
+					app_application_bruno.prepare(["submenu_hide", "submenu_hide_"+that.id], true, false, true);
 					that.Remove();
+					app_application_bruno.prepare(["submenu_hide", "submenu_hide_"+that.id], true);
 				}
 			}
 		);
@@ -258,7 +263,9 @@ Submenu.prototype.hideSubmenu = function(time, delay, animate) {
 				delay: delay,
 				easing: [.38, .1, .13, .9],
 				complete: function() {
+					app_application_bruno.prepare(["submenu_hide", "submenu_hide_"+that.id], true, false, true);
 					that.Remove();
+					app_application_bruno.prepare(["submenu_hide", "submenu_hide_"+that.id], true);
 				}
 			}
 		);

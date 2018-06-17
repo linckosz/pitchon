@@ -1,8 +1,44 @@
-<div id="-submenu_app_statistics" class="base_optionTab submenu_deco">
-	<div find="submenu_app_statistics_session" class="submenu_app_statistics_session ellipsis"></div>
-	<div class="submenu_app_statistics_detail">
-		<span class="submenu_app_statistics_participants"><span class="fa fa-user"></span>&nbsp;&nbsp;<span find="submenu_app_statistics_participants"></span></span>
-		<span class="submenu_app_statistics_correct"><span class="fa fa-trophy"></span>&nbsp;&nbsp;<span find="submenu_app_statistics_correct"></span></span>
-		<span class="submenu_app_statistics_clicks"><span class="fa fa-hand-pointer-o"></span>&nbsp;&nbsp;<span find="submenu_app_statistics_clicks"></span></span>
+<div id="-submenu_app_statistics_charts" class="base_optionTab submenu_deco_read submenu_deco_info_wrap submenu_app_statistics_charts">
+	<div class="submenu_app_statistics_charts_date" find="submenu_app_statistics_charts_date"></div>
+	<div class="submenu_app_statistics_charts_details">
+		<div find="submenu_app_statistics_charts_sessions_div"><span class="fa fa-desktop submenu_app_statistics_charts_icon"></span><span class="" find="submenu_app_statistics_charts_sessions"></span></div>
+		<div><span class="fa fa-user submenu_app_statistics_charts_icon"></span><span class="submenu_app_statistics_charts_details_middle" find="submenu_app_statistics_charts_participants"></span></div>
+		<div><span class="fa fa-eye submenu_app_statistics_charts_icon"></span><span class="submenu_app_statistics_charts_details_middle" find="submenu_app_statistics_charts_views"></span></div>
+		<div><span class="fa fa-hand-pointer-o submenu_app_statistics_charts_icon"></span><span class="submenu_app_statistics_charts_details_middle" find="submenu_app_statistics_charts_clicks"></span></div>
+	</div>
+	<div find="gauge_cliks" class="submenu_app_statistics_charts_gauge_cliks"></div>
+	<div find="pie_devices" class="submenu_app_statistics_charts_pie_devices"></div>
+</div>
+
+<div id="-submenu_app_statistics_session" class="base_optionTab submenu_deco">
+	<div find="submenu_app_statistics_session_title" class="submenu_app_statistics_session_title ellipsis"></div>
+	<div class="submenu_app_statistics_session_detail">
+		<span class="submenu_app_statistics_session_participants"><span class="fa fa-user"></span>&nbsp;&nbsp;<span find="submenu_app_statistics_session_participants"></span></span>
+		<span class="submenu_app_statistics_session_views"><span class="fa fa-eye"></span>&nbsp;&nbsp;<span find="submenu_app_statistics_session_views"></span></span>
+		<span class="submenu_app_statistics_session_clicks"><span class="fa fa-hand-pointer-o"></span>&nbsp;&nbsp;<span find="submenu_app_statistics_session_clicks"></span></span>
+	</div>
+</div>
+
+<div id="-submenu_app_statistics_statistics" class="base_optionTab submenu_deco">
+	<div class="submenu_app_statistics_statistics_title ellipsis">
+		<img class="submenu_app_statistics_statistics_style" find="submenu_app_statistics_statistics_style" src="{{ _filelatest('/bruno/wrapper/images/generic/neutral.png') }}"></img>&nbsp;
+		<span find="submenu_app_statistics_statistics_title"></span>
+	</div>
+	<div class="submenu_app_statistics_statistics_detail">
+		<span class="submenu_app_statistics_statistics_participants"><span class="fa fa-user"></span>&nbsp;&nbsp;<span find="submenu_app_statistics_statistics_participants"></span></span>
+		<span class="submenu_app_statistics_statistics_views"><span class="fa fa-eye"></span>&nbsp;&nbsp;<span find="submenu_app_statistics_statistics_views"></span></span>
+		<span class="submenu_app_statistics_statistics_clicks"><span class="fa fa-hand-pointer-o"></span>&nbsp;&nbsp;<span find="submenu_app_statistics_statistics_clicks"></span></span>
+	</div>
+	<div class="submenu_app_statistics_statistics_question ellipsis" find="submenu_app_statistics_statistics_question"></div>
+	<div class="submenu_app_statistics_statistics_result">
+		<span class="submenu_app_statistics_statistics_trophy display_none" find="submenu_app_statistics_statistics_trophy_span"><span class="fa fa-trophy"></span>&nbsp;&nbsp;<span find="submenu_app_statistics_statistics_trophy"></span></span>
+		<span class="submenu_app_statistics_statistics_score display_none" find="submenu_app_statistics_statistics_score_span"><span class="fa fa-bar-chart"></span>&nbsp;&nbsp;
+			<span find="score_a_span" class="display_none">A:<span find="score_a"></span>&nbsp;&nbsp;</span>
+			<span find="score_b_span" class="display_none">B:<span find="score_b"></span>&nbsp;&nbsp;</span>
+			<span find="score_c_span" class="display_none">C:<span find="score_c"></span>&nbsp;&nbsp;</span>
+			<span find="score_d_span" class="display_none">D:<span find="score_d"></span>&nbsp;&nbsp;</span>
+			<span find="score_e_span" class="display_none">E:<span find="score_e"></span>&nbsp;&nbsp;</span>
+			<span find="score_f_span" class="display_none">F:<span find="score_f"></span>&nbsp;&nbsp;</span>
+		</span>
 	</div>
 </div>

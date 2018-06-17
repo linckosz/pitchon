@@ -1,41 +1,166 @@
-.submenu_app_statistics_loading {
+.submenu_app_statistics_session_loading {
 	font-size: 16px;
 	background-color: transparent;
 	border-color: transparent;
 	text-align: center;
 }
 
-.submenu_app_statistics_nodata {
+.submenu_app_statistics_session_nodata {
 	font-size: 16px;
 	background-color: transparent;
 	border-color: transparent;
 	text-align: center;
 }
 
-.submenu_app_statistics_session {
+.submenu_app_statistics_session_title {
 	text-align: left;
 	font-weight: 400;
 	font-size: 18px;
 	padding: 8px 16px;
 }
 
-.submenu_app_statistics_detail {
+.submenu_app_statistics_session_detail {
 	padding: 0px 16px 8px 16px;
 	height: 24px;
 	line-height: 24px;
 	vertical-align: middle;
 }
 
-.submenu_app_statistics_participants {
+.submenu_app_statistics_session_participants {
 	position: absolute;
 }
 
-.submenu_app_statistics_correct {
+.submenu_app_statistics_session_views {
 	position: absolute;
 	margin-left: 70px;
 }
 
-.submenu_app_statistics_clicks {
+.submenu_app_statistics_session_clicks {
 	position: absolute;
 	margin-left: 140px;
+}
+
+.submenu_app_statistics_session_charts {
+	text-align: center;
+}
+
+.submenu_app_statistics_charts {
+	white-space: nowrap;
+}
+
+.submenu_app_statistics_charts_details {
+	text-align: left;
+	font-weight: 400;
+	font-size: 18px;
+	display: inline-block;
+	vertical-align: middle;
+	padding: 10px 20px;
+}
+.submenu_app_statistics_charts_details > div {
+	padding-top: 4px;
+}
+
+.submenu_app_statistics_charts_icon {
+	width: 32px;
+	text-align: center;
+}
+
+.submenu_app_statistics_charts_details_middle {
+	vertical-align: middle;
+}
+
+.submenu_app_statistics_charts_date {
+	padding-top: 4px;
+	font-size: 16px;
+	text-align: center;
+}
+
+/* We overwrite default class to avoid a click feeling */
+.submenu_app_statistics_session_charts .c3-legend-item-event {
+	cursor: default !important;
+}
+
+.submenu_app_statistics_charts_gauge_cliks {
+	display: inline-block;
+	vertical-align: middle;
+	padding: 10px 20px;
+}
+
+.submenu_app_statistics_charts_pie_devices {
+	display: inline-block;
+	vertical-align: middle;
+	padding: 10px 20px;
+}
+
+
+.submenu_app_statistics_statistics_title {
+	text-align: left;
+	font-weight: 400;
+	font-size: 18px;
+	padding: 8px 16px;
+}
+
+.submenu_app_statistics_statistics_detail, .submenu_app_statistics_statistics_result {
+	padding: 0px 16px 8px 16px;
+	height: 24px;
+	line-height: 24px;
+	vertical-align: middle;
+}
+
+.submenu_app_statistics_statistics_participants {
+	position: absolute;
+}
+
+.submenu_app_statistics_statistics_views {
+	position: absolute;
+	margin-left: 70px;
+}
+
+.submenu_app_statistics_statistics_clicks {
+	position: absolute;
+	margin-left: 140px;
+}
+
+.submenu_app_statistics_statistics_trophy, .submenu_app_statistics_statistics_score {
+	position: absolute;
+	/*margin-left: 210px;*/
+}
+
+.submenu_app_statistics_statistics_style {
+	height: 16px;
+	vertical-align: middle;
+	opacity: 0.60;
+}
+
+.submenu_app_statistics_statistics_question {
+	padding: 0px 16px 8px 16px;
+	opacity: 0.60;
+}
+
+/* Mobile phone in Portrait */
+@media only screen and (max-width: 479px){
+	.submenu_app_statistics_charts_date {
+		padding-top: 2px;
+		font-size: 14px;
+	}
+	.submenu_app_statistics_statistics_title, .submenu_app_statistics_session_title {
+		font-size: 14px;
+	}
+	.submenu_app_statistics_statistics_participants, .submenu_app_statistics_session_participants {
+		font-size: 12px;
+	}
+	.submenu_app_statistics_statistics_views, .submenu_app_statistics_session_views {
+		font-size: 12px;
+		margin-left: 60px;
+	}
+
+	.submenu_app_statistics_statistics_clicks, .submenu_app_statistics_session_clicks {
+		font-size: 12px;
+		margin-left: 120px;
+	}
+
+	.submenu_app_statistics_statistics_trophy, .submenu_app_statistics_statistics_score {
+		font-size: 12px;
+		/*margin-left: 180px;*/
+	}
 }

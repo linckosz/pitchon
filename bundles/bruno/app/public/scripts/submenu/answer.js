@@ -161,6 +161,7 @@ submenu_list['app_answer_get_presentation'] = {
 
 	"url": {
 		"style": "button",
+		"class": "submenu_app_answer_get_presentation_methods",
 		"title": "<span class='fa fa-link minMobileL'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2115, 'html'), //Copy presentation URL
 		"value": function(Elem, subm){
 			if(responsive.test("minMobileL")){
@@ -195,8 +196,9 @@ submenu_list['app_answer_get_presentation'] = {
 
 	"statistics": {
 		"style": "next",
+		"keep_title": true,
 		"title": Bruno.Translation.get('app', 102, 'html'), //Statistics
-		"next": "statistics",
+		"next": "statistics_quiz_open",
 		"class": "",
 		"action_param": function(Elem, subm){
 			return subm.param; //Pitch ID
