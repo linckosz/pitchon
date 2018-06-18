@@ -34,6 +34,13 @@ class ControllerQuiz extends Controller {
 		if(isset($data->zoom)){
 			$app->bruno->data['html_zoom'] = (float) $data->zoom;
 		}
+		$app->bruno->data['data_preview'] = true;
+		if(isset($data->preview) && $data->preview){
+			$app->bruno->data['data_preview'] = true;
+		}
+		$base_url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'];
+		$app->bruno->data['data_ad_pic'] = $base_url.'/bruno/screen/images/logo.png';
+		$app->bruno->data['data_ad'] = $app->bruno->data['domain'];
 		$this->prepared = true;
 		return true;
 	}
@@ -209,9 +216,6 @@ class ControllerQuiz extends Controller {
 		$app->bruno->data['data_statistics_md5'] = false;
 		$answer_id = STR::integer_map($answerid_enc, true);
 		$guest_id = $app->bruno->data['guest_id'];
-		$base_url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'];
-		$app->bruno->data['data_ad_pic'] = $base_url.'/bruno/screen/images/logo.png';
-		$app->bruno->data['data_ad'] = $app->bruno->data['domain'];
 		if($statisticsid_enc=='preview'){ //Mode demo
 			$app->bruno->data['title'] = $app->trans->getBRUT('quiz', 0, 16); //Result
 			if($answer = Answer::Where('id', $answer_id)->first(array('id', 'number', 'parent_id'))){
@@ -316,9 +320,6 @@ class ControllerQuiz extends Controller {
 		$this->prepare();
 		$app->bruno->data['data_answered'] = false;
 		$guest_id = $app->bruno->data['guest_id'];
-		$base_url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'];
-		$app->bruno->data['data_ad_pic'] = $base_url.'/bruno/screen/images/logo.png';
-		$app->bruno->data['data_ad'] = $app->bruno->data['domain'];
 		if($statisticsid_enc=='preview'){ //Mode demo
 			if($questionid_enc){
 				$question_id = STR::integer_map($questionid_enc, true);

@@ -295,7 +295,7 @@ var showppt = function(index, timer){
 			$("#showppt_top_clipboard").find("[find=url]").html(location.protocol+'//screen.'+document.domainRoot+'/'+showppt_list_url[index]);
 			$("#showppt_top_clipboard").find("[find=clipboard]").attr('data-clipboard-text', location.protocol+'//screen.'+document.domainRoot+'/'+showppt_list_url[index]);
 			$("#showppt").removeClass('display_none');
-			var preview_url = location.protocol+'//screen.'+document.domainRoot+'/wb/'+showppt_list_url[index] + showppt_iframe_css.get();
+			var preview_url = location.protocol+'//screen.'+document.domainRoot+'/wb/'+showppt_list_url[index] + showppt_iframe_css.get() + "&preview=1";
 			showppt_timer = setTimeout(function(preview_url){
 				$('#showppt_iframe').prop('src', preview_url);
 			}, timer, preview_url);

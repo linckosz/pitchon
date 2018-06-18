@@ -17,14 +17,13 @@
 		<img id="quiz_result_wait_gif" src="{{ _filelatest('/bruno/quiz/images/gif/wait' ~ random(['01']) ~ '.gif') }}" />
 	</div>
 
-	<div id="quiz_result_wait_scan">
-		<span id="quiz_result_wait_scan_sentence">{{ _trans('quiz', 0, 15, 'html') }}{# Scan next quiz #}</span>
-		<img id="quiz_result_wait_scan_picture" src="{{ _filelatest('/bruno/quiz/images/phone.png') }}" />
-	</div>
-
 	<div class="quiz_result_wait_followus">
 		<div find="ad_link">{{ data_ad }}</div>
 		<img find="ad_link" class="quiz_result_wait_picture" src="{{ data_ad_pic|raw }}" />
+	</div>
+
+	<div id="quiz_result_wait_scan" class="{% if not data_preview %}display_none{% endif %}">
+		<img id="quiz_result_wait_scan_picture" src="{{ _filelatest('/bruno/quiz/images/home.png') }}" />
 	</div>
 
 	<div id="end_quiz_result_wait" class="visibility_hidden">
