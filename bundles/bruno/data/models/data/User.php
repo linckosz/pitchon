@@ -31,7 +31,6 @@ class User extends ModelBruno {
 		'u_at',
 		'updated_json',
 		'email',
-		'pwd',
 		'username',
 		'tuto',
 	);

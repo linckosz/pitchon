@@ -36,8 +36,13 @@ class Answered extends Model {
 			$this->c_at = ModelBruno::getMStime();
 			return parent::save($options);
 		} else {
-			//We only allow creation
-			return false;
+			$dirty = (array) $this->getDirty();
+			//We only allow creation and modification of ad_clicks
+			if(isset($dirty['ad_clicks']) && count($dirty) == 1){
+				return parent::save($options);
+			} else {
+				return false;
+			}
 		}
 	}
 

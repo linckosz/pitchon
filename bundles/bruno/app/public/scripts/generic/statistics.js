@@ -50,6 +50,7 @@ Bruno.statistics.getNbrViews = function(statistics_list){
 //Get total number of Views
 Bruno.statistics.getNbrClicks = function(statistics_list){
 	var result = 0;
+	//We need to use Answered instead of Satistics to count only 1 clicks if the same user clciked many times on the link. Which imit to 1 click per view, not more.
 	if(typeof Bruno.statistics.data['answered'] == 'object'){
 		for(var i in Bruno.statistics.data['answered']){
 			if(typeof statistics_list == 'object' && typeof statistics_list[Bruno.statistics.data['answered'][i]['statistics_id']] == 'undefined'){

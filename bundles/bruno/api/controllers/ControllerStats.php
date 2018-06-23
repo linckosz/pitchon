@@ -13,7 +13,7 @@ use \bundles\bruno\data\models\data\Guest;
 
 class ControllerStats extends Controller {
 
-public function session_post(){
+	public function session_post(){
 		$data = ModelBruno::getData();
 		$msg = 'no record';
 		if(isset($data->id) && isset($data->md5)){
@@ -144,15 +144,20 @@ public function session_post(){
 	public function adclick_post(){
 		$data = ModelBruno::getData();
 		if(isset($data->id) && isset($data->md5)){
-			if($statistics = Statistics::Where('id', $data->id)->where('md5', $data->md5)->first(array('id', 'ad_clicks'))){
+			if($statistics = Statistics::Where('id', $data->id)->where('md5', $data->md5)->first(array('id', 'question_id', 'ad_clicks'))){
 				$statistics->ad_clicks++;
 				$statistics->save();
+				//We must get guest_id here, because bundle is recognized as "api", not "quiz"
+				\bundles\bruno\wrapper\hooks\SetGuest();
+				if($guest = Guest::getUser()){
+					if($answered = Answered::Where('guest_id', $guest->id)->where('statistics_id', $statistics->id)->where('question_id', $statistics->question_id)->first()){
+						$answered->ad_clicks++;
+						$answered->save();
+					}
+				}
 			}
 		}
-		if($guest = Guest::getUser()){
-			$guest->ad_clicks++;
-			$guest->save();
-		}
+				
 		(new Json('Thank you'))->render();
 		return exit(0);
 	}

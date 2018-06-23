@@ -58,7 +58,7 @@ class Guest extends ModelBruno {
 			if($me = self::where('id', $app->bruno->data['guest_id'])->first()){
 				static::$me = $me;
 			}
-		} 
+		}
 		return static::$me;
 	}
 
