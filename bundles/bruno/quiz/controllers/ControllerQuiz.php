@@ -34,7 +34,7 @@ class ControllerQuiz extends Controller {
 		if(isset($data->zoom)){
 			$app->bruno->data['html_zoom'] = (float) $data->zoom;
 		}
-		$app->bruno->data['data_preview'] = true;
+		$app->bruno->data['data_preview'] = false;
 		if(isset($data->preview) && $data->preview){
 			$app->bruno->data['data_preview'] = true;
 		}
@@ -217,6 +217,7 @@ class ControllerQuiz extends Controller {
 		$answer_id = STR::integer_map($answerid_enc, true);
 		$guest_id = $app->bruno->data['guest_id'];
 		if($statisticsid_enc=='preview'){ //Mode demo
+			$app->bruno->data['data_preview'] = true;
 			$app->bruno->data['title'] = $app->trans->getBRUT('quiz', 0, 16); //Result
 			if($answer = Answer::Where('id', $answer_id)->first(array('id', 'number', 'parent_id'))){
 				$letter = $answer->letter();
@@ -321,6 +322,7 @@ class ControllerQuiz extends Controller {
 		$app->bruno->data['data_answered'] = false;
 		$guest_id = $app->bruno->data['guest_id'];
 		if($statisticsid_enc=='preview'){ //Mode demo
+			$app->bruno->data['data_preview'] = true;
 			if($questionid_enc){
 				$question_id = STR::integer_map($questionid_enc, true);
 				if($question = Question::Where('id', $question_id)->first(array('id', 'style', 'number', 'parent_id'))){
@@ -364,12 +366,12 @@ class ControllerQuiz extends Controller {
 					$answered->question_id = $question->id;
 					$answered->style = 4;
 					$answered->correct = null;
+					$statistics->answers = intval($statistics->answers)+1;
 					if(isset($data->score) && $data->score && $score = json_decode($data->score)){
 						foreach ($score as $key => $value) {
 							if($letter = ModelBruno::numToAplha($key)){
 								$answered->{'s_'.$letter} = $value; //s_ stands for Score
 								$statistics->$letter = intval($statistics->$letter)+1;
-								$statistics->answers = intval($statistics->answers)+1;
 								$statistics->{'t_'.$letter} = intval($statistics->{'t_'.$letter}) + $value; //t_ stands for Total (cumulated scores)
 							}
 						}

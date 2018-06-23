@@ -40,7 +40,7 @@
 	margin-left: 140px;
 }
 
-.submenu_app_statistics_session_charts {
+.submenu_app_statistics_top_charts {
 	text-align: center;
 }
 
@@ -75,12 +75,16 @@
 	text-align: center;
 }
 
+.submenu_app_statistics_charts_date > * {
+	vertical-align: middle;
+}
+
 /* We overwrite default class to avoid a click feeling */
-.submenu_app_statistics_session_charts .c3-legend-item-event {
+.submenu_app_statistics_top_charts .c3-legend-item-event {
 	cursor: default !important;
 }
 
-.submenu_app_statistics_charts_gauge_cliks {
+.submenu_app_statistics_charts_gauge_clicks {
 	display: inline-block;
 	vertical-align: middle;
 	padding: 10px 20px;
@@ -132,9 +136,48 @@
 	opacity: 0.60;
 }
 
+.submenu_app_statistics_charts_style {
+	height: 16px;
+	vertical-align: middle;
+	opacity: 0.60;
+}
+
 .submenu_app_statistics_statistics_question {
 	padding: 0px 16px 8px 16px;
 	opacity: 0.60;
+}
+
+.submenu_app_statistics_answer_index {
+	width: 16px;
+	overflow: visible;
+	padding-right: 8px;
+}
+
+.submenu_app_statistics_answer_info {
+	width: 32px;
+	overflow: visible;
+	padding: 0;
+	text-align: right;
+}
+
+.submenu_app_statistics_answer_correct {
+	width: 32px;
+	overflow: visible;
+	font-size: 24px;
+	padding-right: 0;
+	color: rgba(73, 184, 74, 0.94);
+}
+
+.submenu_app_statistics_answer_img {
+	width: 64px;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	padding: 0;
+}
+
+.submenu_app_statistics_answer_title {
+
 }
 
 /* Mobile phone in Portrait */
@@ -161,6 +204,9 @@
 
 	.submenu_app_statistics_statistics_trophy, .submenu_app_statistics_statistics_score {
 		font-size: 12px;
-		/*margin-left: 180px;*/
+	}
+
+	.submenu_app_statistics_answer_img {
+		width: 48px;
 	}
 }

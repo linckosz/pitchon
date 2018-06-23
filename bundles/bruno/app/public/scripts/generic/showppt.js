@@ -391,12 +391,12 @@ $("#showppt_scanner").on('click', function(event){
 						$("#showppt_lazer").removeClass('display_none');
 						if(showppt_pitch_id){
 							showppt_iframe_quiz_css.init();
-							var url = showppt_list_scan[showppt_list_index];
+							var url = showppt_list_scan[showppt_list_index] + "?preview=1";
 							if(showppt_iframe_quiz_css.html_zoom < 0.94){
-								url = url+'?zoom=0.94';
+								url = url+'&zoom=0.94';
 							} else if(showppt_iframe_quiz_css.html_zoom < 1){
 								//Note: We don't need zoom because it already include responsiveness design
-								url = url+'?zoom='+showppt_iframe_quiz_css.html_zoom;
+								url = url+'&zoom='+showppt_iframe_quiz_css.html_zoom;
 							}
 							$('#showppt_iframe_quiz').prop('src', url);
 						}

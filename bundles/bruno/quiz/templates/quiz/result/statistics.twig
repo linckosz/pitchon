@@ -17,7 +17,7 @@
 		<img find="ad_link" class="quiz_result_statistics_picture" src="{{ data_ad_pic|raw }}" />
 	</div>
 
-	<div id="quiz_result_statistics_scan" class="{% if not data_preview %}display_none{% endif %}">
+	<div id="quiz_result_statistics_scan" class="{% if data_preview %}display_none{% endif %}">
 		<img id="quiz_result_statistics_scan_picture" src="{{ _filelatest('/bruno/quiz/images/home.png') }}" />
 	</div>
 

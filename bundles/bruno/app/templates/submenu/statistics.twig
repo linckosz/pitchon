@@ -1,12 +1,17 @@
 <div id="-submenu_app_statistics_charts" class="base_optionTab submenu_deco_read submenu_deco_info_wrap submenu_app_statistics_charts">
-	<div class="submenu_app_statistics_charts_date" find="submenu_app_statistics_charts_date"></div>
+	<div class="submenu_app_statistics_charts_date">
+		<img class="submenu_app_statistics_charts_style display_none" find="submenu_app_statistics_charts_style" src="{{ _filelatest('/bruno/wrapper/images/generic/neutral.png') }}"></img>
+		<span find="submenu_app_statistics_charts_date"></span>
+	</div>
+	<div class="submenu_app_statistics_charts_title" find="submenu_app_statistics_charts_title"></div>
 	<div class="submenu_app_statistics_charts_details">
 		<div find="submenu_app_statistics_charts_sessions_div"><span class="fa fa-desktop submenu_app_statistics_charts_icon"></span><span class="" find="submenu_app_statistics_charts_sessions"></span></div>
 		<div><span class="fa fa-user submenu_app_statistics_charts_icon"></span><span class="submenu_app_statistics_charts_details_middle" find="submenu_app_statistics_charts_participants"></span></div>
 		<div><span class="fa fa-eye submenu_app_statistics_charts_icon"></span><span class="submenu_app_statistics_charts_details_middle" find="submenu_app_statistics_charts_views"></span></div>
-		<div><span class="fa fa-hand-pointer-o submenu_app_statistics_charts_icon"></span><span class="submenu_app_statistics_charts_details_middle" find="submenu_app_statistics_charts_clicks"></span></div>
+		<div find="submenu_app_statistics_charts_clicks_div" class="display_none"><span class="fa fa-hand-pointer-o submenu_app_statistics_charts_icon"></span><span class="submenu_app_statistics_charts_details_middle" find="submenu_app_statistics_charts_clicks"></span></div>
+		<div find="submenu_app_statistics_charts_trophy_div" class="display_none"><span class="fa fa-trophy submenu_app_statistics_charts_icon"></span><span class="submenu_app_statistics_charts_details_middle" find="submenu_app_statistics_charts_trophy"></span></div>
 	</div>
-	<div find="gauge_cliks" class="submenu_app_statistics_charts_gauge_cliks"></div>
+	<div find="gauge_clicks" class="submenu_app_statistics_charts_gauge_clicks display_none"></div>
 	<div find="pie_devices" class="submenu_app_statistics_charts_pie_devices"></div>
 </div>
 
@@ -15,7 +20,7 @@
 	<div class="submenu_app_statistics_session_detail">
 		<span class="submenu_app_statistics_session_participants"><span class="fa fa-user"></span>&nbsp;&nbsp;<span find="submenu_app_statistics_session_participants"></span></span>
 		<span class="submenu_app_statistics_session_views"><span class="fa fa-eye"></span>&nbsp;&nbsp;<span find="submenu_app_statistics_session_views"></span></span>
-		<span class="submenu_app_statistics_session_clicks"><span class="fa fa-hand-pointer-o"></span>&nbsp;&nbsp;<span find="submenu_app_statistics_session_clicks"></span></span>
+		<span class="submenu_app_statistics_session_clicks display_none"><span class="fa fa-hand-pointer-o"></span>&nbsp;&nbsp;<span find="submenu_app_statistics_session_clicks"></span></span>
 	</div>
 </div>
 
@@ -27,7 +32,7 @@
 	<div class="submenu_app_statistics_statistics_detail">
 		<span class="submenu_app_statistics_statistics_participants"><span class="fa fa-user"></span>&nbsp;&nbsp;<span find="submenu_app_statistics_statistics_participants"></span></span>
 		<span class="submenu_app_statistics_statistics_views"><span class="fa fa-eye"></span>&nbsp;&nbsp;<span find="submenu_app_statistics_statistics_views"></span></span>
-		<span class="submenu_app_statistics_statistics_clicks"><span class="fa fa-hand-pointer-o"></span>&nbsp;&nbsp;<span find="submenu_app_statistics_statistics_clicks"></span></span>
+		<span class="submenu_app_statistics_statistics_clicks display_none"><span class="fa fa-hand-pointer-o"></span>&nbsp;&nbsp;<span find="submenu_app_statistics_statistics_clicks"></span></span>
 	</div>
 	<div class="submenu_app_statistics_statistics_question ellipsis" find="submenu_app_statistics_statistics_question"></div>
 	<div class="submenu_app_statistics_statistics_result">
@@ -41,4 +46,12 @@
 			<span find="score_f_span" class="display_none">F:<span find="score_f"></span>&nbsp;&nbsp;</span>
 		</span>
 	</div>
+</div>
+
+<div id="-submenu_app_statistics_answer" class="base_optionTab submenu_deco_read">
+	<span class="submenu_padding submenu_app_statistics_answer_index" find="index"></span>
+	<span class="submenu_padding submenu_app_statistics_answer_info" find="info"></span>
+	<span class="submenu_padding submenu_app_statistics_answer_correct display_none" find="correct"></span>
+	<span class="submenu_padding submenu_padding submenu_app_statistics_answer_img display_none" find="img"></span>
+	<span class="submenu_padding submenu_app_statistics_answer_title" find="title"></span>
 </div>

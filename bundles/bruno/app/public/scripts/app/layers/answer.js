@@ -289,12 +289,16 @@ var app_layers_answer_feedPage = function(param){
 	var answer_timer = {};
 	var answer_creating = {};
 	var answers_wrapper = $('<div find="answers_wrapper" class="app_layers_answer_answers_table app_layers_answer_answers_wrapper"></div>');
-	var items = Bruno.storage.list('answer', 6, null, 'question', app_layers_answer_question['id']); //We have a maximum of 6 answers
+	var items_temp = Bruno.storage.list('answer', 6, null, 'question', app_layers_answer_question['id']); //We have a maximum of 6 answers
 	items = Bruno.storage.sort_items(items, 'number');
+	var items = {};
+	for(var i in items_temp){
+		items[items_temp[i]["number"]] = items_temp[i];
+	}
 	for (var i = 1; i <= 6; i++) {
 		var item = false;
-		if(typeof items[i-1] != "undefined"){
-			item = items[i-1];
+		if(typeof items[i] != "undefined"){
+			item = items[i];
 		}
 		Elem = $('#-app_layers_answer_answers').clone();
 		Elem.prop('id', 'app_layers_answer_answers_'+i);

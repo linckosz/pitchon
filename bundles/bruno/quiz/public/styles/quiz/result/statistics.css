@@ -21,7 +21,6 @@
 }
 
 #quiz_result_statistics_scan {
-	visibility: hidden;
 	position: fixed;
 	text-align: right;
 	bottom: 3vw;
@@ -65,7 +64,7 @@
 }
 
 .quiz_result_statistics_followus {
-	margin: 32px auto 60px auto;
+	margin: 24px auto 60px auto;
 	width: 100%;
 	text-align: center;
 }

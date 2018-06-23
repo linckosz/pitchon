@@ -5,32 +5,32 @@
 		<style type="text/css">
 			#ppt_stats_statistics_1 {
 				height: 0%;
-				left: {{ data_column_left_1 }}%;
+				left: {{ data_column_left_1|number_format(2, '.', '') }}%;
 				{% if data_answers_count < 1 %}display: none !important;{% endif %}
 			}
 			#ppt_stats_statistics_2 {
 				height: 0%;
-				left: {{ data_column_left_2 }}%;
+				left: {{ data_column_left_2|number_format(2, '.', '') }}%;
 				{% if data_answers_count < 2 %}display: none !important;{% endif %}
 			}
 			#ppt_stats_statistics_3 {
 				height: 0%;
-				left: {{ data_column_left_3 }}%;
+				left: {{ data_column_left_3|number_format(2, '.', '') }}%;
 				{% if data_answers_count < 3 %}display: none !important;{% endif %}
 			}
 			#ppt_stats_statistics_4 {
 				height: 0%;
-				left: {{ data_column_left_4 }}%;
+				left: {{ data_column_left_4|number_format(2, '.', '') }}%;
 				{% if data_answers_count < 4 %}display: none !important;{% endif %}
 			}
 			#ppt_stats_statistics_5 {
 				height: 0%;
-				left: {{ data_column_left_5 }}%;
+				left: {{ data_column_left_5|number_format(2, '.', '') }}%;
 				{% if data_answers_count < 5 %}display: none !important;{% endif %}
 			}
 			#ppt_stats_statistics_6 {
 				height: 0%;
-				left: {{ data_column_left_6 }}%;
+				left: {{ data_column_left_6|number_format(2, '.', '') }}%;
 				{% if data_answers_count < 6 %}display: none !important;{% endif %}
 			}
 		</style>

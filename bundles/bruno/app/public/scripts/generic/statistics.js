@@ -66,7 +66,11 @@ Bruno.statistics.getNbrClicks = function(statistics_list){
 
 //Get % of click per view
 Bruno.statistics.getClicksRate = function(statistics_list){
-	return Math.round(1000 * Bruno.statistics.getNbrClicks(statistics_list) / Bruno.statistics.getNbrViews(statistics_list)) / 10; //With one decimal 32.5
+	var views = Bruno.statistics.getNbrViews(statistics_list);
+	if(views > 0){
+		return Math.round(1000 * Bruno.statistics.getNbrClicks(statistics_list) / Bruno.statistics.getNbrViews(statistics_list)) / 10; //With one decimal 32.5
+	}
+	return 0;
 };
 
 //Get Devices numbers
@@ -172,6 +176,7 @@ Bruno.statistics.getStatistics = function(session_id){
 				views: Bruno.statistics.getNbrViews(statistics_list),
 				clicks: Bruno.statistics.getNbrClicks(statistics_list),
 				style: stats['style'],
+				question_id: false,
 				question: "",
 				trophy: "0%",
 				score: {
@@ -218,6 +223,7 @@ Bruno.statistics.getStatistics = function(session_id){
 					}
 				}
 			} else if(stats['style'] == 4){ //Survey
+				var total = stats['a']+stats['b']+stats['c']+stats['d']+stats['e']+stats['f'];
 				if(stats['t_a']!=null){ result_temp[stats['c_at']]['score']['a'] = "0"; }
 				if(stats['t_b']!=null){ result_temp[stats['c_at']]['score']['b'] = "0"; }
 				if(stats['t_c']!=null){ result_temp[stats['c_at']]['score']['c'] = "0"; }
@@ -246,9 +252,10 @@ Bruno.statistics.getStatistics = function(session_id){
 				}
 			}
 			//Attach question values
-			question_title = Bruno.storage.get("question", Bruno.statistics.data['statistics'][i]['question_id'], "title");
-			if(question_title){
-				result_temp[stats['c_at']]['question'] = question_title;
+			question = Bruno.storage.get("question", Bruno.statistics.data['statistics'][i]['question_id']);
+			if(question){
+				result_temp[stats['c_at']]['question_id'] = question["id"];
+				result_temp[stats['c_at']]['question'] = question["title"];
 			}
 		}
 		//Order result from newest to oldest

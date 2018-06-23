@@ -585,7 +585,7 @@ class ControllerScreen extends Controller {
 							if(!is_null($statistics->$letter)){
 								$answers_count++;
 								if($statistics->$letter > 0 && !is_null($statistics->{'t_'.$letter})){
-									$data['data_number_'.$answers_count] = $app->bruno->data['data_number_'.$answers_count] = round($statistics->{'t_'.$letter} / $statistics->$letter);
+									$data['data_number_'.$answers_count] = $app->bruno->data['data_number_'.$answers_count] = round($statistics->{'t_'.$letter} / $statistics->$letter, 1);
 								} else {
 									$data['data_number_'.$answers_count] = $app->bruno->data['data_number_'.$answers_count] = 0;
 								}
