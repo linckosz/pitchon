@@ -11,7 +11,7 @@ function time_checkpoint($msg=''){
 		}
 		$diff = $milliseconds-$app->bruno->time_record;
 		$detail = $diff . "ms to reach this point\n" . ($milliseconds-$app->bruno->time_start)  . "ms in total";
-		\libs\Watch::php( $detail , 'Checkpoint: '.$msg, __FILE__, __LINE__, false, false, true);
+		\libs\Watch::php($detail , 'Checkpoint: '.$msg, __FILE__, __LINE__, false, false, true);
 		$app->bruno->time_record = $milliseconds;
 		return $diff;
 	}

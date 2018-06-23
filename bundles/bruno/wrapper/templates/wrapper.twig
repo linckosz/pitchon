@@ -69,6 +69,11 @@
 ]) }}" type="text/javascript"></script>
 
 <script>
+	var wrapper_user_ip = "{{ user_info_3 }}";
+</script>
+<script type="text/javascript" src="https://l2.io/ip.js?var=wrapper_user_ip"></script>
+
+<script>
 
 var wrapper_user_info = [
 	"{{ user_info_0 }}",
@@ -76,7 +81,8 @@ var wrapper_user_info = [
 	"{{ user_info_2 }}",
 	"{{ user_info_3 }}",
 ];
-setCookie('ip', wrapper_user_info[3], 90);
+//Because of nginx stream we need to get IP in a different way
+wrapper_user_info[3] = wrapper_user_ip;
 
 var wrapper_hash = document.location.hash;
 var wrapper_href = window.location.href;

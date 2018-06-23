@@ -7,7 +7,11 @@ function Submenu(menu, next, param, animate) {
 	this.menu = menu;
 	this.layer = 1;
 	if (typeof next == 'number') {
-		this.layer = next;
+		if (next === 0) {
+			this.layer = submenu_Getfull();
+		} else {
+			this.layer = next;
+		}
 	} else if (typeof next == 'boolean' && next === true) {
 		this.layer = submenu_Getposition(menu);
 	}
@@ -46,6 +50,9 @@ function Submenu(menu, next, param, animate) {
 		submenu_wrapper.on('mouseleave', function(){
 			submenu_mouseenter['submenu'] = false;
 		});
+
+		//This is because we can only place 3 menus on Desktop mode, so after 3 layers we switch to full width mode
+		if (subm.layer > 3) { submenu_wrapper.addClass('submenu_wrapper_important'); }
 
 		//Launch Pre action
 		for (var att in subm.obj) {
@@ -357,6 +364,15 @@ function submenu_Hideall() {
 	for (var index in submenu_obj) {
 		submenu_Clean(true, true);
 	}
+}
+
+//Return the next layer to display full screen
+function submenu_Getfull() {
+	var next = submenu_Getnext();
+	if (next < 4) {
+		next = 4;
+	}
+	return next;
 }
 
 // "1" means that there is no submenu displayed

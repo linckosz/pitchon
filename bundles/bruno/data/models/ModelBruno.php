@@ -762,4 +762,55 @@ abstract class ModelBruno extends Model {
 		return $success;
 	}
 
+	public static function getCSV($list, $filename='data.csv'){
+		
+		$app = ModelBruno::getApp();
+		$app->response->headers->set('Content-Encoding', 'UTF-8');
+		$app->response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
+		$app->response->headers->set('Cache-Control', 'no-cache, must-revalidate');
+		$app->response->headers->set('Expires', 'Fri, 12 Aug 2011 14:57:00 GMT');
+		$app->response->headers->set('Content-Disposition', 'attachment; filename='.$filename);
+		
+		$output = fopen('php://output', 'w');
+		fputs($output, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) )); //UTF-8 BOM
+		$list = json_decode(json_encode($list), true); //Force to be an array
+		$fields = array();
+		if(count($list)>0){
+			foreach ($list as $item) {
+				if(is_array($item)){
+					foreach ($item as $key => $value) {
+						if(!in_array($key, $fields)){
+							$fields[] = $key;
+						}
+					}
+				}
+			}
+			fputcsv($output, $fields);
+
+			$flip = array_flip($fields);
+			$results = array();
+			$i = 0;
+			foreach ($list as $item) {
+				if(is_array($item)){
+					$results[$i] = array();
+					foreach ($fields as $j => $key) {
+						if(isset($item[$key])){
+							$results[$i][$j] = $item[$key];
+						} else {
+							$results[$i][$j] = null;
+						}
+					}
+					$i++;
+				}
+			}
+			foreach ($results as $result) {
+				fputcsv($output, $result);
+			}
+		}
+
+		fclose($output);
+		
+		return exit(0);
+	}
+
 }

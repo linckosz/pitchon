@@ -1,6 +1,6 @@
 Bruno.statistics = {};
 Bruno.statistics.data = {};
-
+Bruno.statistics.pitch = false;
 
 //Get total number of Sessions
 Bruno.statistics.getNbrSessions = function(){

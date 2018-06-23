@@ -15,6 +15,11 @@
 	-webkit-box-sizing: border-box;
 }
 
+.submenu_wrapper_important {
+	position: absolute !important;
+	width: 100% !important;
+}
+
 .submenu_top {
 	display: table;
 	table-layout: fixed;

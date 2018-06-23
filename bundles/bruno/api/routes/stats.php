@@ -12,6 +12,17 @@ $app->group('/api/stats', function() use ($app) {
 	)
 	->name('api_stats_session_post');
 
+	$app->get(
+		'/session/:md5/:id/:category',
+		'\bundles\bruno\api\controllers\ControllerStats:session_get'
+	)
+	->conditions(array(
+		'md5' => '[\d\w]+',
+		'id' => '\d+',
+		'category' => 'session|statistics|answered',
+	))
+	->name('api_stats_session_get');
+
 	$app->post(
 		'/statistics',
 		'\bundles\bruno\api\controllers\ControllerStats:statistics_post'

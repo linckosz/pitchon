@@ -17,6 +17,7 @@ submenu_list['statistics_quiz_open'] = {
 		"now": function(Elem, subm){
 			Bruno.statistics.data = {};
 			var pitch = Bruno.storage.get("pitch", subm.param);
+			Bruno.statistics.pitch = pitch;
 			var layer = subm.layer;
 			if(pitch){
 				wrapper_sendAction(
@@ -87,6 +88,14 @@ submenu_list['statistics_quiz'] = {
 	
 };
 
+var submenu_app_statistics_session_csv = function(){
+	if(Bruno.statistics.pitch){
+		device_download('https://app.pitchon.net/api/stats/session/'+Bruno.statistics.pitch['md5']+'/'+Bruno.statistics.pitch['id']+'/session', '_blank', 'session.csv');
+		device_download('https://app.pitchon.net/api/stats/session/'+Bruno.statistics.pitch['md5']+'/'+Bruno.statistics.pitch['id']+'/statistics', '_blank', 'statistics.csv');
+		device_download('https://app.pitchon.net/api/stats/session/'+Bruno.statistics.pitch['md5']+'/'+Bruno.statistics.pitch['id']+'/answered', '_blank', 'answered.csv');
+	}
+};
+
 var submenu_app_statistics_quiz_chart_gauge;
 var submenu_app_statistics_quiz_chart_donut;
 
@@ -96,6 +105,7 @@ var submenu_app_statistics_session_list = function(){
 		if(
 			   i != "_title"
 			&& i != "no_data"
+			&& i != "csv"
 			&& i != "charts"
 			&& i != "pre_action"
 		){
@@ -139,6 +149,13 @@ var submenu_app_statistics_session_list = function(){
 			}
 		}
 	}
+
+	submenu_list['statistics_quiz']['space'] = {
+		"style": "space",
+		"title": "space",
+		"class": "visibility_hidden",
+		"value": 40,
+	};
 	
 };
 
@@ -172,6 +189,8 @@ Submenu.prototype.style['statistics_quiz_charts'] = function(submenu_wrapper, su
 	Elem.find("[find=gauge_clicks]").prop("id", 'gauge_clicks_'+subm.id);
 	Elem.find("[find=pie_devices]").prop("id", 'pie_devices_'+subm.id);
 	var that_id = subm.id;
+
+	Elem.find("[find=submenu_app_statistics_charts_csv]").removeClass("display_none").on("click", submenu_app_statistics_session_csv);
 
 	Elem.find("[find=submenu_app_statistics_charts_date]").addClass("display_none");
 	Elem.find("[find=submenu_app_statistics_charts_title]").addClass("display_none");
@@ -378,6 +397,13 @@ var submenu_app_statistics_statistics_list = function(session_id){
 			}
 		}
 	}
+
+	submenu_list['statistics_session']['space'] = {
+		"style": "space",
+		"title": "space",
+		"class": "visibility_hidden",
+		"value": 40,
+	};
 	
 };
 
@@ -677,6 +703,13 @@ var submenu_app_statistics_answers_list = function(param){
 			}
 		}
 	}
+
+	submenu_list['statistics_question']['space'] = {
+		"style": "space",
+		"title": "space",
+		"class": "visibility_hidden",
+		"value": 40,
+	};
 	
 };
 

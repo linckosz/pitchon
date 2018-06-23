@@ -42,34 +42,10 @@ function useMobileNotification(){
 function device_download(url, target, name){
 	if(typeof target == 'undefined'){ target = '_system'; }
 	if(typeof name == 'undefined'){ name = 'file'; }
-	var device = device_type();
-
-	if(device=="android"){
-		if(name == 'files' && typeof android.download == 'function'){
-			android.download(url, document.cookie);
-		} 
-		else if(name != 'files' && typeof android.open_external_url == 'function'){
-			android.open_external_url(url);
-		}
-	}
-	else if(device=="ios") {
-		if(name == 'file'){
-			var download_obj = {
-				url: url,
-				cookie: document.cookie,
-			};
-			window.webkit.messageHandlers.iOS.postMessage(download_obj);
-		} else {
-			ios_open_link(url);
-		}		
-	}
-	else if(device=="winphone" && typeof winPhone.download == 'function') {
-		winPhone.download(url);
-	}
-	else if(/MicroMessenger|firefox|opera/i.test(navigator.userAgent)){
+	
+	if(/MicroMessenger|firefox|opera/i.test(navigator.userAgent)){
 		window.open(url, target);
-	}
-	else {
+	} else {
 		//Another method if some browser (safari?) do not work
 		var anchor = document.createElement('a');
 		anchor.href = url;
@@ -82,16 +58,7 @@ function device_download(url, target, name){
 var device_type_record = false;
 function device_type(){
 	if(!device_type_record){
-		if(typeof android != 'undefined') {
-			device_type_record = "android";
-		}
-		else if(typeof window.webkit != 'undefined' && typeof window.webkit.messageHandlers != 'undefined' && typeof window.webkit.messageHandlers.iOS != 'undefined') {
-			device_type_record = "ios";
-		}
-		else if(typeof winPhone != 'undefined') {
-			device_type_record = "winphone";
-		}
-		else if(/webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent)) {
+		if(/webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent)) {
 			device_type_record = "mobilebrowser";
 		} else {
 			device_type_record = "computer";
