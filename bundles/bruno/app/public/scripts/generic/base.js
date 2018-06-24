@@ -167,6 +167,13 @@ var base_toggle_myQRcode = function(display){
 	}
 }
 
+$(document).on('keyup', function(event){
+	event.stopPropagation();
+	if(event.which==27){ //esc
+		window.history.go(-1);
+	}
+});
+
 JSfiles.finish(function(){
 	//Avoid seeing highlited element on mobile
 	$('body').addClass('base_tapHighlight_off');

@@ -39,10 +39,24 @@ var app_layers_question_feedPage = function(param){
 	$('<div find="wrapper" class="app_layers_question_wrapper"></div>').appendTo(sub_layer);
 	var position_wrapper = sub_layer.find("[find=wrapper]");
 
+	//Preview icon
+	$('#app_content_top_right')
+		.addClass('display_none')
+		.off('click');
+
 	var pitch = Bruno.storage.get('pitch', param);
 	var pitch_timer = {};
 	if(pitch){
 		var item = pitch;
+
+		//Preview icon
+		$('#app_content_top_right')
+			.removeClass('display_none')
+			.click(item['id'], function(event){
+				event.stopPropagation();
+				showppt_launch(event.data);
+			});
+
 		app_content_top_title._set('pitch', item['id']);
 		Elem = $('#-models_pitch_top').clone();
 		Elem.prop('id', 'models_pitch_top_'+item['id']);
@@ -51,8 +65,7 @@ var app_layers_question_feedPage = function(param){
 			item['id'],
 			function(event){
 				event.stopPropagation();
-				var pitch_id = Bruno.storage.get("pitch", event.data, "id");
-				showppt_launch(pitch_id);
+				submenu_Build('app_answer_get_presentation', true, true, event.data);
 			}
 		);
 		

@@ -151,7 +151,7 @@ submenu_list['app_answer_get_presentation'] = {
 
 	"preview": {
 		"style": "button",
-		"title": "<span class='fa fa-eye minMobileL'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2116, 'html'), //Preview the Presentation
+		"title": "<span class='fa fa-eye'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2116, 'html'), //Preview the Presentation
 		"action": function(Elem, subm){
 			var question_id = app_layers_answer_question['id'];
 			var pitch_id = Bruno.storage.get("question", question_id, "parent_id");
@@ -162,7 +162,7 @@ submenu_list['app_answer_get_presentation'] = {
 	"url": {
 		"style": "button",
 		"class": "submenu_app_answer_get_presentation_methods",
-		"title": "<span class='fa fa-link minMobileL'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2115, 'html'), //Copy presentation URL
+		"title": "<span class='fa fa-link'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2115, 'html'), //Copy presentation URL
 		"value": function(Elem, subm){
 			if(responsive.test("minMobileL")){
 				return Bruno.storage.getPitchURL(subm.param);
@@ -363,6 +363,54 @@ submenu_list['app_answer_get_presentation'] = {
 				}
 			}, subm.param);
 		},
+	},
+
+	"space3": {
+		"style": "space",
+		"title": "space",
+		"value": 40,
+	},
+
+	"deletion": {
+		"style": "button",
+		"title": "<span class='fa fa-trash-o'>&nbsp;&nbsp;&nbsp;</span> "+Bruno.Translation.get('app', 22, 'html'), //Delete
+		"name": "deletion",
+		"class": "submenu_button_deletion",
+		"action": function(Elem, subm){
+			if(confirm(Bruno.Translation.get('app', 26, 'js'))){ //Are you sure you want to delete this item?
+				var data = {};
+				data.delete = {};
+				data.delete.pitch = {};
+				var item = Bruno.storage.get('pitch', subm.param);
+				data.delete.pitch[item['id']] = {
+					id: item['id'],
+					md5: item['md5'],
+				};
+				var Elem_bis = Elem;
+				var subm_bis = subm;
+				var action_cb_success = function(msg, error, status, extra){
+					storage_cb_success(msg, error, status, extra);
+					app_content_menu.selection("pitch");
+				}
+				var action_cb_complete = function(){
+					storage_cb_complete();
+					base_hideProgress(Elem_bis);
+					app_application_bruno.prepare("pitch", true);
+				};
+				if(storage_offline(data)){
+					base_showProgress(Elem);
+					wrapper_sendAction(data, 'post', 'api/data/set', action_cb_success, storage_cb_error, storage_cb_begin, action_cb_complete);
+				}
+				subm_bis.Hide();
+			}
+		},
+	},
+
+	"space4": {
+		"style": "space",
+		"title": "space",
+		"class": "submenu_space_noborder",
+		"value": 20,
 	},
 
 };

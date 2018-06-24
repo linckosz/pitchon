@@ -249,7 +249,7 @@ class User extends ModelBruno {
 			$question->parent_id = $pitch->id;
 			$question->title = $app->trans->getBRUT('api', 4, 1); //The Dutch windmill is mainly used for:
 			$question->save();
-			$this->tuto = '#question-'.$question->id;
+			$this->tuto = 1;
 			parent::save();
 			$file = File::find(10000)->replicate();
 			$file->updated_json = null;

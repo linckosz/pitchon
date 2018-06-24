@@ -41,9 +41,24 @@ var app_layers_answer_feedPage = function(param){
 	app_layers_answer_question = Bruno.storage.get('question', param);
 	var pitch = Bruno.storage.getParent('question', app_layers_answer_question['id']);
 
+	//Preview icon
+	$('#app_content_top_right')
+		.addClass('display_none')
+		.off('click');
+
 	var pitch_timer = {};
 	if(pitch){
 		var item = pitch;
+
+		//Preview icon
+		$('#app_content_top_right')
+			.removeClass('display_none')
+			.click(item['id'], function(event){
+				event.stopPropagation();
+				var question_id = app_layers_answer_question['id'];
+				showppt_launch(event.data, question_id);
+			});
+
 		app_content_top_title._set('pitch', item['id']);
 		Elem = $('#-models_pitch_top').clone();
 		Elem.prop('id', 'models_pitch_top_'+item['id']);
@@ -52,9 +67,7 @@ var app_layers_answer_feedPage = function(param){
 			item['id'],
 			function(event){
 				event.stopPropagation();
-				var pitch_id = Bruno.storage.get("pitch", event.data, "id");
-				var question_id = app_layers_answer_question['id'];
-				showppt_launch(pitch_id, question_id);
+				submenu_Build('app_answer_get_presentation', true, true, event.data);
 			}
 		);
 		

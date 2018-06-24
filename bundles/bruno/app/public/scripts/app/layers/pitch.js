@@ -39,6 +39,11 @@ var app_layers_pitch_feedPage = function(param){
 	$('<div find="wrapper" class="app_layers_pitch_wrapper"></div>').appendTo(sub_layer);
 	var position_wrapper = sub_layer.find("[find=wrapper]");
 
+	//Preview icon
+	$('#app_content_top_right')
+		.addClass('display_none')
+		.off('click');
+
 	Elem = $('#-app_layers_pitch_add_icon').clone();
 	Elem.prop('id', 'app_layers_pitch_add_icon');
 	Elem.click(param, function(event){
@@ -206,6 +211,15 @@ var app_layers_pitch_feedPage = function(param){
 						app_layers_content_move.reset();
 						var pitch_id = Bruno.storage.get("pitch", event.data, "id");
 						showppt_launch(pitch_id);
+					}
+				);
+				Elem.find("[find=settings]").click(
+					item['id'],
+					function(event){
+						event.stopPropagation();
+						app_layers_content_move.reset();
+						var pitch_id = Bruno.storage.get("pitch", event.data, "id");
+						submenu_Build('app_answer_get_presentation', true, true, pitch_id);
 					}
 				);
 				Elem.click(

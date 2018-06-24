@@ -274,6 +274,10 @@ Submenu.prototype.style['statistics_quiz_charts'] = function(submenu_wrapper, su
 			color_pattern.push('#FF4444');
 		}
 
+		if(data_columns.length <= 0){
+			$("#pie_devices_"+subm_id).addClass("display_none");
+		}
+
 		//Devices
 		submenu_app_statistics_quiz_chart_donut = c3.generate({
 			bindto: '#pie_devices_'+subm_id,
@@ -578,6 +582,10 @@ Submenu.prototype.style['statistics_session_charts'] = function(submenu_wrapper,
 			color_pattern.push('#FF4444');
 		}
 
+		if(data_columns.length <= 0){
+			$("#pie_devices_"+subm_id).addClass("display_none");
+		}
+
 		//Devices
 		submenu_app_statistics_session_chart_donut = c3.generate({
 			bindto: '#pie_devices_'+subm_id,
@@ -829,6 +837,10 @@ Submenu.prototype.style['statistics_question_charts'] = function(submenu_wrapper
 			color_pattern.push('#FF4444');
 		}
 
+		if(data_columns.length <= 0){
+			$("#pie_devices_"+subm_id).addClass("display_none");
+		}
+		
 		//Devices
 		submenu_app_statistics_answers_chart_donut = c3.generate({
 			bindto: '#pie_devices_'+subm_id,

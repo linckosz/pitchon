@@ -1,8 +1,4 @@
-$('#app_content_top_settings').click(function(){
-	submenu_Build('settings');
-});
-
-function app_content_dynamic_position() {
+var app_content_dynamic_position = function() {
 	$('#app_content_dynamic, #app_content_dynamic_sub').height(function(){
 		return $(window).height() - $('#app_content_top').height();
 	});
@@ -61,7 +57,7 @@ var app_content_menu = {
 }
 
 $('#app_content_top_home').click(function(){
-	app_content_menu.selection('pitch');
+	submenu_Build('settings');
 });
 
 var app_content_resize_timer;

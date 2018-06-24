@@ -153,6 +153,16 @@
 	background-color: #969696;
 }
 
+.submenu_button_deletion {
+	color: #CE6961 !important;
+}
+.submenu_button_deletion:hover {
+	background-color: rgba(190, 43, 31, 0.03) !important;
+}
+.submenu_button_deletion:active {
+	background-color: #FFFFFF !important;
+}
+
 .submenu_bottom_deletion {
 	padding-top: 30px;
 	padding-bottom: 30px;
@@ -369,6 +379,10 @@
 	cursor: default;
 	height: 100px;
 	border-bottom: solid 1px #EBEFF3;
+}
+
+.submenu_space_noborder {
+	border-style: none !important;
 }
 
 .submenu_title_small_top {

@@ -198,7 +198,7 @@ var app_generic_state = {
 			}
 		} else if(this.type[key] == 'increase'){
 			if(value>=this.current[key]){
-				value = this.current[key]
+				value = this.current[key];
 				result = false;
 			}
 		}
@@ -249,7 +249,8 @@ var app_generic_state = {
 						if(this.type[key] == 'boolean'){
 							this.current[key] = this.default[key]
 						}
-						window.history.replaceState(this.current, this.getTitle());
+						app_generic_state.manual = false;
+						window.history.go(-1);
 					} else if(position==0){ //Replace
 						this.current[key] = data[key];
 						window.history.replaceState(this.current, this.getTitle());
@@ -353,6 +354,10 @@ var app_generic_state = {
 			var item = item;
 			var app_generic_state_action = function(){
 				if(Bruno.storage.get("question", item.id)){
+					var pitch_id = Bruno.storage.getParent("question", item.id, "id");
+					if(pitch_id){
+						app_generic_state.change({menu: 1,}, pitch_id, 1);
+					}
 					app_content_menu.selection("answer", item.id);
 				}
 			}
@@ -365,9 +370,13 @@ var app_generic_state = {
 		answer: function(item){
 			var item = item;
 			var app_generic_state_action = function(){
-				var question = Bruno.storage.getParent("answer", item.id);
-				if(question){
-					app_content_menu.selection("answer", question.id);
+				var question_id = Bruno.storage.getParent("answer", item.id, "id");
+				if(question_id){
+					var pitch_id = Bruno.storage.getParent("question", question_id, "id");
+					if(pitch_id){
+						app_generic_state.change({menu: 1,}, pitch_id, 1);
+					}
+					app_content_menu.selection("answer", question_id);
 				}
 			}
 			if(!storage_first_launch && Bruno.storage.get("answer", item.id)){
