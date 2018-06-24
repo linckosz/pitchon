@@ -146,7 +146,7 @@ submenu_list['app_answer_get_presentation'] = {
 	//Set the title of the top
 	"_title": {
 		"style": "title",
-		"title": Bruno.Translation.get('app', 2114, 'html'), //Get my Presentation
+		"title": Bruno.Translation.get('app', 2114, 'html'), //Get the Presentation
 	},
 
 	"preview": {

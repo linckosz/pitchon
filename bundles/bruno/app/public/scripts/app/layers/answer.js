@@ -606,26 +606,8 @@ var app_layers_answer_feedPage = function(param){
 			Bruno.storage.onboarding_stop = true;
 			setTimeout(function(){
 				app_layers_answer_grumble_1();
-				app_layers_answer_grumble_2();
 			}, 10);
 		}
-	}
-};
-
-var app_layers_answer_grumble_mask = function(){
-	Elem = $('#-app_layers_answer_mask').clone();
-	Elem.prop('id', 'app_layers_answer_mask');
-	Elem.on('click', function(event){
-		$(document.body).trigger('click.bubble');
-		event.stopPropagation();
-		return false;
-	});
-	$('#app_layers_answer').find("[find=wrapper]").append(Elem);
-};
-
-var app_layers_answer_grumble_mask_hide = function(){
-	if($("#app_layers_answer_mask").length>0){
-		$("#app_layers_answer_mask").recursiveRemove();
 	}
 };
 
@@ -647,9 +629,9 @@ var app_layers_answer_grumble_action = function(){
 
 var app_layers_answer_grumble_1 = function(){
 	//http://jamescryer.github.io/grumble.js/
-	$('#app_layers_answer_settings').find("[find=eye]").grumble(
+	$('#app_layers_answer_settings').find("[find=settings]").grumble(
 		{
-			text: Bruno.Translation.get('app', 125, 'html'), //See how cool it will be!
+			text: Bruno.Translation.get('app', 127, 'html'), //Download your presentation here
 			size: 150,
 			sizeRange: [150],
 			angle: 200,
@@ -658,29 +640,35 @@ var app_layers_answer_grumble_1 = function(){
 			hideOnClick: true,
 			type: 'alt-',
 			useRelativePositioning: true,
+			onShow: function(){
+				app_content_mask_show();
+			},
 			onBeginHide: function(){
-				app_layers_answer_grumble_mask_hide();
-				app_layers_answer_grumble_action();
+				app_layers_answer_grumble_2();
 			},
 		}
 	);
 };
 
 var app_layers_answer_grumble_2 = function(){
-	var grumble_2_distance = 2 + $('#app_layers_answer_url').find("[find=ppt]").outerHeight();
-	$('#app_layers_answer_url').find("[find=ppt_wrapper]").grumble(
+	//http://jamescryer.github.io/grumble.js/
+	$('#app_layers_answer').find("[find=select_style]").grumble(
 		{
-			text: Bruno.Translation.get('app', 127, 'html'), //Get your public presentation here
-			size: 150,
-			sizeRange: [150],
-			angle: 340,
-			distance: grumble_2_distance,
-			showAfter: 600,
+			text: Bruno.Translation.get('app', 132, 'html'), //You can also switch to another mode, like "pictures" or "statistics"
+			size: 200,
+			sizeRange: [200],
+			angle: 220,
+			distance: 4,
+			showAfter: 400,
 			hideOnClick: true,
 			type: 'alt-',
 			useRelativePositioning: true,
+			onShow: function(){
+				app_content_mask_show();
+			},
 			onBeginHide: function(){
-				app_layers_answer_grumble_mask_hide();
+				app_content_mask_hide();
+				app_layers_answer_grumble_action();
 			},
 		}
 	);
