@@ -5,6 +5,7 @@ namespace bundles\bruno\quiz\controllers;
 use \libs\STR;
 use \libs\Email;
 use \libs\Controller;
+use \libs\Vanquish;
 use \bundles\bruno\data\models\ModelBruno;
 use \bundles\bruno\data\models\Session;
 use \bundles\bruno\data\models\Statistics;
@@ -49,6 +50,13 @@ class ControllerQuiz extends Controller {
 		$app = ModelBruno::getApp();
 		$app->bruno->data['data_questionid_enc'] = '';
 		if($question = Question::Where('id', $question_id)->first(array('id', 'u_at', 'parent_id', 'number', 'file_id', 'title', 'style'))){
+
+			//Set host_id
+			if(!Vanquish::get('host_id')){
+				if($pitch = Pitch::find($question->parent_id)){
+					Vanquish::set(array('host_id' => $pitch->c_by,)); //This will hold a guest to the latest pitch creator
+				}
+			}
 
 			$base_url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'];
 
@@ -224,6 +232,7 @@ class ControllerQuiz extends Controller {
 				if($question = Question::Where('id', $answer->parent_id)->first(array('id', 'style', 'number', 'parent_id'))){
 					$app->bruno->data['data_question_id'] = $question->id;
 					if($pitch = Pitch::find($question->parent_id)){
+						Vanquish::set(array('host_id' => $pitch->c_by,)); //This will hold a guest to the latest pitch creator
 						if($pitch->ad_pic && $file = File::Where('id', $pitch->ad_pic)->first(array('id', 'uploaded_by', 'link', 'ori_ext', 'u_at'))){
 							$app->bruno->data['data_ad_pic'] = $base_url.'/files/'.$file->uploaded_by.'/'.$file->link.'.'.$file->ori_ext.'?'.$file->u_at;
 						}
@@ -251,6 +260,7 @@ class ControllerQuiz extends Controller {
 				$question = Question::Where('id', $statistics->question_id)->first(array('id', 'style', 'number', 'parent_id'));
 				$app->bruno->data['data_question_id'] = $question->id;
 				if($question && $pitch = Pitch::find($question->parent_id)){
+					Vanquish::set(array('host_id' => $pitch->c_by,)); //This will hold a guest to the latest pitch creator
 					$base_url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'];
 					if($pitch->ad_pic && $file = File::Where('id', $pitch->ad_pic)->first(array('id', 'uploaded_by', 'link', 'ori_ext', 'u_at'))){
 						$app->bruno->data['data_ad_pic'] = $base_url.'/files/'.$file->uploaded_by.'/'.$file->link.'.'.$file->ori_ext.'?'.$file->u_at;
@@ -327,6 +337,7 @@ class ControllerQuiz extends Controller {
 				$question_id = STR::integer_map($questionid_enc, true);
 				if($question = Question::Where('id', $question_id)->first(array('id', 'style', 'number', 'parent_id'))){
 					if($pitch = Pitch::find($question->parent_id)){
+						Vanquish::set(array('host_id' => $pitch->c_by,)); //This will hold a guest to the latest pitch creator
 						if($pitch->ad_pic && $file = File::Where('id', $pitch->ad_pic)->first(array('id', 'uploaded_by', 'link', 'ori_ext', 'u_at'))){
 							$app->bruno->data['data_ad_pic'] = $base_url.'/files/'.$file->uploaded_by.'/'.$file->link.'.'.$file->ori_ext.'?'.$file->u_at;
 						}
@@ -345,6 +356,7 @@ class ControllerQuiz extends Controller {
 			if($statistics = Statistics::Where('id', $statistics_id)->first()){
 				$question = Question::Where('id', $statistics->question_id)->first(array('id', 'style', 'parent_id'));
 				if($question && $pitch = Pitch::find($question->parent_id)){
+					Vanquish::set(array('host_id' => $pitch->c_by,)); //This will hold a guest to the latest pitch creator
 					if($pitch->ad_pic && $file = File::Where('id', $pitch->ad_pic)->first(array('id', 'uploaded_by', 'link', 'ori_ext', 'u_at'))){
 						$app->bruno->data['data_ad_pic'] = $base_url.'/files/'.$file->uploaded_by.'/'.$file->link.'.'.$file->ori_ext.'?'.$file->u_at;
 					}

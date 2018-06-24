@@ -17,9 +17,9 @@ $app->get('/', function() use ($app) {
 	} else {
 		if(Vanquish::get('remember')){
 			//It feels better to keep track of last email login
-			Vanquish::unsetAll(array('user_language', 'remember', 'user_email'));
+			Vanquish::unsetAll(array('user_language', 'remember', 'host_id', 'user_email'));
 		} else {
-			Vanquish::unsetAll(array('user_language', 'remember'));
+			Vanquish::unsetAll(array('user_language', 'remember', 'host_id'));
 		}
 		$app->render('/bundles/bruno/app/templates/login.twig');
 	}

@@ -4,6 +4,7 @@ namespace bundles\bruno\data\models\data;
 
 use \libs\Json;
 use \libs\STR;
+use \libs\Vanquish;
 use \bundles\bruno\data\models\ModelBruno;
 use \bundles\bruno\data\models\data\Pitch;
 use \bundles\bruno\data\models\data\Question;
@@ -208,6 +209,13 @@ class User extends ModelBruno {
 		$new = false;
 		if(!isset($this->id)){
 			$this->setLanguage(false);
+			// Attach a new user to the latest pitch host.
+			// If this user upgrate to a paid account, a % of the 1st order will be given to the host
+			// It only works at the first payment, not renewal
+			// If this user upgrate to a paid account with a promotional code, the host_id will be changed to the person owning the promotional code (our sales)
+			if($host_id = Vanquish::get('host_id')){
+				$this->host_id = $host_id;
+			}
 			$new = true;
 		}
 		$result = parent::save($options);
