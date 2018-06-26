@@ -205,6 +205,37 @@ submenu_list['app_answer_get_presentation'] = {
 		},
 	},
 
+	"share": {
+		"style": "next",
+		"keep_title": true,
+		"title": Bruno.Translation.get('app', 134, 'html'), //Share with
+		"next": "app_pitch_share",
+		"action_param": function(Elem, subm){
+			return subm.param; //Pitch ID
+		},
+		"now": function(Elem, subm){
+			var value = this.value;
+			Elem.prop('id', subm.id+"_share");
+			app_application_bruno.add(subm.id+"_share", "pitch_"+subm.param, function(){
+				var value = this.action_param[0]($("#"+this.id), this.action_param[1]);
+				Elem.find("[find=submenu_next_value]").html(value);
+			}, [value, subm.param]);
+		},
+		"value": function(Elem, subm){
+			var number = 0;
+			var users = Bruno.storage.get("pitch", subm.param, "_user");
+			if(users){
+				for(var i in users){
+					number++;
+				}
+			}
+			if(number>1){
+				return Bruno.Translation.get('app', 142, 'html', {number: number}); //[{number}] users
+			}
+			return Bruno.Translation.get('app', 135, 'html'); //no one else
+		},
+	},
+
 	"space2": {
 		"style": "space",
 		"title": "space",

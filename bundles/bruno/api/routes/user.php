@@ -18,4 +18,10 @@ $app->group('/api/user', function() use ($app) {
 	)
 	->name('api_user_signout_post');
 
+	$app->post(
+		'/search',
+		'\bundles\bruno\api\controllers\ControllerUser:search_post'
+	)
+	->name('api_user_search_post');
+
 });

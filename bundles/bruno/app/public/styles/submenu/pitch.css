@@ -1,0 +1,118 @@
+.submenu_pitch_search_deco {
+	padding: 16px 16px;
+	height: auto;
+}
+
+.submenu_pitch_search_top {
+	display: block !important;
+}
+
+.submenu_pitch_search_info {
+	display: block !important;
+	font-size: 12px;
+	height: 20px;
+	vertical-align: top !important;
+}
+
+.submenu_pitch_search_input {
+	font-size: 24px;
+	line-height: 20px;
+	vertical-align: middle;
+	color: #6F7377;
+	width: 60%;
+	border: solid 1px #EBEFF3;
+	background-color: rgba(255, 255, 255, 0.8);
+	font-size: 14px;
+	padding: 8px 4px;
+	margin-left: -4px;
+	margin-right: 6px;
+	vertical-align: middle;
+}
+
+.submenu_pitch_search_input:focus::placeholder {
+	color: transparent;
+}
+
+.submenu_pitch_search_input::placeholder {
+	color: #B9B9B9;
+	font-size: 14px;
+	transition:all 0.7s ease;
+	-webkit-transition-delay:all 0.7s ease;
+	-moz-transition-delay:all 0.7s ease;
+	-ms-transition-delay:all 0.7s ease;
+	-o-transition-delay:all 0.7s ease;
+}
+
+.submenu_pitch_search_add.disabled {
+	color: #E4E4E4 !important;
+	border-color: #E4E4E4 !important;
+	background-color: #F5F5F5 !important;
+	cursor: default !important;
+}
+
+.submenu_pitch_search_add {
+	margin: 0;
+	padding: 4px 16px;
+	text-align: center;
+	position: relative;
+	color: #404040;
+	border: 1px solid #A9A9A9;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 16px;
+	background-color: #F1F1F1;
+	vertical-align: middle;
+}
+.submenu_pitch_search_add:hover {
+	border-color: #888888;
+}
+.submenu_pitch_search_add:active {
+	border-color: #888888;
+	background-color: #E2E2E2;
+}
+
+.submenu_pitch_search_progress {
+	filter: alpha(opacity=20);
+	opacity: 0.20;
+	-moz-opacity: 0.20;
+	-khtml-opacity: 0.20;
+}
+
+.submenu_pitch_user {
+	height: auto;
+	padding: 16px 0;
+}
+
+.submenu_pitch_user.uncheck {
+	filter: alpha(opacity=65);
+	opacity: 0.65;
+	-moz-opacity: 0.65;
+	-khtml-opacity: 0.65;
+}
+
+.submenu_pitch_user_read {
+	background-color: #FAFBFC !important;
+	cursor: default !important;
+}
+
+.submenu_pitch_user_padding {
+	padding: 0 32px !important;
+}
+
+.submenu_pitch_user_username {
+	font-size: 24px;
+}
+
+.submenu_pitch_user_email {
+	font-size: 12px;
+	margin-left: 1px;
+}
+
+.submenu_pitch_user_check {
+	font-size: 32px;
+	width: 48px;
+	text-align: center;
+}
+.submenu_pitch_user_check.check {
+	color: #49B84A;
+}

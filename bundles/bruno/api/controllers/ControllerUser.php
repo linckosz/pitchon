@@ -73,4 +73,19 @@ class ControllerUser extends Controller {
 		return exit(0);
 	}
 
+	public function search_post(){
+		$data = ModelBruno::getData();
+		$result = false;
+		if(isset($data->email) && $user = User::Where('email', $data->email)->first(array('id', 'md5', 'username', 'email'))){
+			$result = array(
+				'id' => $user->id,
+				'md5' => substr($user->md5, 0, 8), //CR only needed
+				'username' => $user->username,
+				'email' => mb_strtolower($user->email),
+			);
+		}
+		(new Json($result))->render(); //You have signed out of your account.
+		return exit(0);
+	}
+
 }

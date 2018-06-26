@@ -528,6 +528,11 @@
 	color: #6F7377;
 }
 
+.submenu_personal_profile_email {
+	margin-left: 3px;
+	font-size: 12px;
+}
+
 .submenu_personal_profile_deco {
 	height: 97px;
 }
@@ -614,5 +619,8 @@
 	}
 	.submenu_personal_profile_user {
 		font-size: 18px;
+	}
+	.submenu_personal_profile_email {
+		font-size: 10px;
 	}
 }

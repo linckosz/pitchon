@@ -14,6 +14,7 @@ submenu_list['settings'] = {
 		},
 		"now": function(Elem, subm){
 			var Elem_pic = Elem.find("[find=submenu_profile_upload_picture]");
+			Elem.find("[find=email]").html(Bruno.storage.get('user', wrapper_localstorage.user_id, 'email'));
 			Elem_pic
 				.removeClass("no_shadow")
 				.prop('id', subm.id+'_profile_picture')
@@ -33,7 +34,7 @@ submenu_list['settings'] = {
 			if(typeof now == "undefined"){ now = false; }
 			var item = Bruno.storage.get('user', wrapper_localstorage.user_id);
 			var value = Elem.find("[find=submenu_value]").val();
-			//We don't save if the vaue is the same
+			//We don't save if the value is the same
 			if(value == item['username']){
 				return true;
 			}
@@ -93,7 +94,6 @@ Submenu.prototype.style['profile_photo'] = function(submenu_wrapper, subm) {
 	var attribute = subm.attribute;
 	var Elem = $('#-submenu_personal_profile').clone();
 	var range = 'user_'+user_id;
-	var temp_id = false;
 	Elem.prop("id", '');
 	if ("class" in attribute) {
 		Elem.addClass(attribute['class']);

@@ -23,6 +23,7 @@ class Pitch extends ModelBruno {
 		'md5',
 		'c_at',
 		'u_at',
+		'c_by',
 		'updated_json',
 		'title',
 		'file_id',
@@ -31,6 +32,7 @@ class Pitch extends ModelBruno {
 		'ad',
 		'ad_pic',
 		'sort',
+		'_user',
 	);
 
 	protected $model_integer = array(
@@ -228,6 +230,26 @@ class Pitch extends ModelBruno {
 	}
 
 ////////////////////////////////////////////
+
+	public function toJson($detail=true, $options = 256){ //256: JSON_UNESCAPED_UNICODE
+		$users = $this->user;
+		$this->_user = new \stdClass;
+		foreach ($users as $user) {
+			$this->_user->{$user->id} = new \stdClass;
+			$this->_user->{$user->id}->id = $user->id;
+			$this->_user->{$user->id}->username = $user->username;
+			$this->_user->{$user->id}->email = $user->email;
+			$this->_user->{$user->id}->lock = false;
+			//Lock the creator for being exclude of the picth
+			if($this->c_by == $user->id){
+				$this->_user->{$user->id}->lock = true;
+			}
+		}
+		//\libs\Watch::php($user, '$user', __FILE__, __LINE__, false, false, true);
+		//$this->_user = ;
+		$temp = parent::toJson($detail, $options);
+		return $temp;
+	}
 
 	public function scopegetItems($query, &$list=array(), $get=false){
 		if(!isset($list['user'])){ $list['user']=array(); }

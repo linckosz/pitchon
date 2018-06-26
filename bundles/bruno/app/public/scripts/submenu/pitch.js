@@ -174,3 +174,196 @@ submenu_list['app_pitch_edit'] = {
 		},
 	},
 };
+
+
+
+
+var submenu_app_pitch_share_timeout = null;
+var submenu_app_pitch_share_current_email = false;
+
+submenu_list['app_pitch_share'] = {
+	//Set the title of the top
+	"_title": {
+		"style": "title",
+		"title": Bruno.Translation.get('app', 138, 'html'), //Share your Quiz
+	},
+	"search": {
+		"style": "pitch_search",
+		"title": Bruno.Translation.get('app', 139, 'html'), //search by email address
+		"action": function(Elem, subm, now){
+			if(typeof now == "undefined"){ now = false; }
+			var email = Elem.find("[find=input]").val();
+			email = email.toLowerCase();
+			if(email == submenu_app_pitch_share_current_email){
+				return false;
+			}
+			Elem.find("[find=add]").off("click").addClass("disabled");
+			base_hideProgress(Elem.find("[find=add]"));
+			submenu_app_pitch_share_current_email = email;
+			Elem.find("[find=info]").html("");
+			clearTimeout(submenu_app_pitch_share_timeout);
+			if(base_input_field.email.valid(email)){
+				var timer = 1000;
+				if(now){
+					timer = 0;
+				}
+				base_showProgress(Elem.find("[find=add]"));
+				submenu_app_pitch_share_timeout = setTimeout(function(email, Elem){
+					var Elem_bis = Elem;
+					wrapper_sendAction(
+						{email: email, },
+						'post',
+						'api/user/search',
+						function(msg, err, status, data){
+							Elem_bis.find("[find=add]").addClass("disabled");
+							if(data && typeof data.id != "undefined"){
+								if(data.id == wrapper_localstorage.user_id){
+									Elem_bis.find("[find=info]").html(Bruno.Translation.get('app', 142, 'html')); //This is your email address.
+								} else {
+									var users = Bruno.storage.get("pitch", subm.param, "_user");
+									if(users[data.id]){
+										Elem_bis.find("[find=info]").html(Bruno.Translation.get('app', 141, 'html')); //You already shared it with this person.
+									} else {
+										Elem.find("[find=add]")
+											.removeClass("disabled")
+											.on("click", [Elem_bis, data], function(event){
+												event.stopPropagation();
+												event.data[0].find("[find=input]").val("");
+												submenu_app_pitch_share_add_user(event.data[1], $(this).data("pitch_id"), $(this).data("subm_id"));
+											});
+									}
+								}
+							} else {
+								Elem_bis.find("[find=info]").html(Bruno.Translation.get('app', 140, 'html')); //This person does not have yet an account.
+							}
+							base_hideProgress(Elem_bis.find("[find=add]"));
+						},
+						null,
+						null,
+						function(){
+							base_hideProgress(Elem_bis.find("[find=add]"));
+						}
+					);
+				}, timer, email, Elem);
+			}
+		},
+		"now": function(Elem, subm){
+			Elem.find("[find=add]")
+				.data("subm_id", subm.id)
+				.data("pitch_id", subm.param);
+		},
+	},
+	"pre_action": {
+		"style": "preAction",
+		"action": function(Elem, subm){
+			//Clear the list to rebuild it then
+			for(var i in submenu_list['app_pitch_share']){
+				if(
+					   i != "_title"
+					&& i != "search"
+					&& i != "pre_action"
+					&& i != "post_action"
+				){
+					delete submenu_list['app_pitch_share'][i];
+				}
+			}
+		},
+	},
+	"post_action": {
+		"style": "postAction",
+		"action": function(Elem, subm){
+			var users = Bruno.storage.get("pitch", subm.param, "_user");
+			if(users){
+				for(var i in users){
+					submenu_app_pitch_share_add_user(users[i], subm.param, subm.id);
+				}
+			}
+		},
+	},
+};
+
+Submenu.prototype.style['pitch_search'] = function(submenu_wrapper, subm) {
+	var that = subm;
+	var attribute = subm.attribute;
+	var Elem = $('#-submenu_pitch_search').clone();
+	Elem.prop("id", that.id+"_submenu_pitch_search");
+	Elem.find("[find=input]").attr('placeholder', attribute.title);
+	if ("class" in attribute) {
+		Elem.addClass(attribute['class']);
+	}
+	if ("value" in attribute) {
+		if(typeof attribute.value == "function"){
+			var value = attribute.value(Elem, that);
+			Elem.find("[find=input]").val(value);
+		} else {
+			Elem.find("[find=input]").val(attribute.value);
+		}
+	}
+
+	if ("action" in attribute) {
+		if (!("action_param" in attribute)) {
+			attribute.action_param = null;
+		}
+		Elem.find("[find=input]").on({
+			focusin: function(){ attribute.action(Elem, that) },
+			focusout: function(){ attribute.action(Elem, that, true) },
+			change: function(){ attribute.action(Elem, that) },
+			copy: function(){ attribute.action(Elem, that) },
+			paste: function(){ attribute.action(Elem, that, true) },
+			cut: function(){ attribute.action(Elem, that, true) },
+			keyup: function(event) {
+				if (event.which != 13) {
+					attribute.action(Elem, that);
+				} else {
+					attribute.action(Elem, that, true); //Press Enter
+				}
+			},
+		});
+	}
+
+	if ("now" in attribute && typeof attribute.now == "function") {
+		attribute.now(Elem, that);
+	}
+	
+	submenu_wrapper.find("[find=submenu_wrapper_content]").append(Elem);
+	return true;
+};
+
+
+//Add individual user line
+var submenu_app_pitch_share_add_user = function(user, pitch_id, subm_id){
+	if($("#"+subm_id+"_submenu_pitch_user_"+user["id"]).length>=1){
+		return false;
+	}
+	var Elem = $('#-submenu_pitch_user').clone();
+	Elem.prop("id", subm_id+"_submenu_pitch_user_"+user["id"]);
+	Elem.find("[find=username]").html(user["username"]);
+	Elem.find("[find=email]").html(user["email"]);
+
+	var pitch_c_by = Bruno.storage.get("pitch", pitch_id, "c_by");
+	if(user["id"] == pitch_c_by){ //Lock because it's the creator
+		Elem.addClass("submenu_pitch_user_read");
+		Elem.find("[find=check]")
+			.removeClass("fa-check")
+			.addClass("fa-lock");
+	} else {
+		Elem.find("[find=check]").addClass("check");
+		Elem
+			.data("check", true)
+			.on("click", function(event){
+				event.stopPropagation();
+				var check = $(this).data("check");
+				if(check){
+					$(this).data("check", false).addClass("uncheck");
+					$(this).find("[find=check]").addClass("visibility_hidden");
+				} else {
+					$(this).data("check", true).removeClass("uncheck");
+					$(this).find("[find=check]").removeClass("visibility_hidden");
+				}
+			});
+	}
+
+	$("#"+subm_id+"_submenu_pitch_search").after(Elem);
+	return Elem;
+
+};

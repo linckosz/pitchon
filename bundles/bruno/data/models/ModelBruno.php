@@ -36,6 +36,10 @@ abstract class ModelBruno extends Model {
 	protected static $schema_table = array();
 	protected static $schema_default = array();
 
+	//CRUD restriction per model class
+	// 1:CRUD / 2: CRU / 3:CR
+	protected $crud = 1;
+
 	//Force to save user access for the user itself
 	protected static $save_user_access = true;
 
@@ -337,6 +341,19 @@ abstract class ModelBruno extends Model {
 		}
 		return self::$columns[$model->getTable()];
 	}
+
+	public static function findMD5(int $id, $md5, $with_trash=false){
+		//Read is authorized at 8 characters
+		if(strlen($md5)<8){
+			return false;
+		}
+		if($with_trash){
+			$model = static::withTrashed()->where('id', $id)->where('md5', 'like', $md5.'%')->first();
+		} else {
+			$model = static::Where('id', $id)->where('md5', 'like', $md5.'%')->first();
+		}
+		return $model;
+	}
 	
 	public static function getModel($id, $with_trash=false){
 		if($with_trash){
@@ -582,6 +599,8 @@ abstract class ModelBruno extends Model {
 
 	public function getNoSQL($force=false){
 
+		$result = false;
+
 		//We use a NoSQL format to speedup the result displayed
 		if($force || !isset($this->nosql) || is_null($this->nosql)){
 			//Make sure we cache with all fields
@@ -627,11 +646,20 @@ abstract class ModelBruno extends Model {
 
 			static::withTrashed()->where('id', $this->id)->getQuery()->update(['nosql' => $this->nosql]);
 			usleep(rand(1000, 5000)); //1ms
-
-			return $result;
+		} else {
+			$result = json_decode($this->nosql);
 		}
 
-		return json_decode($this->nosql);
+		//Limit the scope for the user
+		if(isset($result->md5)){
+			if($this->crud == 2){ //CRU
+				$result->md5 = substr($result->md5, 0, 16);
+			} else if($this->crud == 3){ //CR
+				$result->md5 = substr($result->md5, 0, 8);
+			}
+		}
+
+		return $result;
 	}
 
 	public function pivots_format($form){

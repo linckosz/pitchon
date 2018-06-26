@@ -97,8 +97,8 @@ class ControllerData extends Controller {
 					$class = ModelBruno::getClass($table);
 					if($class){
 						foreach ($list as $item) {
-							if(isset($item->id) && isset($item->md5) && is_string($item->md5) && strlen($item->md5)==32){
-								if($model = $class::where('id', $item->id)->where('md5', $item->md5)->first(array('id', 'md5', 'nosql'))){
+							if(isset($item->id) && isset($item->md5) && is_string($item->md5) && strlen($item->md5)>=8){
+								if($model = $class::where('id', $item->id)->where('md5', 'like', $item->md5.'%')->first(array('id', 'md5', 'nosql'))){
 									if(!isset($result->read)){ $result->read = new \stdClass; }
 									if(!isset($result->read->$table)){ $result->read->$table = new \stdClass; }
 									$result->read->$table->{$item->id} = $model->getNoSQL();
@@ -121,13 +121,23 @@ class ControllerData extends Controller {
 					if($class){
 						if(!isset($result->read->$table)){ $result->read->$table = new \stdClass; }
 						foreach ($list as $item) {
-							$model = $class::setItem($item);
-							if(is_object($model)){
-								$dirty = $model->getDirty();
-								$pivots = $model->pivots_format($item);
-								if(count($dirty)>0 || $pivots){
-									if($model->save()){
-										$result->read->$table->{$model->id} = $model->getNoSQL();
+							if(
+								   !isset($item->id) //insert
+								|| (isset($item->md5) && is_string($item->md5) && strlen($item->md5)>=16) //Update is authorized at 16 characters
+							){
+								if(isset($item->id) && strlen($item->md5)<32){
+									$temp = $class::where('id', $item->id)->where('md5', 'like', $item->md5.'%')->first(array('id', 'md5'));
+									$item->md5 = $temp->md5; //Set it to the full md5 if a shorter md5 is confirmed
+								}
+								if($model = $class::setItem($item)){
+									if(is_object($model)){
+										$dirty = $model->getDirty();
+										$pivots = $model->pivots_format($item);
+										if(count($dirty)>0 || $pivots){
+											if($model->save()){
+												$result->read->$table->{$model->id} = $model->getNoSQL();
+											}
+										}
 									}
 								}
 							}

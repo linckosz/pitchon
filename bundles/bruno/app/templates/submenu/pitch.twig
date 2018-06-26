@@ -1,0 +1,18 @@
+<div id="-submenu_pitch_search" class="base_optionTab submenu_deco_read submenu_pitch_search_deco">
+	<div class="submenu_padding submenu_pitch_search_top">
+		<input find="input" type="email" class="submenu_pitch_search_input selectable no_focus" value="" />
+		<span find="add" class="submenu_pitch_search_add disabled">
+			{{ _trans('app', 1, 12, 'html')|upper }}{# ADD #}
+			<img class="submit_progress_bar submenu_pitch_search_progress" find="submit_progress_bar" src="{{ _filelatest('/bruno/app/images/base/loading_bar_black.gif') }}"/>
+		</span>
+	</div class="submenu_padding">
+	<div find="info" class="submenu_padding submenu_pitch_search_info"></div>
+</div>
+
+<div id="-submenu_pitch_user" class="base_optionTab submenu_deco submenu_pitch_user">
+	<span class="submenu_padding submenu_pitch_user_padding">
+		<div find="username" class="submenu_pitch_user_username"></div>
+		<div find="email" class="submenu_pitch_user_email"></div>
+	</span>
+	<span find="check" class="submenu_padding submenu_pitch_user_padding submenu_pitch_user_check fa fa-check"></span>
+</div>

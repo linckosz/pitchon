@@ -14,7 +14,8 @@
 </div>
 
 <div id="-submenu_info" class="base_optionTab submenu_deco_read submenu_deco_info_wrap">
-	<span class="submenu_padding" find="submenu_info_title" class="submenu_info_title"></span>
+	<span class="submenu_padding" find="submenu_info_title"></span>
+	<span class="submenu_padding submenu_value" find="submenu_info_value"></span>
 </div>
 
 <li id="-submenu_menu_list_item" class="submenu_menu_list_item">
@@ -49,7 +50,7 @@
 <div id="-submenu_bottom" class="base_optionTab submenu_bottom_cell">
 	<button class="submenu_bottom_valid" find="submenu_bottom_button">
 		<span find="submenu_bottom_title"></span>
-		<img class="submit_progress_bar" find="submit_progress_bar" src="{{ _filelatest('/bruno/app/images/generic/base/generic/loading_bar.gif') }}"/>
+		<img class="submit_progress_bar" find="submit_progress_bar" src="{{ _filelatest('/bruno/app/images/base/loading_bar.gif') }}"/>
 	</button>
 </div>
 
@@ -96,5 +97,6 @@
 	</span>
 	<span class="submenu_padding">
 		<input type="text" maxlength="200" find="submenu_value" class="submenu_input_flat_value submenu_personal_profile_user selectable no_focus" value="" />
+		<div find="email" class="ellipsis submenu_personal_profile_email"></div>
 	</span>
 </div>

@@ -115,7 +115,9 @@ Submenu.prototype.style['info'] = function(submenu_wrapper, subm) {
 	Elem.prop("id", '');
 	Elem.find("[find=submenu_info_title]").html(attribute.title);
 	if ("value" in attribute) {
-		Elem.find("[find=submenu_info_title]").html(attribute.value);
+		Elem.find("[find=submenu_info_value]").html(attribute.value);
+	} else {
+		Elem.find("[find=submenu_info_value]").addClass("display_none");
 	}
 	if ("class" in attribute) {
 		Elem.addClass(attribute['class']);
