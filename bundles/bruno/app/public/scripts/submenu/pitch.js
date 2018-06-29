@@ -176,8 +176,6 @@ submenu_list['app_pitch_edit'] = {
 };
 
 
-
-
 var submenu_app_pitch_share_timeout = null;
 var submenu_app_pitch_share_current_email = false;
 
@@ -220,16 +218,20 @@ submenu_list['app_pitch_share'] = {
 								if(data.id == wrapper_localstorage.user_id){
 									Elem_bis.find("[find=info]").html(Bruno.Translation.get('app', 142, 'html')); //This is your email address.
 								} else {
-									var users = Bruno.storage.get("pitch", subm.param, "_user");
+									var users = Bruno.storage.get("pitch", Elem_bis.find("[find=add]").data("pitch_id"), "_user");
 									if(users[data.id]){
 										Elem_bis.find("[find=info]").html(Bruno.Translation.get('app', 141, 'html')); //You already shared it with this person.
 									} else {
-										Elem.find("[find=add]")
+										Elem_bis.find("[find=add]")
 											.removeClass("disabled")
 											.on("click", [Elem_bis, data], function(event){
 												event.stopPropagation();
-												event.data[0].find("[find=input]").val("");
-												submenu_app_pitch_share_add_user(event.data[1], $(this).data("pitch_id"), $(this).data("subm_id"));
+												event.data[0].find("[find=input]")
+													.val("")
+													.trigger("change");
+												var pitch = Bruno.storage.get("pitch", Elem_bis.find("[find=add]").data("pitch_id"));
+												submenu_app_pitch_share_add_user(Elem_bis.find("[find=add]").data("pitch_id"), event.data[1]["id"], true);
+												submenu_app_pitch_share_add_tab(event.data[1], $(this).data("pitch_id"), $(this).data("subm_id"));
 											});
 									}
 								}
@@ -275,7 +277,7 @@ submenu_list['app_pitch_share'] = {
 			var users = Bruno.storage.get("pitch", subm.param, "_user");
 			if(users){
 				for(var i in users){
-					submenu_app_pitch_share_add_user(users[i], subm.param, subm.id);
+					submenu_app_pitch_share_add_tab(users[i], subm.param, subm.id);
 				}
 			}
 		},
@@ -330,9 +332,31 @@ Submenu.prototype.style['pitch_search'] = function(submenu_wrapper, subm) {
 };
 
 
-//Add individual user line
-var submenu_app_pitch_share_add_user = function(user, pitch_id, subm_id){
+
+var submenu_app_pitch_share_add_user = function(pitch_id, user_id, access){
+	var pitch = Bruno.storage.get("pitch", pitch_id);
+	if(pitch){
+		var data = {};
+		data.set = {};
+		data.set.pitch = {};
+		data.set.pitch[pitch['id']] = {
+			id: pitch['id'],
+			md5: pitch['md5'],
+			"user>access": {},
+		};
+		data.set.pitch[pitch['id']]["user>access"][user_id] = access;
+		if(storage_offline(data)){
+			wrapper_sendAction(data, 'post', 'api/data/set', storage_cb_success, storage_cb_error, storage_cb_begin, storage_cb_complete);
+		}
+	}
+};
+
+
+//Add individual user tab line
+var submenu_app_pitch_share_add_tab = function(user, pitch_id, subm_id){
 	if($("#"+subm_id+"_submenu_pitch_user_"+user["id"]).length>=1){
+		$("#"+subm_id+"_submenu_pitch_user_"+user["id"]).data("check", true).removeClass("uncheck");
+		$("#"+subm_id+"_submenu_pitch_user_"+user["id"]).find("[find=check]").removeClass("visibility_hidden");
 		return false;
 	}
 	var Elem = $('#-submenu_pitch_user').clone();
@@ -350,15 +374,29 @@ var submenu_app_pitch_share_add_user = function(user, pitch_id, subm_id){
 		Elem.find("[find=check]").addClass("check");
 		Elem
 			.data("check", true)
-			.on("click", function(event){
+			.on("click", [pitch_id, user["id"]], function(event){
 				event.stopPropagation();
+				var pitch_id = event.data[0];
+				var user_id = event.data[1];
 				var check = $(this).data("check");
 				if(check){
-					$(this).data("check", false).addClass("uncheck");
-					$(this).find("[find=check]").addClass("visibility_hidden");
+					var accept = false;
+					if(user["id"] == wrapper_localstorage.user_id){
+						if(confirm(Bruno.Translation.get('app', 144, 'js'))){ //Are you sure you want to block your access to this item? If you confirm, you won't be able to see it then.
+							accept = true;
+						}
+					} else {
+						accept = true;
+					}
+					if(accept){
+						$(this).data("check", false).addClass("uncheck");
+						$(this).find("[find=check]").addClass("visibility_hidden");
+						submenu_app_pitch_share_add_user(pitch_id, user_id, false);
+					}
 				} else {
 					$(this).data("check", true).removeClass("uncheck");
 					$(this).find("[find=check]").removeClass("visibility_hidden");
+					submenu_app_pitch_share_add_user(pitch_id, user_id, true);
 				}
 			});
 	}

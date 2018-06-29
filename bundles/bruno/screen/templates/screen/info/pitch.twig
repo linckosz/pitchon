@@ -2,12 +2,35 @@
 {% block frame %}
 	<div id="begin_ppt_info_pitch" class="visibility_hidden">
 		<link rel="stylesheet" href="{{ _filelatest('/bruno/screen/styles/screen/info/pitch.css') }}" type="text/css" />
+		{% if body_preview %}
+			<style type="text/css">
+				#ppt_info_pitch_website {
+					left: 9vw;
+					left: 15vmin;
+					font-size: 3.2vw;
+					font-size: 5.2vmin;
+				}
+				#ppt_info_pitch_website_logo {
+					height: 4.4vw;
+					height: 5.6vmin;
+					line-height: 4.4vw;
+					line-height: 5.6vmin;
+					width: 4.4vw;
+					width: 5.6vmin;
+					font-size: 4.2vw;
+					font-size: 5.4vmin;
+				}
+			</style>
+		{% endif %}
 		<style type="text/css">
 			.base_color_bg_main_gradient {
 				background-image: url("{{ _filelatest('/bruno/screen/images/bg01.jpg') }}") !important;
 				background-repeat: no-repeat !important;
 				background-position: center !important;
 				background-size: cover !important;
+			}
+			#ppt_info_pitch_website_logo {
+				background-image: url("{{ data_brand_pic|raw }}");
 			}
 		</style>
 		<script src="{{ _filelatest('/bruno/screen/scripts/screen/info/pitch.js') }}" type="text/javascript"></script>
@@ -22,7 +45,8 @@
 	</div>
 
 	<div id="ppt_info_pitch_website">
-		<span id="ppt_info_pitch_website_logo" class="icon-projectBlack"></span><span id="ppt_info_pitch_website_link">{{ domain }}</span>
+		<span id="ppt_info_pitch_website_logo"></span>
+		<span id="ppt_info_pitch_website_link">{{ data_brand }}</span>
 	</div>
 
 	<div id="end_ppt_info_pitch" class="visibility_hidden"></div>

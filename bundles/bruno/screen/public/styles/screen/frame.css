@@ -187,7 +187,6 @@
 	line-height: 4.4vmin;
 	width: 4.4vw;
 	width: 4.4vmin;
-	border: 0 solid;
 	border-radius: 0.6vw;
 	border-radius: 0.6vmin;
 	display: inline-block;
@@ -201,6 +200,7 @@
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
+	background-color: #FFFFFF;
 }
 
 #ppt_frame_website_link {

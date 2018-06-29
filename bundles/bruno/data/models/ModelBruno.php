@@ -682,6 +682,7 @@ abstract class ModelBruno extends Model {
 						if(!isset($this->pivots_var->$type)){ $this->pivots_var->$type = new \stdClass; }
 						if(!isset($this->pivots_var->$type->$type_id)){ $this->pivots_var->$type->$type_id = new \stdClass; }
 						if(!isset($this->pivots_var->$type->$type_id->$column)){ $this->pivots_var->$type->$type_id->$column = $value; }
+						$this->forceSaving();
 					}	
 				}
 			}

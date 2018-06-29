@@ -400,6 +400,12 @@ submenu_list['app_answer_get_presentation'] = {
 		"style": "space",
 		"title": "space",
 		"value": 40,
+		"now": function(Elem, subm){
+			var pitch_c_by = Bruno.storage.get('pitch', subm.param, 'c_by');
+			if(pitch_c_by != wrapper_localstorage.user_id){
+				Elem.off("click").addClass("display_none");
+			}
+		},
 	},
 
 	"deletion": {
@@ -433,6 +439,12 @@ submenu_list['app_answer_get_presentation'] = {
 					wrapper_sendAction(data, 'post', 'api/data/set', action_cb_success, storage_cb_error, storage_cb_begin, action_cb_complete);
 				}
 				subm_bis.Hide();
+			}
+		},
+		"now": function(Elem, subm){
+			var pitch_c_by = Bruno.storage.get('pitch', subm.param, 'c_by');
+			if(pitch_c_by != wrapper_localstorage.user_id){
+				Elem.off("click").addClass("display_none");
 			}
 		},
 	},

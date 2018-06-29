@@ -36,13 +36,12 @@
 #ppt_info_pitch_website_logo {
 	height: 4.4vw;
 	height: 4.4vmin;
+	line-height: 4.vw;
 	line-height: 4.4vmin;
 	width: 4.4vw;
 	width: 4.4vmin;
-	border: 0 solid;
 	border-radius: 0.6vw;
 	border-radius: 0.6vmin;
-	background-color: #FBA026;
 	display: inline-block;
 	font-size: 4.2vw;
 	font-size: 4.2vmin;
@@ -50,6 +49,11 @@
 	padding: 0.1vmin;
 	box-sizing: border-box;
 	vertical-align: middle;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	background-color: #FFFFFF;
 }
 
 #ppt_info_pitch_website_link {
