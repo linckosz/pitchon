@@ -230,7 +230,7 @@ submenu_list['app_answer_get_presentation'] = {
 				}
 			}
 			if(number>1){
-				return Bruno.Translation.get('app', 142, 'html', {number: number}); //[{number}] users
+				return Bruno.Translation.get('app', 143, 'html', {number: number}); //[{number}] users
 			}
 			return Bruno.Translation.get('app', 135, 'html'); //no one else
 		},

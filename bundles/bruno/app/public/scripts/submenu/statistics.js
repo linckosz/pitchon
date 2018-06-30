@@ -70,8 +70,8 @@ submenu_list['statistics_quiz'] = {
 		"title": "",
 		"now": function(Elem, subm){
 			Elem.addClass('display_none');
-			if(typeof subm.param == "object"){
-				for(var i in subm.param){
+			if(typeof subm.param == "object" && typeof subm.param.session == "object"){
+				for(var i in subm.param.session){
 					Elem.removeClass('display_none');
 					break;
 				}
