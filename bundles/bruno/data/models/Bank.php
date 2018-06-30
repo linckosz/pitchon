@@ -59,8 +59,13 @@ class Bank extends Model {
 	}
 
 	
-	public static function subscription(int $amount_eur){
+	public static function subscription(float $amount_eur, $subscription_rate = 0.5){
 		$app = ModelBruno::getApp();
+		//The user get 50% of the "one time" subscription amount, the rate must be between 0% and 60%.
+		if(!is_float($subscription_rate) || $subscription_rate > 0.6 || $subscription_rate < 0){
+			return false;
+		}
+		$amount_eur = floor($subscription_rate * $amount_eur);
 		if($amount_eur<=0){
 			return false;
 		}

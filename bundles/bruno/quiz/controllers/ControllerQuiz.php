@@ -54,7 +54,9 @@ class ControllerQuiz extends Controller {
 			//Set host_id
 			if(!Vanquish::get('host_id')){
 				if($pitch = Pitch::find($question->parent_id)){
-					Vanquish::set(array('host_id' => $pitch->c_by,)); //This will hold a guest to the latest pitch creator
+					//This will hold a guest to the latest pitch creator
+					//A second pitch creator won't overwrite the first one (he has the priority)
+					Vanquish::set(array('host_id' => $pitch->c_by,));
 				}
 			}
 

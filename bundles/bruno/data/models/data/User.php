@@ -6,6 +6,7 @@ use \libs\Json;
 use \libs\STR;
 use \libs\Vanquish;
 use \bundles\bruno\data\models\ModelBruno;
+use \bundles\bruno\data\models\Bank;
 use \bundles\bruno\data\models\data\Pitch;
 use \bundles\bruno\data\models\data\Question;
 use \bundles\bruno\data\models\data\Answer;
@@ -34,6 +35,8 @@ class User extends ModelBruno {
 		'email',
 		'username',
 		'tuto',
+		'_bank',
+		'_host',
 	);
 
 	protected static $me = false;
@@ -205,6 +208,18 @@ class User extends ModelBruno {
 		}
 	}
 
+	public static function getHosts(){
+		$app = ModelBruno::getApp();
+		return User::Where('host_id', $app->bruno->data['user_id'])->count();
+	}
+
+	public function toJson($detail=true, $options = 256){ //256: JSON_UNESCAPED_UNICODE
+		$this->_bank = Bank::getRecords(); //Get the whole list of subscriptions attached
+		$this->_host = User::getHosts(); //Get the number of attached hosts that created an account
+		$temp = parent::toJson($detail, $options);
+		return $temp;
+	}
+
 	public function save(array $options = array()){
 		$new = false;
 		if(!isset($this->id)){
@@ -212,7 +227,7 @@ class User extends ModelBruno {
 			// Attach a new user to the latest pitch host.
 			// If this user upgrate to a paid account, a % of the 1st order will be given to the host
 			// It only works at the first payment, not renewal
-			// If this user upgrate to a paid account with a promotional code, the host_id will be changed to the person owning the promotional code (our sales)
+			// If later this user upgrate to a paid account with a promotional code, the host_id will be changed to the person owning the promotional code (our sales)
 			if($host_id = Vanquish::get('host_id')){
 				$this->host_id = $host_id;
 			}
