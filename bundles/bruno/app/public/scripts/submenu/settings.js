@@ -71,18 +71,15 @@ submenu_list['settings'] = {
 		"title": Bruno.Translation.get('app', 145, 'html'), //Rewards
 		"next": "reward",
 		"value": function(){
-			var text = "";
 			var amount = 0;
 			var records = Bruno.storage.get("user", wrapper_localstorage.user_id, "_bank");
 			for(var i in records){
-				if($.isNumeric(records[i]["eur"])){
+				//Only display the amount not paid yet
+				if(!records[i]["used_at"] && $.isNumeric(records[i]["eur"])){
 					amount +=  parseInt(records[i]["eur"], 10);
 				}
 			}
-			if(amount > 0){
-				text = amount+" €";
-			}
-			return text;
+			return amount+" €";
 		},
 	},
 	"support": {

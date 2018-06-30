@@ -224,7 +224,7 @@
 	cursor: pointer !important;
 }
 
-.submenu_deco_info_wrap {
+.submenu_deco_info_wrap, .submenu_deco_info_wrap > * {
 	white-space: normal !important;
 }
 

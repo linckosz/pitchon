@@ -1,0 +1,29 @@
+.submenu_app_reward_info {
+	padding: 16px;
+	height: auto;
+	box-sizing: border-box;
+	background-color: #FFFFFF;
+}
+
+.submenu_reward_button {
+	position: relative;
+	height: 64px;
+}
+
+.submenu_reward_button_ask {
+	display: inline-block !important;
+	padding: 6px 32px !important;
+	color: #FFFFFF !important;
+	background-color: #7BB1A9 !important;
+	border: solid 2px transparent;
+	border-radius: 4px;
+	cursor: pointer;
+	cursor: hand;
+	box-sizing: border-box;
+}
+.submenu_reward_button_ask:hover {
+	border-color: rgba(255, 255, 255, 0.3) !important;
+}
+.submenu_reward_button_ask:active {
+	background-color: #74A9A1 !important;
+}
