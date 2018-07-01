@@ -55,7 +55,7 @@ submenu_list['reward'] = {
 	
 	"reward": {
 		"style": "reward_button",
-		"title": function(Elem, subm){
+		"title": function(){
 			var unpaid_amount = 0;
 			var records = Bruno.storage.get("user", wrapper_localstorage.user_id, "_bank");
 			if(typeof records == "object"){
@@ -64,9 +64,6 @@ submenu_list['reward'] = {
 						unpaid_amount += parseInt(records[i]["eur"], 10);
 					}
 				}
-			}
-			if(unpaid_amount<=0){
-				Elem.addClass("display_none");
 			}
 			return Bruno.Translation.get('app', 152, 'html', {amount: unpaid_amount,}); //Ask for [{amount}] €
 		},
@@ -82,12 +79,20 @@ submenu_list['reward'] = {
 					}
 				}
 			}
-			if(unpaid_amount<=0){
-				Elem.addClass("display_none");
-				return false;
-			}
 			console.log(unpaid_amount);
 			console.log(bank);
+		},
+		"now": function(Elem, subm){
+			Elem.addClass("display_none");
+			var records = Bruno.storage.get("user", wrapper_localstorage.user_id, "_bank");
+			if(typeof records == "object"){
+				for(var i in records){
+					if(!records[i]["used_at"]){
+						Elem.removeClass("display_none");
+						return true;
+					}
+				}
+			}
 		},
 	},
 
