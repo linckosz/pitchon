@@ -56,22 +56,6 @@ var app_content_menu = {
 	},
 };
 
-var app_content_mask_timer = null;
-var app_content_mask_show = function(){
-	$('#app_content_mask').removeClass("display_none visibility_hidden");
-	clearTimeout(app_content_mask_timer);
-	setTimeout(function(){
-		$('#app_content_mask').css("background-image", "url('"+app_application_cloud.src+"')");
-	}, 10);
-};
-
-var app_content_mask_hide = function(){
-	$('#app_content_mask').css("background-image", "url('"+wrapper_neutral.src+"')");
-	setTimeout(function(){
-		$('#app_content_mask').addClass("display_none visibility_hidden");
-	}, 500);
-};
-
 $('#app_content_top_home').click(function(){
 	submenu_Build('settings');
 });
@@ -477,15 +461,6 @@ JSfiles.finish(function(){
 			wrapper_IScroll_refresh();
 		}
 		app_layers_content_move.mouse_status_leave = event.buttons;
-	});
-
-	//Onboarding
-	$('#app_content_mask').on('click', function(event){
-		$(document.body).trigger('click.bubble');
-		event.stopPropagation();
-		clearTimeout(app_content_mask_hide);
-		app_content_mask_timer = setTimeout(app_content_mask_hide, 2000);
-		return false;
 	});
 
 });

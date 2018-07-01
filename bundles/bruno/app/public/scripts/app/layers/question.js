@@ -484,14 +484,43 @@ var app_layers_question_feedPage = function(param){
 
 	//Launch onboarding
 	if(!Bruno.storage.onboarding_stop){
-		var tuto = Bruno.storage.get('user', wrapper_localstorage.user_id, 'tuto');
-		if(tuto){
+		var tuto = JSON.parse(Bruno.storage.get('user', wrapper_localstorage.user_id, 'tuto'));
+		if(typeof tuto == "object" && typeof tuto[0] != "undefined" && tuto[0]){
 			setTimeout(function(){
 				app_layers_question_grumble_1();
 			}, 10);
 		}
 	}
 
+};
+
+
+var app_layers_question_grumble_1 = function(){
+	var angle = 30;
+	if($("#app_layers_question_add_icon").position().top < 300){
+		angle = 150;
+	}
+	$("#app_layers_question_add_icon").find(".app_layers_question_add_icon_img").grumble(
+		{
+			text: Bruno.Translation.get('app', 131, 'html'), //Create questions to your quiz
+			size: 150,
+			sizeRange: [150],
+			angle: angle,
+			distance: 20,
+			showAfter: 300,
+			hideOnClick: true,
+			type: 'alt-',
+			useRelativePositioning: true,
+			onShow: function(){
+				Bruno.storage.onboarding_opened = true;
+				app_application_mask_show();
+			},
+			onBeginHide: function(){
+				app_application_mask_hide();
+				Bruno.storage.clearTuto(0);
+			},
+		}
+	);
 };
 
 var app_layers_question_list_position = {
@@ -540,8 +569,9 @@ var app_layers_question_icon_back = function(){
 	}
 };
 
+var app_layers_question_icon_create_running = false; //Avoid double create by multiple clicks
 var app_layers_question_icon_create = function(pitch_id){
-	if($("#app_layers_question_add_icon").length>0){
+	if(!app_layers_question_icon_create_running && $("#app_layers_question_add_icon").length>0){
 		var data = {};
 		data.set = {};
 		data.set.question = {};
@@ -563,6 +593,7 @@ var app_layers_question_icon_create = function(pitch_id){
 			}
 		}
 		var action_cb_complete = function(){
+			app_layers_question_icon_create_running = false;
 			storage_cb_complete();
 			base_hideProgress(Elem_bis);
 			app_application_bruno.prepare("question", true);
@@ -575,59 +606,8 @@ var app_layers_question_icon_create = function(pitch_id){
 		};
 		if(storage_offline(data)){
 			base_showProgress(Elem_bis);
+			app_layers_question_icon_create_running = true;
 			wrapper_sendAction(data, 'post', 'api/data/set', action_cb_success, storage_cb_error, storage_cb_begin, action_cb_complete);
 		}
-	}
-};
-
-//Onboarding
-var app_layers_question_grumble_1 = function(){
-	//http://jamescryer.github.io/grumble.js/
-	$('#app_content_top_right').grumble(
-		{
-			text: Bruno.Translation.get('app', 130, 'html'), //Preview your presentation!
-			size: 150,
-			sizeRange: [150],
-			angle: 230,
-			distance: 8,
-			showAfter: 300,
-			hideOnClick: true,
-			type: 'alt-',
-			useRelativePositioning: false,
-			onShow: function(){
-				app_content_mask_show();
-			},
-			onBeginHide: function(){
-				app_layers_question_grumble_2();
-			},
-		}
-	);
-};
-
-var app_layers_question_grumble_2 = function(){
-	//http://jamescryer.github.io/grumble.js/
-	var question = $("#app_layers_question").find(".models_question_standard:first");
-	if(question.length==1){
-		question.grumble(
-			{
-				text: Bruno.Translation.get('app', 131, 'html'), //Create your quiz slides
-				size: 150,
-				sizeRange: [150],
-				angle: 130,
-				distance: 2,
-				showAfter: 300,
-				hideOnClick: true,
-				type: 'alt-',
-				useRelativePositioning: true,
-				onShow: function(){
-					app_content_mask_show();
-				},
-				onBeginHide: function(){
-					app_content_mask_hide();
-				},
-			}
-		);
-	} else {
-		app_content_mask_hide();
 	}
 };

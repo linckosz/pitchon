@@ -601,9 +601,8 @@ var app_layers_answer_feedPage = function(param){
 
 	//Launch onboarding
 	if(!Bruno.storage.onboarding_stop){
-		var tuto = Bruno.storage.get('user', wrapper_localstorage.user_id, 'tuto');
-		if(tuto){
-			Bruno.storage.onboarding_stop = true;
+		var tuto = JSON.parse(Bruno.storage.get('user', wrapper_localstorage.user_id, 'tuto'));
+		if(typeof tuto == "object" && typeof tuto[1] != "undefined" && tuto[1]){
 			setTimeout(function(){
 				app_layers_answer_grumble_1();
 			}, 10);
@@ -611,37 +610,21 @@ var app_layers_answer_feedPage = function(param){
 	}
 };
 
-var app_layers_answer_grumble_action = function(){
-	var data = {};
-	data.set = {};
-	data.set.user = {};
-	var item = Bruno.storage.get('user', wrapper_localstorage.user_id);
-	data.set.user[item['id']] = {
-		id: item['id'],
-		md5: item['md5'],
-		tuto: null,
-	};
-	
-	if(storage_offline(data)){
-		wrapper_sendAction(data, 'post', 'api/data/set', storage_cb_success, storage_cb_error, storage_cb_begin, storage_cb_complete);
-	}
-};
-
 var app_layers_answer_grumble_1 = function(){
-	//http://jamescryer.github.io/grumble.js/
-	$('#app_layers_answer_settings').find("[find=settings]").grumble(
+	$("#app_layers_answer").find("[find=answer_select]:first").grumble(
 		{
-			text: Bruno.Translation.get('app', 127, 'html'), //Download your presentation here
+			text: Bruno.Translation.get('app', 153, 'html'), //Preselect the correct answer
 			size: 150,
 			sizeRange: [150],
-			angle: 200,
-			distance: 8,
+			angle: 45,
+			distance: 30,
 			showAfter: 400,
 			hideOnClick: true,
 			type: 'alt-',
 			useRelativePositioning: true,
 			onShow: function(){
-				app_content_mask_show();
+				Bruno.storage.onboarding_opened = true;
+				app_application_mask_show();
 			},
 			onBeginHide: function(){
 				app_layers_answer_grumble_2();
@@ -651,10 +634,9 @@ var app_layers_answer_grumble_1 = function(){
 };
 
 var app_layers_answer_grumble_2 = function(){
-	//http://jamescryer.github.io/grumble.js/
 	$('#app_layers_answer').find("[find=select_style]").grumble(
 		{
-			text: Bruno.Translation.get('app', 132, 'html'), //You can also switch to another mode, like "pictures" or "statistics"
+			text: Bruno.Translation.get('app', 132, 'html'), //You can switch to different display modes like "pictures" or "statistics"
 			size: 200,
 			sizeRange: [200],
 			angle: 220,
@@ -664,11 +646,36 @@ var app_layers_answer_grumble_2 = function(){
 			type: 'alt-',
 			useRelativePositioning: true,
 			onShow: function(){
-				app_content_mask_show();
+				Bruno.storage.onboarding_opened = true;
+				app_application_mask_show();
 			},
 			onBeginHide: function(){
-				app_content_mask_hide();
-				app_layers_answer_grumble_action();
+				app_layers_answer_grumble_3();
+			},
+		}
+	);
+};
+
+var app_layers_answer_grumble_3 = function(){
+	$('#app_layers_answer_settings').grumble(
+		{
+			text: Bruno.Translation.get('app', 127, 'html'), //Let's get your presentaton here
+			size: 150,
+			sizeRange: [150],
+			angle: 200,
+			distance: 8,
+			showAfter: 400,
+			hideOnClick: true,
+			type: 'alt-',
+			useRelativePositioning: true,
+			onShow: function(){
+				Bruno.storage.onboarding_opened = true;
+				app_application_mask_show();
+				wrapper_handclick_create($("#app_layers_answer_settings"));
+			},
+			onBeginHide: function(){
+				app_application_mask_hide();
+				Bruno.storage.clearTuto(1);
 			},
 		}
 	);

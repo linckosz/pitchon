@@ -428,8 +428,9 @@ var app_layers_pitch_icon_back = function(){
 	}
 };
 
+var app_layers_pitch_icon_create_running = false; //Avoid double create by multiple clicks
 var app_layers_pitch_icon_create = function(){
-	if($("#app_layers_pitch_add_icon").length>0){
+	if(!app_layers_pitch_icon_create_running && $("#app_layers_pitch_add_icon").length>0){
 		var data = {};
 		data.set = {};
 		data.set.pitch = {};
@@ -448,6 +449,7 @@ var app_layers_pitch_icon_create = function(){
 			}
 		}
 		var action_cb_complete = function(){
+			app_layers_pitch_icon_create_running = false;
 			storage_cb_complete();
 			base_hideProgress(Elem_bis);
 			app_application_bruno.prepare("pitch", true);
@@ -460,6 +462,7 @@ var app_layers_pitch_icon_create = function(){
 		};
 		if(storage_offline(data)){
 			base_showProgress(Elem_bis);
+			app_layers_pitch_icon_create_running = true;
 			wrapper_sendAction(data, 'post', 'api/data/set', action_cb_success, storage_cb_error, storage_cb_begin, action_cb_complete);
 		}
 	}

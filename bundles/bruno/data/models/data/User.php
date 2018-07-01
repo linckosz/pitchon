@@ -100,13 +100,9 @@ class User extends ModelBruno {
 
 		if(isset($form->tuto)){
 			$error = true;
-			if(is_object($form->tuto)){
-				$form->tuto = (array) $form->tuto;
-			}
-			//Only valid the detachment
-			if(empty($form->tuto)){
+			if(is_string($form->tuto) && json_decode($form->tuto)){
 				$error = false;
-				$model->tuto = null;
+				$model->tuto = (array) $form->tuto;
 			}
 			if($error){
 				$errfield = 'tuto';
@@ -231,6 +227,8 @@ class User extends ModelBruno {
 			if($host_id = Vanquish::get('host_id')){
 				$this->host_id = $host_id;
 			}
+			//Set tuto list
+			$this->tuto = json_encode((object) array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
 			$new = true;
 		}
 		$result = parent::save($options);
@@ -264,8 +262,6 @@ class User extends ModelBruno {
 			$question->parent_id = $pitch->id;
 			$question->title = $app->trans->getBRUT('api', 4, 1); //The Dutch windmill is mainly used for:
 			$question->save();
-			$this->tuto = 1;
-			parent::save();
 			$file = File::find(10000)->replicate();
 			$file->updated_json = null;
 			$file->nosql = null;

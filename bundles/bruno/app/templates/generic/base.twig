@@ -1,5 +1,6 @@
 {% extends '/bundles/bruno/wrapper/templates/wrapper.twig' %}
 {% block base %}
+	{% include '/bundles/bruno/wrapper/templates/handclick.twig' %}
 	<div id="begin_base" class="visibility_hidden">
 		<script>
 			JSfiles.later("{{ _filelatest('/bruno/app/scripts/generic/base.js') }}", 30);

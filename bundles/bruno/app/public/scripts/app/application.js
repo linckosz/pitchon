@@ -474,6 +474,23 @@ wrapper_load_progress.add_cb_complete(function(){
 	app_application_bruno.prepare("hide_progress_wall", true);
 });
 
+var app_application_mask_timer = null;
+var app_application_mask_show = function(){
+	$('#app_application_mask').removeClass("display_none visibility_hidden");
+	clearTimeout(app_application_mask_timer);
+	setTimeout(function(){
+		$('#app_application_mask').css("background-image", "url('"+app_application_cloud.src+"')");
+	}, 10);
+};
+
+var app_application_mask_hide = function(){
+	$('#app_application_mask').css("background-image", "url('"+wrapper_neutral.src+"')");
+	clearTimeout(app_application_mask_timer);
+	app_application_mask_timer = setTimeout(function(){
+		$('#app_application_mask').addClass("display_none visibility_hidden");
+	}, 500);
+};
+
 JSfiles.finish(function(){
 	app_application_action(1, wrapper_user_info); //Logged
 	//Update every 15s automatically
@@ -481,4 +498,16 @@ JSfiles.finish(function(){
 	setInterval(function(){
 		app_application_bruno.prepare(false, true);
 	}, 15000); //15s Production
+
+	//Onboarding
+	$('#app_application_mask').on('click', function(event){
+		$(document.body).trigger('click.bubble');
+		event.stopPropagation();
+		if(Bruno.storage.onboarding_opened){
+			return false;
+		}
+		clearTimeout(app_application_mask_hide);
+		app_application_mask_timer = setTimeout(app_application_mask_hide, 2000);
+		return false;
+	});
 });

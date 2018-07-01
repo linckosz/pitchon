@@ -126,6 +126,7 @@ var storage_cb_complete = function(msg, err, status, data){
 };
 
 Bruno.storage.onboarding_stop = false;
+Bruno.storage.onboarding_opened = false;
 
 Bruno.storage.getMD5 = function(category){
 	var md5id = md5(Math.random());
@@ -1104,6 +1105,27 @@ Bruno.storage.getPitchURL = function(pitch_id, question_id){
 		return location.protocol+'//screen.'+document.domainRoot+"/"+wrapper_integer_map(pitch_id);
 	}
 	return false;
+}
+
+Bruno.storage.clearTuto = function(index){
+	Bruno.storage.onboarding_opened = false;
+	var data = {};
+	data.set = {};
+	data.set.user = {};
+	var item = Bruno.storage.get('user', wrapper_localstorage.user_id);
+	tuto = JSON.parse(item['tuto']);
+	if(typeof tuto == "object" && tuto[index] != "undefined"){
+		tuto[index] = 0;
+		data.set.user[item['id']] = {
+			id: item['id'],
+			md5: item['md5'],
+			tuto: JSON.stringify(tuto),
+		};
+		
+		if(storage_offline(data)){
+			wrapper_sendAction(data, 'post', 'api/data/set', storage_cb_success, storage_cb_error, storage_cb_begin, storage_cb_complete);
+		}
+	}
 }
 
 /*

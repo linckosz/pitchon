@@ -38,8 +38,12 @@
 			.base_color_bg_main_gradient {
 				background-image: url("{{ _filelatest('/bruno/app/images/generic/base/bg02.png') }}"), linear-gradient(140deg, #023762, #00719C) !important;
 			}
+			#app_application_mask {
+				background-image: url("{{ _filelatest('/bruno/wrapper/images/generic/neutral.png') }}");
+			}
 		</style>
 	</div>
+	<div id="app_application_mask" class="display_none visibility_hidden"></div>
 	<div id="app_application_main">
 		<div id="app_application_content">
 			{% include '/bundles/bruno/app/templates/app/content.twig' %}

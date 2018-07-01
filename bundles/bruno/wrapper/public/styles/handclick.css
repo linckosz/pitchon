@@ -1,0 +1,22 @@
+.wrapper_handclick {
+	position: absolute;
+	height: 64px;
+	width: 64px;
+	z-index: 10000;
+}
+
+.wrapper_handclick_hand {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+}
+
+.wrapper_handclick_click {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+}

@@ -152,6 +152,9 @@ submenu_list['app_answer_get_presentation'] = {
 	"preview": {
 		"style": "button",
 		"title": "<span class='fa fa-eye'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2116, 'html'), //Preview the Presentation
+		"now": function(Elem, subm){
+			Elem.prop("id", "app_submenu_answer_get_presentation_preview_"+subm.id);
+		},
 		"action": function(Elem, subm){
 			var question_id = app_layers_answer_question['id'];
 			var pitch_id = Bruno.storage.get("question", question_id, "parent_id");
@@ -162,7 +165,7 @@ submenu_list['app_answer_get_presentation'] = {
 	"url": {
 		"style": "button",
 		"class": "submenu_app_answer_get_presentation_methods",
-		"title": "<span class='fa fa-link'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2115, 'html'), //Copy presentation URL
+		"title": "<span class='fa fa-link'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2115, 'html'), //Copy the Presentation URL
 		"value": function(Elem, subm){
 			if(responsive.test("minMobileL")){
 				return Bruno.storage.getPitchURL(subm.param);
@@ -170,6 +173,7 @@ submenu_list['app_answer_get_presentation'] = {
 			return false;
 		},
 		"now": function(Elem, subm){
+			Elem.prop("id", "app_submenu_answer_get_presentation_url_"+subm.id);
 			Elem.attr('data-clipboard-text', Bruno.storage.getPitchURL(subm.param));
 			if(app_layers_answer_clipboard_pitch && destroy in app_layers_answer_clipboard_pitch){
 				app_layers_answer_clipboard_pitch.destroy();
@@ -456,4 +460,66 @@ submenu_list['app_answer_get_presentation'] = {
 		"value": 20,
 	},
 
+	"post_action": {
+		"style": "postAction",
+		"action": function(Elem, subm){
+			//Launch onboarding
+			if(!Bruno.storage.onboarding_stop){
+				var tuto = JSON.parse(Bruno.storage.get('user', wrapper_localstorage.user_id, 'tuto'));
+				if(typeof tuto == "object" && typeof tuto[2] != "undefined" && tuto[2]){
+					setTimeout(function(subm_id){
+						app_submenu_answer_grumble_1(subm_id);
+					}, 10, subm.id);
+				}
+			}
+		},
+	},
+
+};
+
+var app_submenu_answer_grumble_1 = function(subm_id){
+	$("#app_submenu_answer_get_presentation_preview_"+subm_id).grumble(
+		{
+			text: Bruno.Translation.get('app', 130, 'html'), //Preview it
+			size: 150,
+			sizeRange: [150],
+			angle: 160,
+			distance: -20,
+			showAfter: 400,
+			hideOnClick: true,
+			type: 'alt-',
+			useRelativePositioning: false,
+			onShow: function(){
+				Bruno.storage.onboarding_opened = true;
+				app_application_mask_show();
+			},
+			onBeginHide: function(){
+				app_submenu_answer_grumble_2(subm_id);
+			},
+		}
+	);
+};
+
+var app_submenu_answer_grumble_2 = function(subm_id){
+	$("#app_submenu_answer_get_presentation_url_"+subm_id).grumble(
+		{
+			text: Bruno.Translation.get('app', 154, 'html'), //Or copy the URL for a public presentation
+			size: 150,
+			sizeRange: [150],
+			angle: 130,
+			distance: -20,
+			showAfter: 400,
+			hideOnClick: true,
+			type: 'alt-',
+			useRelativePositioning: false,
+			onShow: function(){
+				Bruno.storage.onboarding_opened = true;
+				app_application_mask_show();
+			},
+			onBeginHide: function(){
+				app_application_mask_hide();
+				Bruno.storage.clearTuto(2);
+			},
+		}
+	);
 };
