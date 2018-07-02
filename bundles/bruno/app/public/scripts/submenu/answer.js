@@ -469,7 +469,7 @@ submenu_list['app_answer_get_presentation'] = {
 				if(typeof tuto == "object" && typeof tuto[2] != "undefined" && tuto[2]){
 					setTimeout(function(subm_id){
 						app_submenu_answer_grumble_1(subm_id);
-					}, 10, subm.id);
+					}, 600, subm.id);
 				}
 			}
 		},
