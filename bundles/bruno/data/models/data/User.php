@@ -100,9 +100,12 @@ class User extends ModelBruno {
 
 		if(isset($form->tuto)){
 			$error = true;
+			if(is_object($form->tuto)){
+				$form->tuto = json_encode($form->tuto);
+			}
 			if(is_string($form->tuto) && json_decode($form->tuto)){
 				$error = false;
-				$model->tuto = (array) $form->tuto;
+				$model->tuto = $form->tuto;
 			}
 			if($error){
 				$errfield = 'tuto';

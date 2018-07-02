@@ -627,6 +627,7 @@ var app_layers_answer_grumble_1 = function(){
 				app_application_mask_show();
 			},
 			onBeginHide: function(){
+				Bruno.storage.onboarding_opened = false;
 				app_layers_answer_grumble_2();
 			},
 		}
@@ -650,6 +651,7 @@ var app_layers_answer_grumble_2 = function(){
 				app_application_mask_show();
 			},
 			onBeginHide: function(){
+				Bruno.storage.onboarding_opened = false;
 				app_layers_answer_grumble_3();
 			},
 		}
@@ -674,6 +676,7 @@ var app_layers_answer_grumble_3 = function(){
 				wrapper_handclick_create($("#app_layers_answer_settings"));
 			},
 			onBeginHide: function(){
+				Bruno.storage.onboarding_opened = false;
 				app_application_mask_hide();
 				Bruno.storage.clearTuto(1);
 			},

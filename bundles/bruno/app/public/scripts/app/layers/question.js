@@ -516,6 +516,7 @@ var app_layers_question_grumble_1 = function(){
 				app_application_mask_show();
 			},
 			onBeginHide: function(){
+				Bruno.storage.onboarding_opened = false;
 				app_application_mask_hide();
 				Bruno.storage.clearTuto(0);
 			},

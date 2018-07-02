@@ -494,6 +494,7 @@ var app_submenu_answer_grumble_1 = function(subm_id){
 				app_application_mask_show();
 			},
 			onBeginHide: function(){
+				Bruno.storage.onboarding_opened = false;
 				app_submenu_answer_grumble_2(subm_id);
 			},
 		}
@@ -517,6 +518,7 @@ var app_submenu_answer_grumble_2 = function(subm_id){
 				app_application_mask_show();
 			},
 			onBeginHide: function(){
+				Bruno.storage.onboarding_opened = false;
 				app_application_mask_hide();
 				Bruno.storage.clearTuto(2);
 			},
