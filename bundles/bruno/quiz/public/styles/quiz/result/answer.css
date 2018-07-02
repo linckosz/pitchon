@@ -89,3 +89,7 @@
 	border: 1px solid rgba(255, 255, 255, 0.2);
 	background-color: #FFFFFF;
 }
+
+.quiz_result_answer_ad_link_visit {
+	opacity: 0.9;
+}

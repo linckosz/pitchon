@@ -20,8 +20,9 @@
 	</div>
 
 	<div class="quiz_result_wait_followus">
-		<div find="ad_link">{{ data_ad }}</div>
-		<img find="ad_link" class="quiz_result_wait_picture" src="{{ data_ad_pic|raw }}" />
+		<div id="ad_visit" class="quiz_result_wait_ad_link_visit">{{ _trans('quiz', 0, 26, 'html') }}{# Visit us at #}</div>
+		<div id="ad_link">{{ data_ad }}</div>
+		<img id="ad_picture" class="quiz_result_wait_picture" src="{{ data_ad_pic|raw }}" />
 	</div>
 
 	<div id="quiz_result_wait_scan" class="{% if data_preview %}display_none{% endif %}">
@@ -31,7 +32,7 @@
 	<div id="end_quiz_result_wait" class="visibility_hidden">
 		{% if data_ad_link %}
 			<script type="text/javascript">
-				$('[find=ad_link]')
+				$('#ad_link, #ad_picture')
 					.addClass('base_pointer')
 					.on('click', function(){
 						{% if data_statistics_id and data_statistics_md5 %}
@@ -39,6 +40,9 @@
 						{% endif %}
 						window.open("{{ data_ad_link|raw }}", '_blank');
 					});
+				setTimeout(function(){
+					wrapper_handclick_create($("#ad_link"), 2, 48, 20, 600);
+				}, 1000);
 			</script>
 		{% endif %}
 	</div>

@@ -77,3 +77,9 @@
 	border: 1px solid rgba(255, 255, 255, 0.2);
 	background-color: #FFFFFF;
 }
+
+.quiz_result_statistics_ad_link_visit {
+	font-size: 2.6vw;
+    font-size: 2.6vmax;
+	opacity: 0.8;
+}
