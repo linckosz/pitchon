@@ -91,5 +91,7 @@
 }
 
 .quiz_result_answer_ad_link_visit {
-	opacity: 0.9;
+	font-size: 2.6vw;
+	font-size: 2.6vmax;
+	opacity: 0.8;
 }
