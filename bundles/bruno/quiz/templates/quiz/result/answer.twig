@@ -26,7 +26,7 @@
 	</div>
 
 	<div class="quiz_result_answer_followus">
-		<div id="ad_visit" class="quiz_result_answer_ad_link_visit">{{ _trans('quiz', 0, 26, 'html') }}{# Visit us at #}</div>
+		<div id="ad_visit" class="quiz_result_answer_ad_link_visit">{{ data_ad_visit }}</div>
 		<div id="ad_link" find="ad_link">{{ data_ad }}</div>
 		<img id="ad_picture" find="ad_link" class="quiz_result_answer_picture" src="{{ data_ad_pic|raw }}" />
 	</div>
@@ -61,7 +61,7 @@
 					.addClass('base_pointer')
 					.on('click', function(){
 						{% if data_statistics_id and data_statistics_md5 %}
-							base_sendAction({id: parseInt({{ data_statistics_id }}, 10), md5: "{{ data_statistics_md5 }}"}, 'post', 'api/stats/adclick');
+							base_sendAction({id: parseInt({{ data_statistics_id }}, 10), md5: "{{ data_statistics_md5 }}", guest_md5: "{{ guest_md5 }}"}, 'post', 'api/stats/adclick');
 						{% endif %}
 						window.open("{{ data_ad_link|raw }}", '_blank');
 					});

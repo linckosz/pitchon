@@ -49,15 +49,16 @@ function SetGuest(){
 	$app = ModelBruno::getApp();
 	$guest_md5 = Vanquish::get('guest_md5');
 	if($guest_md5){
-		if($guest = Guest::Where('md5', $guest_md5)->first(array('id'))){
+		if($guest = Guest::Where('md5', $guest_md5)->first(array('id', 'md5'))){
 			$app->bruno->data['guest_id'] = $guest->id;
+			$app->bruno->data['guest_md5'] = $guest->md5;
 		} else {
 			$guest_md5 = false;
 		}
 	}
 	if(!$guest_md5){
 		$guest_md5 = md5(uniqid('', true));
-		while(Guest::Where('md5', $guest_md5)->first(array('id'))){
+		while(Guest::Where('md5', $guest_md5)->first(array('id', 'md5'))){
 			usleep(50000);
 			$guest_md5 = md5(uniqid('', true));
 		}
@@ -68,6 +69,7 @@ function SetGuest(){
 			return false;
 		}
 		$app->bruno->data['guest_id'] = $guest->id;
+		$app->bruno->data['guest_md5'] = $guest->md5;
 		Vanquish::set(array('guest_md5' => $guest_md5,));
 	}
 	return true;

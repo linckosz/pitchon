@@ -224,6 +224,7 @@ class ControllerQuiz extends Controller {
 		$app->bruno->data['data_question_id'] = false;
 		$app->bruno->data['data_statistics_id'] = false;
 		$app->bruno->data['data_statistics_md5'] = false;
+		$app->bruno->data['data_ad_visit'] = '';
 		$answer_id = STR::integer_map($answerid_enc, true);
 		$guest_id = $app->bruno->data['guest_id'];
 		if($statisticsid_enc=='preview'){ //Mode demo
@@ -243,6 +244,13 @@ class ControllerQuiz extends Controller {
 							$app->bruno->data['data_ad'] = $pitch->ad;
 						}
 						$app->bruno->data['data_ad_link'] = Email::buildUrl($app->bruno->data['data_ad']);
+						if($app->bruno->data['data_ad_link']){
+							if(strpos($app->bruno->data['data_ad_link'], 'mailto:') === 0){
+								//$app->bruno->data['data_ad_visit'] = $app->trans->getBRUT('quiz', 0, 27); //Contact us
+							} else {
+								$app->bruno->data['data_ad_visit'] = $app->trans->getBRUT('quiz', 0, 26); //Visit us at
+							}
+						}
 					}
 					if($answer->number == $question->number){
 						$app->bruno->data['data_correct'] = true;
@@ -272,6 +280,13 @@ class ControllerQuiz extends Controller {
 						$app->bruno->data['data_ad'] = $pitch->ad;
 					}
 					$app->bruno->data['data_ad_link'] = Email::buildUrl($app->bruno->data['data_ad']);
+					if($app->bruno->data['data_ad_link']){
+						if(strpos($app->bruno->data['data_ad_link'], 'mailto:') === 0){
+							//$app->bruno->data['data_ad_visit'] = $app->trans->getBRUT('quiz', 0, 27); //Contact us
+						} else {
+							$app->bruno->data['data_ad_visit'] = $app->trans->getBRUT('quiz', 0, 26); //Visit us at
+						}
+					}
 				}
 				//Check if already answered
 				if(!Answered::isAuthorized($guest_id, $statistics->id, $statistics->question_id)){
@@ -333,6 +348,7 @@ class ControllerQuiz extends Controller {
 		$app = ModelBruno::getApp();
 		$this->prepare();
 		$app->bruno->data['data_answered'] = false;
+		$app->bruno->data['data_ad_visit'] = '';
 		$guest_id = $app->bruno->data['guest_id'];
 		if($statisticsid_enc=='preview'){ //Mode demo
 			$app->bruno->data['data_preview'] = true;
@@ -349,6 +365,13 @@ class ControllerQuiz extends Controller {
 							$app->bruno->data['data_ad'] = $pitch->ad;
 						}
 						$app->bruno->data['data_ad_link'] = Email::buildUrl($app->bruno->data['data_ad']);
+						if($app->bruno->data['data_ad_link']){
+							if(strpos($app->bruno->data['data_ad_link'], 'mailto:') === 0){
+								//$app->bruno->data['data_ad_visit'] = $app->trans->getBRUT('quiz', 0, 27); //Contact us
+							} else {
+								$app->bruno->data['data_ad_visit'] = $app->trans->getBRUT('quiz', 0, 26); //Visit us at
+							}
+						}
 					}
 				}
 			}
@@ -369,6 +392,13 @@ class ControllerQuiz extends Controller {
 						$app->bruno->data['data_ad'] = $pitch->ad;
 					}
 					$app->bruno->data['data_ad_link'] = Email::buildUrl($app->bruno->data['data_ad']);
+					if($app->bruno->data['data_ad_link']){
+						if(strpos($app->bruno->data['data_ad_link'], 'mailto:') === 0){
+							//$app->bruno->data['data_ad_visit'] = $app->trans->getBRUT('quiz', 0, 27); //Contact us
+						} else {
+							$app->bruno->data['data_ad_visit'] = $app->trans->getBRUT('quiz', 0, 26); //Visit us at
+						}
+					}
 				}
 				//Check if already answered
 				if(!Answered::isAuthorized($guest_id, $statistics->id, $statistics->question_id)){

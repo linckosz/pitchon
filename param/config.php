@@ -193,6 +193,7 @@ $app->bruno->data = array(
 	'user_id' => false,
 	'user_ip' => $_SERVER['REMOTE_ADDR'],
 	'guest_id' => false,
+	'guest_md5' => false,
 	'domain' => $app->bruno->domain,
 	'shortlink' => $app->bruno->shortlink,
 	'http_host' => $app->bruno->http_host,

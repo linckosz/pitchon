@@ -9,16 +9,15 @@
 			setTimeout(function(){
 				quiz_result_refresh_loop = false;
 			}, 3*3600*1000);
-
-			//Make sure we keep code cookie every minutes
-			setInterval(function(){
-				setCookie(document.brunoDev+'_quiz_code', 5546, 30/(60*24)); //Add 30min
-			}, 60*1000);
-
+			
 			var quiz_result_refresh_code = getCookie(document.brunoDev+"_quiz_code");
 			if(quiz_result_refresh_code){
 				quiz_result_refresh_code = parseInt(quiz_result_refresh_code, 10);
 				if(quiz_result_refresh_code > 0){
+					//Make sure we keep code cookie every minutes
+					setInterval(function(){
+						setCookie(document.brunoDev+'_quiz_code', quiz_result_refresh_code, 30/(60*24)); //Add 30min
+					}, 60*1000);
 					var quiz_result_refresh_start = function(){
 						quiz_result_refresh_conn = new ab.Session(
 							'wss://quiz.'+document.domainRoot+':9443',

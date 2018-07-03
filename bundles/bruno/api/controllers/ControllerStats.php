@@ -106,13 +106,11 @@ class ControllerStats extends Controller {
 
 	public function adclick_post(){
 		$data = ModelBruno::getData();
-		if(isset($data->id) && isset($data->md5)){
+		if(isset($data->id) && isset($data->md5) && isset($data->guest_md5)){
 			if($statistics = Statistics::Where('id', $data->id)->where('md5', $data->md5)->first(array('id', 'question_id', 'ad_clicks'))){
 				$statistics->ad_clicks++;
 				$statistics->save();
-				//We must get guest_id here, because bundle is recognized as "api", not "quiz"
-				\bundles\bruno\wrapper\hooks\SetGuest();
-				if($guest = Guest::getUser()){
+				if($guest = Guest::Where('md5', $data->guest_md5)->first(array('id'))){
 					if($answered = Answered::Where('guest_id', $guest->id)->where('statistics_id', $statistics->id)->where('question_id', $statistics->question_id)->first()){
 						$answered->ad_clicks++;
 						$answered->save();
