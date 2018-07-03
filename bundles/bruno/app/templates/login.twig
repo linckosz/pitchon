@@ -1,6 +1,6 @@
 {% extends '/bundles/bruno/wrapper/templates/wrapper.twig' %}
 {% block base %}
-	<script>
+	<script type="text/javascript">
 		JSfiles.later("{{ _filelatest('/bruno/app/scripts/generic/base.js') }}", 30);
 		JSfiles.later("{{ _filelatest('/bruno/app/scripts/login.js') }}");
 	</script>

@@ -68,19 +68,28 @@ submenu_list['reward'] = {
 			return Bruno.Translation.get('app', 152, 'html', {amount: unpaid_amount,}); //Ask for [{amount}] €
 		},
 		"action": function(Elem, subm, data){
-			var bank = {};
+			var list = "";
 			var unpaid_amount = 0;
-			var records = Bruno.storage.get("user", wrapper_localstorage.user_id, "_bank");
+			var user = Bruno.storage.get("user", wrapper_localstorage.user_id);
+			var records = user["_bank"];
 			if(typeof records == "object"){
 				for(var i in records){
 					if(!records[i]["used_at"]){
 						unpaid_amount += parseInt(records[i]["eur"], 10);
-						bank[i] = records[i]["id"] + "#" + records[i]["md5"];
+						list += "@"+records[i]["id"] + "#" + records[i]["md5"]+";";
 					}
 				}
 			}
-			console.log(unpaid_amount);
-			console.log(bank);
+
+			if(unpaid_amount > 0){
+				var subject = Bruno.Translation.get('app', 401, 'js', { title: wrapper_main_title, }); //[ [{title}] ] Rewards
+				var body = Bruno.Translation.get('app', 402, 'brut', { amount: unpaid_amount, list: list, username: user["username"]}); //Hello, I have been rewarded...
+				var link = "mailto:"
+					+ wrapper_link['reward']
+					+ "?subject=" + escape(subject)
+					+ "&body=" + encodeURIComponent(body);
+				window.location.href = link;
+			}
 		},
 		"now": function(Elem, subm){
 			Elem.addClass("display_none");

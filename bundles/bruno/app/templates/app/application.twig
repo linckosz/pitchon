@@ -2,7 +2,7 @@
 
 {% block app_application %}
 	<div id="begin_app_application" class="visibility_hidden">
-		<script>
+		<script type="text/javascript">
 			JSfiles.later("{{ _filelatest('/bruno/app/scripts/app/application.js') }}", 10);
 			//Some JS that are not linked to a twig file
 			JSfiles.later("{{ _filelatest('/bruno/app/scripts/generic/storage.js') }}", 40);

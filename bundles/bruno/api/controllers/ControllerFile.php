@@ -31,7 +31,7 @@ class ControllerFile extends Controller {
 		<title>jQuery Iframe Transport Plugin Redirect Page</title>
 	</head>
 	<body>
-		<script>
+		<script type="text/javascript">
 			document.body.innerText=document.body.textContent=decodeURIComponent(window.location.search.slice(1));
 		</script>
 	</body>

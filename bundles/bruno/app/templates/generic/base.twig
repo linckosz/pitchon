@@ -2,7 +2,7 @@
 {% block base %}
 	{% include '/bundles/bruno/wrapper/templates/handclick.twig' %}
 	<div id="begin_base" class="visibility_hidden">
-		<script>
+		<script type="text/javascript">
 			JSfiles.later("{{ _filelatest('/bruno/app/scripts/generic/base.js') }}", 30);
 			var base_grumble_bubble = new Image();
 			base_grumble_bubble.src = "{{ _filelatest('/scripts/libs/grumble/images/bubble-sprite.png') }}";
