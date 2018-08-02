@@ -1,0 +1,231 @@
+<script type="text/javascript">
+	var submenu_subscription_discount_promocode = "{{ subscription_promocode }}";
+	var submenu_subscription_discount_value = parseInt("{{ subscription_promocode_discount }}", 10);
+	var submenu_subscription_selection_plan = parseInt("{{ subscription_plan }}", 10);
+	var submenu_subscription_pricing = parseInt("{{ subscription_pricing }}", 10);
+	var submenu_subscription_price = parseInt("{{ subscription_standard }}", 10);
+	var submenu_subscription_total_price = 0;
+
+	var submenu_subscription_paypal = function(Elem, subm_id){
+
+		$("#submenu_subscription_paypal_"+subm_id).recursiveRemove();
+		Elem.prop("id", "submenu_subscription_paypal_"+subm_id);
+
+		var paypal_size = 'large';
+		if(responsive.test("maxMobileL")){
+			paypal_size = 'medium';
+		}
+		
+		paypal.Button.render({
+
+			env: "{{ paypal_env }}",
+
+			style: {
+				label: 'buynow',
+				fundingicons: true,
+				branding: true,
+				size:  paypal_size,
+				shape: 'rect',
+				color: 'gold'
+			},
+
+			client: {
+				"{{ paypal_env }}": "{{ paypal_client }}",
+			},
+
+			// Show the buyer a 'Pay Now' button in the checkout flow
+			commit: true,
+
+			// Wait for the PayPal button to be clicked
+
+			payment: function(data, actions) {
+				var total_price = (10*submenu_subscription_price)-1;
+				if(submenu_subscription_pricing == 1){ //Monthly
+					total_price = submenu_subscription_price;
+				}
+				var discount = ((100-submenu_subscription_discount_value)/100);
+				if(discount > 0 && discount < 1){
+					total_price = Math.floor(discount * total_price);
+				}
+				return actions.request.post('/api/paypal/billing', {
+						subscription_id: parseInt("{{ subscription_id }}", 10), //Price showed to the user
+						subscription_md5: "{{ subscription_md5 }}",
+						subscription_plan: submenu_subscription_selection_plan, //Subscription plan
+						subscription_pricing: submenu_subscription_pricing, //1:Montly , 2:Annual
+						subscription_promocode: submenu_subscription_discount_promocode,
+						total_price: total_price, //Is used only for comparing with server calculation
+					})
+					.then(function(data) {
+						if(data && typeof data.extra != "undefined" &&  typeof data.extra.id != "undefined"){
+							return data.extra.id;
+						}
+						return false;
+					})
+					.catch(function(err) {
+						console.log(err);
+						base_show_error(Bruno.Translation.get('app', 1102, 'js')); //The payment failed. Please retry.
+					});
+			},
+
+			// Wait for the payment to be authorized by the customer
+			onAuthorize: function(data, actions) {
+				return actions.request.post('/api/paypal/pay', {
+						paymentID: data.paymentID,
+						payerID:   data.payerID
+					})
+					.then(function(data) {
+						base_show_error(Bruno.Translation.get('app', 1101, 'js'), false); //Payment succeeded. The application will restart.
+						setTimeout(function(){
+							window.location.href = wrapper_link['root'];
+						}, 2000);
+					})
+					.catch(function(err) {
+						console.log(err);
+						base_show_error(Bruno.Translation.get('app', 1102, 'js')); //The payment failed. Please retry.
+					});
+			}
+
+		}, "#submenu_subscription_paypal_"+subm_id);
+	};
+</script>
+
+<div id="-submenu_subscription" class="submenu_deco_read submenu_subscription">
+
+	<div find="option_starter" plan="1" class="submenu_subscription_option">
+		<div class="submenu_subscription_cell_left">
+			<div class="submenu_subscription_round">
+				<div></div>
+			</div>
+			<div class="submenu_subscription_plan">{{ _trans('app', 20, 1, 'html') }}{# Starter #}</div>
+		</div>
+		<div class="submenu_subscription_cell_right">
+			<div class="submenu_subscription_cost">
+				<span class="submenu_subscription_currency">€</span><span class="submenu_subscription_amount" find="amount">{{ subscription_starter }}</span><span class="submenu_subscription_month">/{{ _trans('app', 20, 4, 'html') }}{# month #}</span>
+			</div>
+		</div>
+	</div>
+
+	<div find="option_standard" plan="2" class="submenu_subscription_option">
+		<div class="submenu_subscription_cell_left">
+			<div class="submenu_subscription_round">
+				<div></div>
+			</div>
+			<div class="submenu_subscription_plan">{{ _trans('app', 20, 2, 'html') }}{# Standard #}</div>
+		</div>
+		<div class="submenu_subscription_cell_right">
+			<div class="submenu_subscription_cost">
+				<span class="submenu_subscription_currency">€</span><span class="submenu_subscription_amount" find="amount">{{ subscription_standard }}</span><span class="submenu_subscription_month">/{{ _trans('app', 20, 4, 'html') }}{# month #}</span>
+			</div>
+		</div>
+	</div>
+
+	<div find="option_premium" plan="3" class="submenu_subscription_option">
+		<div class="submenu_subscription_cell_left">
+			<div class="submenu_subscription_round">
+				<div></div>
+			</div>
+			<div class="submenu_subscription_plan">{{ _trans('app', 20, 3, 'html') }}{# Premium #}</div>
+		</div>
+		<div class="submenu_subscription_cell_right">
+			<div class="submenu_subscription_cost">
+				<span class="submenu_subscription_currency">€</span><span class="submenu_subscription_amount" find="amount">{{ subscription_premium }}</span><span class="submenu_subscription_month">/{{ _trans('app', 20, 4, 'html') }}{# month #}</span>
+			</div>
+		</div>
+	</div>
+
+	<div find="discount" class="submenu_subscription_discount display_none">
+		{{ _trans('app', 20, 24, 'html') }}{# DISCOUNT OFFER:  #}{{ subscription_promocode_discount }}%
+	</div>
+
+	<div class="submenu_subscription_billing" find="pricing_month" pricing="1">
+		<img class="submenu_subscription_billing_arrow" src="{{ _filelatest('/bruno/app/images/submenu/subscription/arrow.png') }}" />
+		<div class="submenu_subscription_billing_title">
+			{{ _trans('app', 20, 22, 'html') }}{# Monthly #}
+		</div>
+		<div class="submenu_subscription_billing_content">
+			<div find="pricing_month_value" class="submenu_subscription_billing_amount"></div>
+			<div find="pricing_month_instead" class="submenu_subscription_billing_instead"></div>
+		</div>
+	</div>
+	<div class="submenu_subscription_billing" find="pricing_annual" pricing="2">
+		<img class="submenu_subscription_billing_arrow" src="{{ _filelatest('/bruno/app/images/submenu/subscription/arrow.png') }}" />
+		<div class="submenu_subscription_billing_title">
+			{{ _trans('app', 20, 23, 'html') }}{# Annual #}
+		</div>
+		<div class="submenu_subscription_billing_content">
+			<div find="pricing_annual_value" class="submenu_subscription_billing_amount"></div>
+			<div find="pricing_annual_instead" class="submenu_subscription_billing_instead"></div>
+		</div>
+	</div>
+
+	<div find="paypal_buy" class="submenu_subscription_buy"></div>
+
+	<div find="features" class="submenu_subscription_features">
+		<div class="submenu_subscription_feature">
+			<span plan="1" find="feature" class="fa fa-circle submenu_subscription_feature_disabled"></span>
+			<span class="submenu_subscription_feature_text">{{ _trans('app', 20, 5, 'html') }}{# Quiz mode #}</span>
+		</div>
+		<div class="submenu_subscription_feature">
+			<span plan="1" find="feature" class="fa fa-circle submenu_subscription_feature_disabled"></span>
+			<span class="submenu_subscription_feature_text">{{ _trans('app', 20, 6, 'html') }}{# Pictures mode #}</span>
+		</div>
+		<div class="submenu_subscription_feature">
+			<span plan="1" find="feature" class="fa fa-circle submenu_subscription_feature_disabled"></span>
+			<span class="submenu_subscription_feature_text">{{ _trans('app', 20, 7, 'html') }}{# Statistics mode #}</span>
+		</div>
+		<div class="submenu_subscription_feature">
+			<span plan="2" find="feature" class="fa fa-circle submenu_subscription_feature_disabled"></span>
+			<span class="submenu_subscription_feature_text">{{ _trans('app', 20, 8, 'html') }}{# Survey mode #}</span>
+		</div>
+		<div class="submenu_subscription_feature">
+			<span plan="1" find="feature" class="fa fa-circle submenu_subscription_feature_disabled"></span>
+			<span class="submenu_subscription_feature_text">{{ _trans('app', 20, 9, 'html') }}{# Unlimited Quizzes #}</span>
+		</div>
+		<div class="submenu_subscription_feature">
+			<span plan="1" find="feature" class="fa fa-circle submenu_subscription_feature_disabled"></span>
+			<span class="submenu_subscription_feature_text">{{ _trans('app', 20, 10, 'html') }}{# Unlimited Questions #}</span>
+		</div>
+		<div class="submenu_subscription_feature">
+			<span plan="1" find="feature" class="fa fa-circle submenu_subscription_feature_disabled"></span>
+			<span class="submenu_subscription_feature_text">{{ _trans('app', 20, 11, 'html') }}{# Answer via QR code #}</span>
+		</div>
+		<div class="submenu_subscription_feature">
+			<span plan="1" find="feature" class="fa fa-circle submenu_subscription_feature_disabled"></span>
+			<span class="submenu_subscription_feature_text">{{ _trans('app', 20, 12, 'html') }}{# Presentation (URL) #}</span>
+		</div>
+		<div class="submenu_subscription_feature">
+			<span plan="2" find="feature" class="fa fa-circle submenu_subscription_feature_disabled"></span>
+			<span class="submenu_subscription_feature_text">{{ _trans('app', 20, 13, 'html') }}{# Presentation (PowerPoint) #}</span>
+		</div>
+		<div class="submenu_subscription_feature">
+			<span plan="2" find="feature" class="fa fa-circle submenu_subscription_feature_disabled"></span>
+			<span class="submenu_subscription_feature_text">{{ _trans('app', 20, 14, 'html') }}{# Presentation (Jpeg) #}</span>
+		</div>
+		<div class="submenu_subscription_feature">
+			<span plan="2" find="feature" class="fa fa-circle submenu_subscription_feature_disabled"></span>
+			<span class="submenu_subscription_feature_text">{{ _trans('app', 20, 21, 'html') }}{# Group game #}</span>
+		</div>
+		<div class="submenu_subscription_feature">
+			<span plan="2" find="feature" class="fa fa-circle submenu_subscription_feature_disabled"></span>
+			<span class="submenu_subscription_feature_text">{{ _trans('app', 20, 15, 'html') }}{# Data Analytics #}</span>
+		</div>
+		<div class="submenu_subscription_feature">
+			<span plan="3" find="feature" class="fa fa-circle submenu_subscription_feature_disabled"></span>
+			<span class="submenu_subscription_feature_text">{{ _trans('app', 20, 16, 'html') }}{# Data in CSV format #}</span>
+		</div>
+		<div class="submenu_subscription_feature">
+			<span plan="3" find="feature" class="fa fa-circle submenu_subscription_feature_disabled"></span>
+			<span class="submenu_subscription_feature_text">{{ _trans('app', 20, 17, 'html') }}{# Online collaboration #}</span>
+		</div>
+		<div class="submenu_subscription_feature">
+			<span plan="3" find="feature" class="fa fa-circle submenu_subscription_feature_disabled"></span>
+			<span class="submenu_subscription_feature_text">{{ _trans('app', 20, 18, 'html') }}{# Branding on presentation screen #}</span>
+		</div>
+		<div class="submenu_subscription_feature">
+			<span plan="3" find="feature" class="fa fa-circle submenu_subscription_feature_disabled"></span>
+			<span class="submenu_subscription_feature_text">{{ _trans('app', 20, 19, 'html') }}{# Advertising on mobile #}</span>
+		</div>
+
+	</div>
+
+</div>

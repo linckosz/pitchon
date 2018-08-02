@@ -13,7 +13,7 @@ $app->group('/api/stats', function() use ($app) {
 	->name('api_stats_session_post');
 
 	$app->get(
-		'/session/:md5/:id/:category',
+		'/session/:md5/:id/:category.csv',
 		'\bundles\bruno\api\controllers\ControllerStats:session_get'
 	)
 	->conditions(array(

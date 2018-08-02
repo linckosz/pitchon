@@ -90,9 +90,9 @@ submenu_list['statistics_quiz'] = {
 
 var submenu_app_statistics_session_csv = function(){
 	if(Bruno.statistics.pitch){
-		device_download('https://app.pitchon.net/api/stats/session/'+Bruno.statistics.pitch['md5']+'/'+Bruno.statistics.pitch['id']+'/session', '_blank', 'session.csv');
-		device_download('https://app.pitchon.net/api/stats/session/'+Bruno.statistics.pitch['md5']+'/'+Bruno.statistics.pitch['id']+'/statistics', '_blank', 'statistics.csv');
-		device_download('https://app.pitchon.net/api/stats/session/'+Bruno.statistics.pitch['md5']+'/'+Bruno.statistics.pitch['id']+'/answered', '_blank', 'answered.csv');
+		device_download('https://app.pitchon.net/api/stats/session/'+Bruno.statistics.pitch['md5']+'/'+Bruno.statistics.pitch['id']+'/session.csv', '_blank', 'session.csv');
+		device_download('https://app.pitchon.net/api/stats/session/'+Bruno.statistics.pitch['md5']+'/'+Bruno.statistics.pitch['id']+'/statistics.csv', '_blank', 'statistics.csv');
+		device_download('https://app.pitchon.net/api/stats/session/'+Bruno.statistics.pitch['md5']+'/'+Bruno.statistics.pitch['id']+'/answered.csv', '_blank', 'answered.csv');
 	}
 };
 
@@ -190,7 +190,10 @@ Submenu.prototype.style['statistics_quiz_charts'] = function(submenu_wrapper, su
 	Elem.find("[find=pie_devices]").prop("id", 'pie_devices_'+subm.id);
 	var that_id = subm.id;
 
-	Elem.find("[find=submenu_app_statistics_charts_csv]").removeClass("display_none").on("click", submenu_app_statistics_session_csv);
+	//[plan]
+	if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') >= 3){
+		Elem.find("[find=submenu_app_statistics_charts_csv]").removeClass("display_none").on("click", submenu_app_statistics_session_csv);
+	}
 
 	Elem.find("[find=submenu_app_statistics_charts_date]").addClass("display_none");
 	Elem.find("[find=submenu_app_statistics_charts_title]").addClass("display_none");

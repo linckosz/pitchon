@@ -134,7 +134,6 @@ $('#account_signin_email').on('blur', function(){
 				$('#account_signin_email_format').css('visibility', 'visible');
 			}
 		});
-		
 	}
 });
 

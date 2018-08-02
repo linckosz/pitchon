@@ -6,12 +6,51 @@ use \libs\Controller;
 use \libs\STR;
 use \libs\Folders;
 use \libs\Json;
+use \libs\Vanquish;
 use \bundles\bruno\data\models\ModelBruno;
+use \bundles\bruno\data\models\Subscription;
+use \bundles\bruno\data\models\Promocode;
 use \bundles\bruno\data\models\data\Pitch;
 use \bundles\bruno\data\models\data\Question;
 use \bundles\bruno\data\models\data\User;
+use \bundles\bruno\wrapper\models\Action;
 
 class ControllerApp extends Controller {
+
+	public function _get(){
+		$app = ModelBruno::getApp();
+		if($app->bruno->data['user_id']){
+			$user_info = Action::getUserInfo();
+			foreach ($user_info as $key => $value) {
+				$app->bruno->data['user_info_'.$key] = $value;
+			}
+			//List of laest Subscription available
+			$subscription = Subscription::getLatest();
+			$app->bruno->data['subscription_id'] = $subscription->id;
+			$app->bruno->data['subscription_md5'] = $subscription->md5;
+			$app->bruno->data['subscription_starter'] = $subscription->starter;
+			$app->bruno->data['subscription_standard'] = $subscription->standard;
+			$app->bruno->data['subscription_premium'] = $subscription->premium;
+			$app->bruno->data['subscription_pricing'] = 1; //Default to Monthly
+			$app->bruno->data['subscription_plan'] = 1; //Default to Starter
+			if($user = User::getUser()){
+				$app->bruno->data['subscription_pricing'] = $user->pricing;
+				$app->bruno->data['subscription_plan'] = $user->plan;
+			}
+			$promocode = Promocode::getCurrent();
+			$app->bruno->data['subscription_promocode'] = $promocode[0];
+			$app->bruno->data['subscription_promocode_discount'] = $promocode[1];
+			$app->render('/bundles/bruno/app/templates/app/application.twig');
+		} else {
+			if(Vanquish::get('remember')){
+				//It feels better to keep track of last email login
+				Vanquish::unsetAll(array('user_language', 'remember', 'host_id', 'user_email'));
+			} else {
+				Vanquish::unsetAll(array('user_language', 'remember', 'host_id'));
+			}
+			$app->render('/bundles/bruno/app/templates/login.twig');
+		}
+	}
 
 	public function username_get(){
 		$msg = false;
@@ -25,6 +64,7 @@ class ControllerApp extends Controller {
 		return exit(0);
 	}
 
+	//wrapper_sendAction('', 'post', 'refresh');
 	public function refresh_post(){
 		$msg = 'error';
 		if(User::isAdmin()){

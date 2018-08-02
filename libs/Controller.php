@@ -1,6 +1,7 @@
 <?php
 
 namespace libs;
+use \libs\Json;
 
 abstract class Controller {
 
@@ -8,7 +9,7 @@ abstract class Controller {
 		$app = \Slim\Slim::getInstance();
 		$msg = $app->trans->getJSON('wrapper', 0, 4); //Sorry, we could not understand the request.
 		if($app->bruno->jsonException){
-			$app->render(404, array('msg' => $msg,));
+			(new Json($msg, true, 404))->render();
 		} else {
 			echo $msg;
 		}

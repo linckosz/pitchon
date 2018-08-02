@@ -5,6 +5,8 @@ use \libs\TranslationModel;
 use \libs\Datassl;
 use \libs\Folders;
 use \libs\Version;
+use \bundles\bruno\data\models\ModelBruno;
+use \bundles\bruno\data\models\data\User;
 
 $path = $_SERVER['DOCUMENT_WWW'];
 
@@ -46,6 +48,9 @@ $app->get('/get/:ip/:hostname/:deployment', function($ip = null, $hostname = nul
 	}
 	$version->version = md5(uniqid('', true));
 	$version->save();
+
+	//[dev side] We force all users to refresh their data
+	User::withTrashed()->getQuery()->update(['refresh' => ModelBruno::getMStime()]);
 
 	$list = array();
 	foreach ($app->bruno->databases as $bundle => $value) {
@@ -172,6 +177,9 @@ $app->post('/update', function() use ($app) {
 	}
 	$version->version = $data->git;
 	$version->save();
+
+	//[server side] We force all users to refresh their data
+	User::withTrashed()->getQuery()->update(['refresh' => ModelBruno::getMStime()]);
 	
 	echo "Translation ok\n";
 })

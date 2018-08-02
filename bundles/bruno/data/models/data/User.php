@@ -35,8 +35,14 @@ class User extends ModelBruno {
 		'email',
 		'username',
 		'tuto',
+		'plan',
+		'plan_at',
 		'_bank',
 		'_host',
+	);
+
+	protected $model_integer = array(
+		'plan',
 	);
 
 	protected static $me = false;
@@ -213,6 +219,12 @@ class User extends ModelBruno {
 	}
 
 	public function toJson($detail=true, $options = 256){ //256: JSON_UNESCAPED_UNICODE
+		//We check if the user has his subscription expired
+		if(!is_null($this->plan_at) && $this->plan_at < ModelBruno::getMStime()){
+			$this->plan = 1; //Get back to Free subscription
+			$this->plan_at = null; //Null enable unlimited subscription
+			$this->save();
+		}
 		$this->_bank = Bank::getRecords(); //Get the whole list of subscriptions attached
 		$this->_host = User::getHosts(); //Get the number of attached hosts that created an account
 		$temp = parent::toJson($detail, $options);

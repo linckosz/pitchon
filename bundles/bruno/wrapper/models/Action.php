@@ -95,26 +95,26 @@ class Action extends Model {
 	public static function getUserInfo(){
 		$app = ModelBruno::getApp();
 		if(!self::$user_info_done && isset($_SERVER) && isset($_SERVER['HTTP_USER_AGENT'])){
-			if(stripos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')){
+			if(stripos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')!==false){
 				self::$user_info[2] = 'Wechat';
 			}
 			if(preg_match("/iPhone|iPad|iPod|Macintosh|iOS/ui", $_SERVER['HTTP_USER_AGENT'])){
 				self::$user_info[0] = 'Macintosh';
-				if(stripos($_SERVER['HTTP_USER_AGENT'], 'iPhone')){
+				if(stripos($_SERVER['HTTP_USER_AGENT'], 'iPhone')!==false){
 					self::$user_info[1] = 'Mobile';
 				} else if(preg_match("/iPad|iPod/ui", $_SERVER['HTTP_USER_AGENT'])){
 					self::$user_info[1] = 'Tablet';
 				}
-			} else if(stripos($_SERVER['HTTP_USER_AGENT'], 'BlackBerry')){
+			} else if(stripos($_SERVER['HTTP_USER_AGENT'], 'BlackBerry')!==false){
 				self::$user_info[0] = 'BlackBerry';
 				self::$user_info[1] = 'Mobile';
-			} else if(stripos($_SERVER['HTTP_USER_AGENT'], 'Palm')){
+			} else if(stripos($_SERVER['HTTP_USER_AGENT'], 'Palm')!==false){
 				self::$user_info[0] = 'Palm';
 				self::$user_info[1] = 'Mobile';
-			} else if(stripos($_SERVER['HTTP_USER_AGENT'], 'Android')){
+			} else if(stripos($_SERVER['HTTP_USER_AGENT'], 'Android')!==false){
 				self::$user_info[0] = 'Android';
 				self::$user_info[1] = 'Mobile';
-			} else if(stripos($_SERVER['HTTP_USER_AGENT'], 'Linux')){
+			} else if(stripos($_SERVER['HTTP_USER_AGENT'], 'Linux')!==false){
 				self::$user_info[0] = 'Linux';
 			}
 			if(self::$user_info[1] == 'Desktop' && preg_match("/webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/ui", $_SERVER['HTTP_USER_AGENT'])){

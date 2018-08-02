@@ -9,27 +9,19 @@ use \bundles\bruno\wrapper\models\Action;
 
 class ControllerInfo extends Controller {
 
-	protected $app = NULL;
-	protected $data = NULL;
-
-	public function __construct(){
-		$app = $this->app = \Slim\Slim::getInstance();
-		$this->data = json_decode($app->request->getBody());
-		return true;
-	}
-
 	public function action_post(){
 		$app = ModelBruno::getApp();
-		if(isset($this->data->action)){
-			$action = $this->data->action;
+		$data = ModelBruno::getData();
+		if(isset($data->action)){
+			$action = $data->action;
 			if(is_numeric($action)){
 				//Always use negative for outside value, Positives value are used to follow history
 				if($action>0){
 					$action = -$action;
 				}
 				$info = null;
-				if(isset($this->data->info)){
-					$info = $this->data->info;
+				if(isset($data->info)){
+					$info = $data->info;
 				}
 				Action::record($action, $info);
 			}
@@ -37,6 +29,19 @@ class ControllerInfo extends Controller {
 		$msg = array('msg' => 'ok');
 		(new Json($msg))->render();
 		return exit(0);
+	}
+
+	public function wait_get($seconds = 5){
+		$app = ModelBruno::getApp();
+		if($seconds<0 || $seconds > 60){
+			$seconds = 10;
+		}
+		sleep($seconds);
+		$app->response->headers->set('Content-Type', 'text/xml');
+		$app->response->headers->set('Cache-Control', 'no-cache, must-revalidate');
+		$app->response->headers->set('Expires', 'Fri, 12 Aug 2011 14:57:00 GMT');
+  		echo '<?xml version="1.0" encoding="UTF-8"?><ppt>ok</ppt>';
+  		return true;
 	}
 
 }

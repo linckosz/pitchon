@@ -166,7 +166,7 @@
 }
 
 #ppt_question_title {
-	font-weight: bold;
+	font-weight: 600;
 }
 
 #ppt_frame_website {
@@ -178,6 +178,7 @@
 	font-size: 3.2vw;
 	font-size: 3.2vmin;
 	color: #FFFFFF;
+	white-space: nowrap;
 }
 
 #ppt_frame_website_logo {
@@ -204,6 +205,8 @@
 }
 
 #ppt_frame_website_link {
+	display: inline-block;
+	vertical-align: middle;
 	padding-left: 1.6vw;
 	padding-left: 1.6vmin;
 }

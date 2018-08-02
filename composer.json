@@ -15,6 +15,8 @@
         "overtrue/pinyin": "3.*",
         "phpoffice/phppresentation": "dev-master",
         "cboden/ratchet": "0.4.*",
-        "react/zmq": "0.2.*|0.3.*"
+        "react/zmq": "0.2.*|0.3.*",
+        "paypal/rest-api-sdk-php": "*",
+        "microweber/screen": "*"
     }
 }

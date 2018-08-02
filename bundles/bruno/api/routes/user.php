@@ -24,4 +24,10 @@ $app->group('/api/user', function() use ($app) {
 	)
 	->name('api_user_search_post');
 
+	$app->post(
+		'/promocode',
+		'\bundles\bruno\api\controllers\ControllerUser:promocode_post'
+	)
+	->name('api_user_promocode_post');
+
 });

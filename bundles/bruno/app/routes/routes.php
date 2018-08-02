@@ -2,28 +2,12 @@
 
 namespace bundles\bruno\app\routes;
 
-use \libs\Vanquish;
-use \bundles\bruno\wrapper\models\Action;
-
 $app = \Slim\Slim::getInstance();
 
-$app->get('/', function() use ($app) {
-	if($app->bruno->data['user_id']){
-		$user_info = Action::getUserInfo();
-		foreach ($user_info as $key => $value) {
-			$app->bruno->data['user_info_'.$key] = $value;
-		}
-		$app->render('/bundles/bruno/app/templates/app/application.twig');
-	} else {
-		if(Vanquish::get('remember')){
-			//It feels better to keep track of last email login
-			Vanquish::unsetAll(array('user_language', 'remember', 'host_id', 'user_email'));
-		} else {
-			Vanquish::unsetAll(array('user_language', 'remember', 'host_id'));
-		}
-		$app->render('/bundles/bruno/app/templates/login.twig');
-	}
-})
+$app->get(
+	'/',
+	'\bundles\bruno\app\controllers\ControllerApp:_get'
+)
 ->name('_get');
 
 $app->get(

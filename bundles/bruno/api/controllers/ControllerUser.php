@@ -7,6 +7,7 @@ use \libs\Controller;
 use \libs\Vanquish;
 use \bundles\bruno\data\models\ModelBruno;
 use \bundles\bruno\data\models\data\User;
+use \bundles\bruno\data\models\Promocode;
 
 class ControllerUser extends Controller {
 
@@ -85,6 +86,34 @@ class ControllerUser extends Controller {
 			);
 		}
 		(new Json($result))->render(); //You have signed out of your account.
+		return exit(0);
+	}
+
+	public function promocode_post(){
+		$app = ModelBruno::getApp();
+		$data = ModelBruno::getData();
+		$promocode = false;
+		$result = array(
+			'type' => 0,
+			'discount' => 0,
+			'msg' => '',
+		);
+		if(isset($data->promocode)){
+			if($promocode = Promocode::getItem($data->promocode)){
+				if($promocode === -1){
+					$result['msg'] = 'Code already used';
+				} else if($promocode->type==1){ //Discount in %
+					$result['type'] = intval($promocode->type);
+					$result['discount'] = intval($promocode->discount);
+					$result['msg'] = $app->trans->getBRUT('api', 1, 4, array('discount' => intval($promocode->discount))); //Disoucnt: 30%
+				} else if($promocode->type==2){ //Disoucnt in Value
+					$result['type'] = intval($promocode->type);
+					$result['discount'] = intval($promocode->discount);
+					$result['msg'] = $app->trans->getBRUT('api', 1, 5, array('discount' => intval($promocode->discount))); //Disoucnt: 30€
+				}
+			}
+		}
+		(new Json($result))->render();
 		return exit(0);
 	}
 

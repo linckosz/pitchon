@@ -146,7 +146,7 @@ submenu_list['app_answer_get_presentation'] = {
 	//Set the title of the top
 	"_title": {
 		"style": "title",
-		"title": Bruno.Translation.get('app', 2114, 'html'), //Get the Presentation
+		"title": Bruno.Translation.get('app', 2114, 'html'), //Get the Quiz
 	},
 
 	"preview": {
@@ -192,10 +192,32 @@ submenu_list['app_answer_get_presentation'] = {
 		},
 	},
 
+	"powerpoint": {
+		"style": "button",
+		"class": "display_none submenu_app_answer_get_presentation_methods",
+		"title": "<span class='fa fa-download'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2117, 'html'), //PowerPoint Presentation
+		"now": function(Elem, subm){
+			//[plan]
+			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
+				Elem.find("[find=submenu_button_value]").addClass("submenu_button_paypal");
+			}
+		},
+		"action": function(Elem, subm){
+			//[toto] => Download PPT
+			console.log("Download PPT");
+		},
+	},
+
 	"space1": {
 		"style": "space",
 		"title": "space",
 		"value": 20,
+		"now": function(Elem, subm){
+			//[plan]
+			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
+				Elem.addClass("display_none");
+			}
+		},
 	},
 
 	"statistics": {
@@ -206,6 +228,12 @@ submenu_list['app_answer_get_presentation'] = {
 		"class": "",
 		"action_param": function(Elem, subm){
 			return subm.param; //Pitch ID
+		},
+		"now": function(Elem, subm){
+			//[plan]
+			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
+				Elem.addClass("display_none");
+			}
 		},
 	},
 
@@ -218,6 +246,10 @@ submenu_list['app_answer_get_presentation'] = {
 			return subm.param; //Pitch ID
 		},
 		"now": function(Elem, subm){
+			//[plan]
+			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 3){
+				Elem.addClass("display_none");
+			}
 			var value = this.value;
 			Elem.prop('id', subm.id+"_share");
 			app_application_bruno.add(subm.id+"_share", "pitch_"+subm.param, function(){
@@ -244,12 +276,22 @@ submenu_list['app_answer_get_presentation'] = {
 		"style": "space",
 		"title": "space",
 		"value": 20,
+		"now": function(Elem, subm){
+			//[plan]
+			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 3){
+				Elem.addClass("display_none");
+			}
+		},
 	},
 
 	"brand_name": {
 		"style": "input_text_flat",
 		"title": Bruno.Translation.get('app', 98, 'html'), //Brand name or Link
 		"now": function(Elem, subm){
+			//[plan]
+			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 3){
+				Elem.addClass("display_none");
+			}
 			Elem.find("[find=submenu_value]").addClass("no_focus");
 		},
 		"value": function(Elem, subm){
@@ -304,6 +346,10 @@ submenu_list['app_answer_get_presentation'] = {
 			return wrapper_neutral.src;
 		},
 		"now": function(Elem, subm){
+			//[plan]
+			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 3){
+				Elem.addClass("display_none");
+			}
 			var item = Bruno.storage.get("pitch", subm.param);
 			Elem.find("[find=submenu_value]")
 				.prop('id', subm.id+'_brand_pic')
@@ -329,6 +375,10 @@ submenu_list['app_answer_get_presentation'] = {
 		"style": "input_text_flat",
 		"title": Bruno.Translation.get('app', 100, 'html'), //Advertising name or link
 		"now": function(Elem, subm){
+			//[plan]
+			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 3){
+				Elem.addClass("display_none");
+			}
 			Elem.find("[find=submenu_value]").addClass("no_focus");
 		},
 		"value": function(Elem, subm){
@@ -381,6 +431,10 @@ submenu_list['app_answer_get_presentation'] = {
 			return app_application_logo_bruno.src;
 		},
 		"now": function(Elem, subm){
+			//[plan]
+			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 3){
+				Elem.addClass("display_none");
+			}
 			var item = Bruno.storage.get("pitch", subm.param);
 			Elem.find("[find=submenu_value]")
 				.prop('id', subm.id+'_ad_pic')

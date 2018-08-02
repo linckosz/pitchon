@@ -1,0 +1,233 @@
+.submenu_subscription {
+	width: 100%;
+	border-style: none !important;
+	text-align: center;
+	background-color: transparent;
+}
+
+.submenu_subscription_option {
+	display: table;
+	width: 90%;
+	max-width: 400px;
+	cursor: pointer;
+	color: #2D3E50;
+	font-weight: 600;
+	background-color: #FFFFFF;
+	border: solid 1px #87D4E0;
+	border-radius: 4px;
+	box-sizing: border-box;
+	margin: 10px auto;
+	padding: 24px 16px;
+	transition: background-color 0.3s linear, box-shadow 0.3s linear;
+
+	font-size: 24px;
+	padding: 24px 16px;
+
+	font-size: 24px;
+	padding: 10px 16px;
+}
+
+.submenu_subscription_option:hover {
+	background-color: #E6F5F8;
+}
+
+.submenu_subscription_option.selected {
+	background-color: #E6F5F8;
+	box-shadow: #87D4E0 0px 0px 0px 1px inset;
+	cursor: default !important;
+}
+
+.submenu_subscription_option.disabled {
+	display: none !important;
+	color: #D2D2D2 !important;
+	border-color: #D2D2D2 !important;
+	cursor: default !important;
+	opacity: 0.6;
+}
+.submenu_subscription_option.disabled:hover {
+	background-color: inherit;
+}
+
+.submenu_subscription_round,
+.submenu_subscription_plan,
+.submenu_subscription_cost {
+	display: inline-block;
+	vertical-align: middle;
+	white-space: nowrap;
+	overflow: visible;
+}
+
+.submenu_subscription_plan {
+	margin-left: 6px;
+}
+
+.submenu_subscription_round {
+	background-color: #FFFFFF;
+	border: solid 2px #D2D2D2;
+	border-radius: 100%;
+	padding: 2px;
+}
+.submenu_subscription_option.selected .submenu_subscription_round {
+	border-color: #6EC6D4;
+}
+
+.submenu_subscription_round > div {
+	background-color: #6EC6D4;
+	width: 12px;
+	height: 12px;
+	border-radius: 100%;
+	visibility: hidden;
+}
+.submenu_subscription_option.selected .submenu_subscription_round > div {
+	visibility: visible;
+}
+
+.submenu_subscription_cost {
+	
+}
+
+.submenu_subscription_currency {
+	vertical-align: text-top;
+	font-size: 12px;
+}
+
+.submenu_subscription_month {
+	vertical-align: baseline;
+	font-size: 12px;
+	font-weight: 200;
+}
+
+.submenu_subscription_cell_left {
+	display: table-cell;
+	text-align: left;
+}
+
+.submenu_subscription_cell_right {
+	display: table-cell;
+	text-align: right;
+}
+
+
+.submenu_subscription_features {
+	width: 90%;
+	max-width: 330px;
+	margin: 0 auto;
+}
+
+.submenu_subscription_feature {
+	vertical-align: middle;
+	white-space: normal;
+	font-size: 14px;
+	text-align: left;
+	padding: 4px;
+}
+
+.submenu_subscription_feature_text {
+	margin-left: 6px;
+}
+
+.submenu_subscription_feature_enabled {
+	color: #FF7A59;
+}
+
+.submenu_subscription_feature_disabled {
+	color: #CBD6E2;
+}
+
+.submenu_subscription_discount {
+	font-size: 24px;
+	color: #1A69A6;
+}
+
+.submenu_subscription_billing {
+	display: inline-block;
+	position: relative;
+	font-size: 16px;
+	color: #AAAAAA;
+	background-color: #E9E9E9;
+	text-align: center;
+	margin: 20px 6px 10px 6px;
+	width: 240px;
+	white-space: nowrap;
+	overflow: visible;
+	transition: background-color 0.1s linear;
+	cursor: pointer;
+}
+.submenu_subscription_billing.selected {
+	color: #FFFFFF;
+	background-color: #0081BB;
+	border: 2px solid #1A69A6;
+	border-top: none;
+}
+
+.submenu_subscription_billing_arrow {
+	display: none;
+	position: absolute;
+	text-align: center;
+	vertical-align: top;
+	-webkit-transform: translate(-50%, 0);
+	-moz-transform: translate(-50%, 0);
+	-ms-transform: translate(-50%, 0);
+	-o-transform: translate(-50%, 0);
+	transform: translate(-50%, 0);
+	top: 0;
+	left: 50%;
+	height: 6px;
+	width: 12px;
+}
+.submenu_subscription_billing.selected .submenu_subscription_billing_arrow {
+	display: block;
+}
+
+.submenu_subscription_billing_title {
+	background-color: #D4D4D4;
+	color: #7B7B7B;
+	padding: 10px 4px;
+	transition: background-color 0.1s linear;
+}
+.submenu_subscription_billing.selected .submenu_subscription_billing_title {
+	background-color: #1A69A6;
+	color: #A3D3F5;
+}
+
+.submenu_subscription_billing_content {
+	padding: 10px 4px;
+}
+
+.submenu_subscription_billing_amount {
+	font-size: 38px;
+}
+
+.submenu_subscription_billing_instead {
+	filter: alpha(opacity=80);
+	opacity: 0.80;
+	-moz-opacity: 0.80;
+	-khtml-opacity: 0.80;
+}
+
+.submenu_subscription_price {
+	padding: 30px 6px;
+	font-size: 24px;
+}
+
+.submenu_subscription_buy {
+	padding: 30px 0;
+	text-align: center;
+	width: 100%;
+}
+
+/* Maximum Mobile phone in Portrait */
+@media only screen and (max-width: 479px) {
+	.submenu_subscription_billing {
+		font-size: 14px;
+		margin: 24px 6px;
+		width: 140px;
+	}
+	.submenu_subscription_billing_amount {
+		font-size: 32px;
+	}
+	.submenu_subscription_option {
+		font-size: 22px;
+		padding: 8px 16px;
+	}
+}

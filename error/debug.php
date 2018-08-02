@@ -9,9 +9,11 @@
 	print_r($data);
 
 	Then open the link (change the domain name according to dev(.net)/stage(.co)/production(.com) server)
-	https://bruno.co/wrapper/debug
+	https://pitchon.net/wrapper/debug
 */
 
-$app = \Slim\Slim::getInstance();
+//$app = \Slim\Slim::getInstance();
 //print_r($data);
 //phpinfo();
+echo 'OOKK';
+exit(0);

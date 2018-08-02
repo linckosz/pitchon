@@ -537,6 +537,10 @@
 	height: 97px;
 }
 
+.submenu_button_paypal {
+	font-size: 24px;
+	color: #3B7BBF;
+}
 
 /* Minimum Desktop */
 @media only screen and (min-width: 1280px) {
