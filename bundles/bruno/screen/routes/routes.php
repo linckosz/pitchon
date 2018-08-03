@@ -7,6 +7,15 @@ use \libs\Vanquish;
 $app = \Slim\Slim::getInstance();
 
 $app->get(
+	'/wait/:seconds.xml',
+	'\bundles\bruno\api\controllers\ControllerInfo:wait_get'
+)
+->conditions(array(
+	'seconds' => '\d+',
+))
+->name('screen_wait_get');
+
+$app->get(
 	'/:pitchid(/:page)',
 	'\bundles\bruno\screen\controllers\ControllerScreen:pitch_get'
 )

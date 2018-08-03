@@ -114,6 +114,19 @@ class ControllerScreen extends Controller {
 		return $session;
 	}
 
+	public function wait_get($seconds = 5){
+		$app = ModelBruno::getApp();
+		if($seconds<0 || $seconds > 60){
+			$seconds = 10;
+		}
+		sleep($seconds);
+		$app->response->headers->set('Content-Type', 'text/xml');
+		$app->response->headers->set('Cache-Control', 'no-cache, must-revalidate');
+		$app->response->headers->set('Expires', 'Fri, 12 Aug 2011 14:57:00 GMT');
+		echo '<?xml version="1.0" encoding="UTF-8"?><wait>'.$seconds.'</wait>';
+		return true;
+	}
+
 	public function webviewer_get($pitch_enc, $page=true){
 		self::$webviewer = true;
 		return $this->pitch_get($pitch_enc, $page);

@@ -13,7 +13,3 @@
 */
 
 //$app = \Slim\Slim::getInstance();
-//print_r($data);
-//phpinfo();
-echo 'OOKK';
-exit(0);
