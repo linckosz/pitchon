@@ -31,6 +31,7 @@
 	font-size: 3.2vw;
 	font-size: 3.2vmin;
 	color: #FFFFFF;
+	white-space: nowrap;
 }
 
 #ppt_info_pitch_website_logo {
@@ -57,6 +58,8 @@
 }
 
 #ppt_info_pitch_website_link {
+	display: inline-block;
+	vertical-align: middle;
 	padding-left: 1.6vw;
 	padding-left: 1.6vmin;
 }

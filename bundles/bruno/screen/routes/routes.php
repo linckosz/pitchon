@@ -8,13 +8,14 @@ $app = \Slim\Slim::getInstance();
 
 $app->get(
 	'/wait/:seconds.xml',
-	'\bundles\bruno\api\controllers\ControllerInfo:wait_get'
+	'\bundles\bruno\screen\controllers\ControllerScreen:wait_get'
 )
 ->conditions(array(
 	'seconds' => '\d+',
 ))
 ->name('screen_wait_get');
 
+//Dynamic session with JS action
 $app->get(
 	'/:pitchid(/:page)',
 	'\bundles\bruno\screen\controllers\ControllerScreen:pitch_get'
@@ -25,9 +26,22 @@ $app->get(
 ))
 ->name('screen_pitch_get');
 
+//Genrate a picture base on webviewer
+$app->get(
+	'/:pitchid(/:page).:ext',
+	'\bundles\bruno\screen\controllers\ControllerScreen:pitch_picture_get'
+)
+->conditions(array(
+	'pitchid' => '[a-z0-9]+',
+	'page' => '\d+',
+	'ext' => 'jpg|png',
+))
+->name('screen_picture_get');
+
+//Unique session with no JS
 $app->get(
 	'/wb/:pitchid(/:page)',
-	'\bundles\bruno\screen\controllers\ControllerScreen:webviewer_get'
+	'\bundles\bruno\screen\controllers\ControllerScreen:pitch_webviewer_get'
 )
 ->conditions(array(
 	'pitchid' => '[a-z0-9]+',

@@ -194,7 +194,7 @@ submenu_list['app_answer_get_presentation'] = {
 
 	"powerpoint": {
 		"style": "button",
-		"class": "display_none submenu_app_answer_get_presentation_methods",
+		"class": "submenu_app_answer_get_presentation_methods",
 		"title": "<span class='fa fa-download'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2117, 'html'), //PowerPoint Presentation
 		"now": function(Elem, subm){
 			//[plan]

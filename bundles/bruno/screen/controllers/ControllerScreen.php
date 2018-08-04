@@ -19,6 +19,7 @@ use \bundles\bruno\data\models\data\Guest;
 use \bundles\bruno\data\models\data\User;
 use WideImage\WideImage;
 use Endroid\QrCode\QrCode;
+use Screen\Capture;
 
 class ControllerScreen extends Controller {
 
@@ -46,7 +47,8 @@ class ControllerScreen extends Controller {
 	protected function get_session_code(){
 		//Clean unused codes (older than 24H)
 		$limit = ModelBruno::getMStime() - (24*3600*1000); //Cut 24H
-		Session::WhereNotNull('code')->where('u_at', '<', $limit)->whereNull('namecard')->getQuery()->update(['code' => null]);
+		//For session where user_id exists, it means it's a fix session (no time limit!)
+		Session::WhereNotNull('code')->where('u_at', '<', $limit)->whereNull('user_id')->getQuery()->update(['code' => null]);
 
 		//Get a unique code number
 		$length = 4;
@@ -74,7 +76,7 @@ class ControllerScreen extends Controller {
 		return $code;
 	}
 
-	protected function get_session(){
+	protected function get_session($pitch_id){
 		if(self::$session){
 			return self::$session;
 		}
@@ -91,6 +93,7 @@ class ControllerScreen extends Controller {
 			$session = new Session;
 			$session->md5 = $md5;
 			$session->code = $this->get_session_code();
+			$session->pitch_id = $pitch_id;
 			if($session->save()){
 				$info = new \stdClass;
 				$info->env = Action::getUserInfo();
@@ -105,8 +108,8 @@ class ControllerScreen extends Controller {
 		return self::$session;
 	}
 
-	protected function set_session($question_id, $status=0){
-		if($session = $this->get_session()){
+	protected function set_session($pitch_id, $question_id, $status=0){
+		if($session = $this->get_session($pitch_id)){
 			$session->question_id = $question_id;
 			$session->status = $status;
 			$session->save();
@@ -127,17 +130,48 @@ class ControllerScreen extends Controller {
 		return true;
 	}
 
-	public function webviewer_get($pitch_enc, $page=true){
+	public function pitch_picture_get($pitch_enc, $page=true, $ext=false){
+
+		//Use webviewer to not display JS button and unique session
+		$app = ModelBruno::getApp();
+		$data = ModelBruno::getData();
+
+		$page = $this->set_page($page);
+
+		$url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/wb/'.$pitch_enc.'/'.$page;
+
+		$screenCapture = new Capture();
+		$screenCapture->setUrl($url);
+		/*
+		$screenCapture->setWidth(1280);
+		$screenCapture->setHeight(720);
+		$screenCapture->setClipWidth(1280);
+		$screenCapture->setClipHeight(720);
+		$screenCapture->setImageType('png');
+		*/
+		$screenCapture->setWidth(1920);
+		$screenCapture->setHeight(1080);
+		$screenCapture->setClipWidth(1920);
+		$screenCapture->setClipHeight(1080);
+		$screenCapture->setImageType('jpg');
+		$screenCapture->setOptions([
+		    'ignore-ssl-errors' => 'yes',
+		]);
+		$folder = new Folders;
+		$folder->createPath($app->bruno->filePath.'/microweber/jobs/');
+		$folder->createPath($app->bruno->filePath.'/microweber/output/');
+		$screenCapture->jobs->setLocation($app->bruno->filePath.'/microweber/jobs/');
+		$screenCapture->output->setLocation($app->bruno->filePath.'/microweber/output/');
+		$screenCapture->binPath = '/usr/local/bin/';
+		$screenCapture->save('toto');
+	}
+
+	public function pitch_webviewer_get($pitch_enc, $page=true){
 		self::$webviewer = true;
 		return $this->pitch_get($pitch_enc, $page);
 	}
 
-	public function pitch_get($pitch_enc, $page=true){
-		$app = ModelBruno::getApp();
-		$data = ModelBruno::getData();
-
-		$base_url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'];
-
+	protected function set_page($page){
 		// $page at true => next page
 		if(is_numeric($page)){
 			$page = (int) $page;
@@ -152,9 +186,19 @@ class ControllerScreen extends Controller {
 			$page = 0; //Start from introduction page
 		}
 		$_SESSION['screen_page'] = $page;
+		return $page;
+	}
+
+	public function pitch_get($pitch_enc, $page=true, $ext=false){
+		$app = ModelBruno::getApp();
+		$data = ModelBruno::getData();
+
+		$base_url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'];
+
+		$page = $this->set_page($page);
 		
 		//[toto] For now (June 6th, 2018), I don't see another method than base quest/anser page base on modulo of the page. In the case we have 1 or 3 slide for a style it breaks the logic!
-		$style = 'question'; //off numbers = question (1, 3, 5)
+		$style = 'question'; //odd numbers = question (1, 3, 5)
 		if($page % 2 == 0){ //even numbers = answers (0, 2, 4)
 			$style = 'answer';
 		}
@@ -211,9 +255,9 @@ class ControllerScreen extends Controller {
 					$app->bruno->data['data_pitch_code_length'] = 4;
 					if(!self::$webviewer){
 						if($style=='question'){
-							$session = $this->set_session($question->id, 2); //Prepare session
+							$session = $this->set_session($pitch->id, $question->id, 2); //Prepare session
 						} else {
-							$session = $this->set_session(null, 2); //Change to null so we can force mobiles to switch into the waiting screen
+							$session = $this->set_session($pitch->id, null, 2); //Change to null so we can force mobiles to switch into the waiting screen
 						}
 						if($session && $session->code){
 							$length = mb_strlen($session->code);
@@ -372,7 +416,7 @@ class ControllerScreen extends Controller {
 			//We display START or END slide
 			$app->bruno->data['get_style'] = 'answer';
 			if($page<=0){ //Start
-				$session = $this->set_session(null, 1);
+				$session = $this->set_session($pitch->id, null, 1);
 				$app->bruno->data['data_pitch_title'] = $pitch->title;
 				if($user = User::find($pitch->c_by)){
 					$app->bruno->data['data_pitch_by'] = $app->trans->getBRUT('screen', 0, 7).$user->username; //By Bruno Martin
@@ -382,7 +426,7 @@ class ControllerScreen extends Controller {
 				$app->render('/bundles/bruno/screen/templates/screen/info/pitch.twig');
 				return true;
 			} else { // END
-				$session = $this->set_session(null, 0);
+				$session = $this->set_session($pitch->id, null, 0);
 				$app->bruno->data['data_pitch_title'] = strtoupper($app->trans->getBRUT('screen', 0, 6)); //Thank you
 				$app->bruno->data['data_pitch_by'] = '';
 				$last_answer = (2*$pitch->question->count());
@@ -392,7 +436,7 @@ class ControllerScreen extends Controller {
 				return true;
 			}
 		}
-		$session = $this->set_session(null, 0);
+		$session = $this->set_session($pitch_id, null, 0);
 		$app->render('/bundles/bruno/screen/templates/generic/sorry.twig');
 		return true;
 	}
