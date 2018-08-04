@@ -12,6 +12,7 @@ use \libs\Datassl;
 use \libs\Translation;
 use \bundles\bruno\data\models\Data;
 use \bundles\bruno\data\models\Inform;
+use \bundles\bruno\data\models\Fixcode;
 use \bundles\bruno\data\models\ModelBruno;
 use \bundles\bruno\wrapper\models\Action;
 use \bundles\bruno\data\models\data\Answer;
@@ -45,18 +46,31 @@ class ControllerTest extends Controller {
 		$app->bruno->time_record = true; //Display timing
 		$tp = null;
 
+		$numbers = range(40000, 49999);
+		shuffle($numbers);
+		$letters = array('B', 'R', 'U', 'N', 'Q', 'Z', 'H', 'A', 'M', 'G', 'L', 'S', 'F', 'J', 'T', 'V', 'C', 'Y', 'D', 'E', 'W', 'X', 'P');
+		foreach ($letters as $letter) {
+			set_time_limit(500);
+			foreach ($numbers as $number) {
+				$fixcode = new Fixcode;
+				$fixcode->fixcode = $letter.$number;
+				$fixcode->save();
+			}
+		}
+
+		/*
 		$url = 'https://screen.pitchon.net/6qfsb/1';
 		$url = 'https://screen.pitchon.net/acpga/12';
 
 		$screenCapture = new Capture();
 		$screenCapture->setUrl($url);
-		/*
+		
 		$screenCapture->setWidth(1280);
 		$screenCapture->setHeight(720);
 		$screenCapture->setClipWidth(1280);
 		$screenCapture->setClipHeight(720);
 		$screenCapture->setImageType('png');
-		*/
+		
 		$screenCapture->setWidth(1920);
 		$screenCapture->setHeight(1080);
 		$screenCapture->setClipWidth(1920);
@@ -72,6 +86,7 @@ class ControllerTest extends Controller {
 		$screenCapture->output->setLocation($app->bruno->filePath.'/microweber/output/');
 		$screenCapture->binPath = '/usr/local/bin/';
 		$screenCapture->save('test');
+		*/
 
 		//wrapper_sendAction('', 'post', 'api/test');
 		//\libs\Watch::php( $db->getQueryLog() , 'QueryLog', __FILE__, __LINE__, false, false, true);

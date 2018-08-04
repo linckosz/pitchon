@@ -76,7 +76,7 @@ class ControllerScreen extends Controller {
 		return $code;
 	}
 
-	protected function get_session($pitch_id){
+	protected function get_session($pitch_id=null){
 		if(self::$session){
 			return self::$session;
 		}

@@ -6,6 +6,17 @@ use \libs\Vanquish;
 
 $app = \Slim\Slim::getInstance();
 
+//This does redirect the QRcode picture with the current open question
+//NOTE: Must be before screen_picture_get to not be ignored
+$app->get(
+	'/session(/:questionid).jpg',
+	'\bundles\bruno\screen\controllers\ControllerScreen:session_get'
+)
+->conditions(array(
+	'questionid' => '[a-z0-9]+',
+))
+->name('screen_qrcode_session_get');
+
 $app->get(
 	'/wait/:seconds.xml',
 	'\bundles\bruno\screen\controllers\ControllerScreen:wait_get'
@@ -76,13 +87,3 @@ $app->get(
 	'questionid' => '[a-z0-9]+',
 ))
 ->name('screen_statsjs_get');
-
-//This does redirect the QRcode picture with the current open question
-$app->get(
-	'/session(/:questionid).jpg',
-	'\bundles\bruno\screen\controllers\ControllerScreen:session_get'
-)
-->conditions(array(
-	'questionid' => '[a-z0-9]+',
-))
-->name('screen_qrcode_session_get');
