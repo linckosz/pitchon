@@ -27,7 +27,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Carbon\Carbon;
 use WideImage\WideImage;
-
+use Hashids\Hashids;
 use Screen\Capture;
 
 class ControllerTest extends Controller {
@@ -46,17 +46,9 @@ class ControllerTest extends Controller {
 		$app->bruno->time_record = true; //Display timing
 		$tp = null;
 
-		$numbers = range(40000, 49999);
-		shuffle($numbers);
-		$letters = array('B', 'R', 'U', 'N', 'Q', 'Z', 'H', 'A', 'M', 'G', 'L', 'S', 'F', 'J', 'T', 'V', 'C', 'Y', 'D', 'E', 'W', 'X', 'P');
-		foreach ($letters as $letter) {
-			set_time_limit(500);
-			foreach ($numbers as $number) {
-				$fixcode = new Fixcode;
-				$fixcode->fixcode = $letter.$number;
-				$fixcode->save();
-			}
-		}
+		$tp = Question::encrypt(759);
+		\libs\Watch::php( $tp, Question::decrypt($tp), __FILE__, __LINE__, false, false, true);
+
 
 		/*
 		$url = 'https://screen.pitchon.net/6qfsb/1';

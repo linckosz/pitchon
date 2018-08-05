@@ -13,7 +13,7 @@ $app->get(
 ->conditions(array(
 	'sessionid' => '[a-z0-9]+',
 ))
-->name('quiz_session_get');
+->name('quiz_scan_get');
 
 $app->get(
 	'/:sessionid',

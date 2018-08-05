@@ -56,7 +56,9 @@
 				</div>
 			</div>
 			<div id="ppt_frame_right_bottom">
-				<iframe id="ppt_stats_iframe" name="ppt_stats_iframe" frameborder="0" scrolling="no" src="{{ data_stats_iframe|raw }}"></iframe>
+				{% if not fixcode %}
+					<iframe id="ppt_stats_iframe" name="ppt_stats_iframe" frameborder="0" scrolling="no" src="{{ data_stats_iframe|raw }}"></iframe>
+				{% endif %}
 			</div>
 		</div>
 	</div>

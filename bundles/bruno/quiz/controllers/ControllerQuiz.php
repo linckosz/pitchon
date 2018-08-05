@@ -176,7 +176,32 @@ class ControllerQuiz extends Controller {
 	public function code_get($code){
 		$app = ModelBruno::getApp();
 		$this->prepare();
-		if($session = Session::Where('code', $code)->first(array('id', 'question_id', 'code'))){
+		//Check if it's a fixcode (has alphabet)
+		if($question_id = Question::decrypt($code)){
+			//We don't save cookies
+			setcookie($app->bruno->data['bruno_dev'].'_quiz_code', null, time()-3600, '/');
+			$session = Session::Where('question_hashid', $code)->first(array('id'));
+			if(!$session){
+				//Create the session, but must be in a try because hundred of users can do this operation at the same time
+				$session = new Session;
+				$session->md5 = $md5;
+				$session->question_id = $question_id;
+				$session->question_hashid = $code;
+				try {
+					$session->save(); //It may fail if somebody else is faster
+				} catch (\Exception $e){
+					//Maybe someone else did it slightly faster
+					$session = Session::Where('question_hashid', $code)->first(array('id'));
+				}
+			}
+			if($session){
+				//We use $question_id instead of $session->question_id to insure the session is fixed to the question
+				if($statistics = Statistics::unlock($session->id, $question_id)){
+					$app->bruno->data['data_statisticsid_enc'] = STR::integer_map($statistics->id);
+				}
+				return $this->question_display($question_id);
+			}
+		} else if($session = Session::Where('code', $code)->first(array('id', 'question_id', 'code'))){
 			if($session->code){
 				setcookie($app->bruno->data['bruno_dev'].'_quiz_code', $session->code, time()+1800, '/'); //Only 30min (because a pitch should not exceed 30 min)
 			} else {

@@ -5,9 +5,12 @@ namespace bundles\bruno\data\models\data;
 use \libs\Json;
 use \libs\STR;
 use \bundles\bruno\data\models\ModelBruno;
+use \bundles\bruno\data\models\Fixcode;
+use \bundles\bruno\data\models\Session;
 use \bundles\bruno\data\models\data\Answer;
 use \bundles\bruno\data\models\data\Pitch;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Hashids\Hashids;
 
 class Question extends ModelBruno {
 
@@ -286,6 +289,38 @@ class Question extends ModelBruno {
 		} else {
 			return parent::save($options);
 		}
+	}
+
+	public static function encrypt(int $id){
+		//0 and l are deleted to avoid confusion / a is deleted to be used as prefix in case the result is a integer
+		$hashids = new Hashids('bm', 3, 'bcdefghijkmnopqrstuvwxyz123456789');
+		$enc_id = $hashids->encode($id);
+		//Check if the result is only numbers
+		if(strpbrk($enc_id, 'bcdefghijkmnopqrstuvwxyz')===false){
+			$enc_id = 'a'.$enc_id;
+		}
+		return $enc_id;
+	}
+
+	public static function decrypt($enc_id){
+		$enc_id = mb_strtolower($enc_id);
+		//Check if it includes alphabet
+		//it includes 'a'
+		if(strpbrk($enc_id, 'abcdefghijkmnopqrstuvwxyz')===false){
+			return false;
+		}
+		//We delete 'a' if it has been used on front
+		if(strpos($enc_id, 'a')===0){
+			$enc_id = substr($enc_id, 1);
+		}
+		//0 and l are deleted to avoid confusion / a is deleted to be used as prefix in case the result is a integer
+		$hashids = new Hashids('bm', 3, 'bcdefghijkmnopqrstuvwxyz123456789');
+		$arr = $hashids->decode($enc_id);
+		$id = false;
+		if($arr && isset($arr[0])){
+			$id = intval($arr[0]);
+		}
+		return $id;
 	}
 
 }

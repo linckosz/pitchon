@@ -194,7 +194,7 @@ class ControllerApp extends Controller {
 								$content = 'ppt/webextensions/'.$match[1];
 								$xml = $zip->getFromName($content);
 								if(!empty($xml)){
-									$xml = preg_replace("/bruno_start_url.*?bruno_end_url/i", $bruno_url.'/webviewer', $xml);
+									$xml = preg_replace("/bruno_start_url.*?bruno_end_url/i", $bruno_url.'/fc', $xml);
 									$zip->addFromString($content, $xml);
 								}
 							}

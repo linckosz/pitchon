@@ -23,7 +23,7 @@ use Screen\Capture;
 
 class ControllerScreen extends Controller {
 
-	protected static $webviewer = false;
+	protected static $fixcode = false;
 
 	protected static $session = false;
 
@@ -48,7 +48,7 @@ class ControllerScreen extends Controller {
 		//Clean unused codes (older than 24H)
 		$limit = ModelBruno::getMStime() - (24*3600*1000); //Cut 24H
 		//For session where user_id exists, it means it's a fix session (no time limit!)
-		Session::WhereNotNull('code')->where('u_at', '<', $limit)->whereNull('user_id')->getQuery()->update(['code' => null]);
+		Session::WhereNotNull('code')->where('u_at', '<', $limit)->whereNull('question_hashid')->getQuery()->update(['code' => null]);
 
 		//Get a unique code number
 		$length = 4;
@@ -76,7 +76,7 @@ class ControllerScreen extends Controller {
 		return $code;
 	}
 
-	protected function get_session($pitch_id=null){
+	protected function get_session(){
 		if(self::$session){
 			return self::$session;
 		}
@@ -93,7 +93,6 @@ class ControllerScreen extends Controller {
 			$session = new Session;
 			$session->md5 = $md5;
 			$session->code = $this->get_session_code();
-			$session->pitch_id = $pitch_id;
 			if($session->save()){
 				$info = new \stdClass;
 				$info->env = Action::getUserInfo();
@@ -108,8 +107,8 @@ class ControllerScreen extends Controller {
 		return self::$session;
 	}
 
-	protected function set_session($pitch_id, $question_id, $status=0){
-		if($session = $this->get_session($pitch_id)){
+	protected function set_session($question_id, $status=0){
+		if($session = $this->get_session()){
 			$session->question_id = $question_id;
 			$session->status = $status;
 			$session->save();
@@ -132,13 +131,13 @@ class ControllerScreen extends Controller {
 
 	public function pitch_picture_get($pitch_enc, $page=true, $ext=false){
 
-		//Use webviewer to not display JS button and unique session
+		//Use fixcode to not display JS button and unique session
 		$app = ModelBruno::getApp();
 		$data = ModelBruno::getData();
 
 		$page = $this->set_page($page);
 
-		$url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/wb/'.$pitch_enc.'/'.$page;
+		$url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/fc/'.$pitch_enc.'/'.$page;
 
 		$screenCapture = new Capture();
 		$screenCapture->setUrl($url);
@@ -166,8 +165,8 @@ class ControllerScreen extends Controller {
 		$screenCapture->save('toto');
 	}
 
-	public function pitch_webviewer_get($pitch_enc, $page=true){
-		self::$webviewer = true;
+	public function pitch_fixcode_get($pitch_enc, $page=true){
+		self::$fixcode = true;
 		return $this->pitch_get($pitch_enc, $page);
 	}
 
@@ -205,14 +204,19 @@ class ControllerScreen extends Controller {
 		$app->bruno->data['get_style'] = $style;
 
 		$app->bruno->data['listenevent'] = true;
-		$webviewer = '';
-		if(self::$webviewer){
+		$app->bruno->data['fixcode'] = self::$fixcode;
+		$fcuri = '';
+		$hashid = false;
+		if(self::$fixcode){
 			$app->bruno->data['listenevent'] = false;
-			$webviewer = '/wb';
+			$fcuri = '/fc';
 		}
 		$app->bruno->data['body_preview'] = false;
 
+		//Minimum require to make sure we are in preview mode
+		$preview = false;
 		$check = array(
+			'preview' => true,
 			'html_zoom' => true,
 			'html_width' => true,
 			'html_height' => true,
@@ -224,8 +228,12 @@ class ControllerScreen extends Controller {
 			}
 		}
 		if(count($check)==0){
+			$preview = true;
+			self::$fixcode = false;
+			$fcuri = '';
 			$app->bruno->data['listenevent'] = false; //Disable events for preview mode
 			$app->bruno->data['body_preview'] = true;
+			$app->bruno->data['fixcode'] = false;
 		}
 
 		$app->bruno->data['slide_prev'] = false;
@@ -246,18 +254,18 @@ class ControllerScreen extends Controller {
 			if($offset>=0){
 				if(isset($app->bruno->data['listenevent']) && $app->bruno->data['listenevent']){
 					if($page>0){
-						$app->bruno->data['slide_prev'] = 'https://'.$app->bruno->http_host.$webviewer.'/'.$pitch_enc.'/'.($page-1);
+						$app->bruno->data['slide_prev'] = 'https://'.$app->bruno->http_host.$fcuri.'/'.$pitch_enc.'/'.($page-1);
 					}
 				}
 				if($question = $pitch->question_offset($offset, array('id', 'u_at', 'parent_id', 'number', 'file_id', 'title', 'style'))){
 					$session = false;
 					$app->bruno->data['data_pitch_code'] = false;
 					$app->bruno->data['data_pitch_code_length'] = 4;
-					if(!self::$webviewer){
+					if(!$preview && !self::$fixcode){
 						if($style=='question'){
-							$session = $this->set_session($pitch->id, $question->id, 2); //Prepare session
+							$session = $this->set_session($question->id, 2); //Prepare session
 						} else {
-							$session = $this->set_session($pitch->id, null, 2); //Change to null so we can force mobiles to switch into the waiting screen
+							$session = $this->set_session(null, 2); //Change to null so we can force mobiles to switch into the waiting screen
 						}
 						if($session && $session->code){
 							$length = mb_strlen($session->code);
@@ -269,10 +277,19 @@ class ControllerScreen extends Controller {
 								$app->bruno->data['data_pitch_code'] = substr($session->code, 0, 4).' '.substr($session->code, 3, 4);
 							}
 						}
+					} else if(!$preview && $hashid = Question::encrypt($question->id)){
+						$length = mb_strlen($hashid);
+						$app->bruno->data['data_pitch_code_length'] = $length;
+						$app->bruno->data['data_pitch_code'] = $hashid;
+						if($length==6){
+							$app->bruno->data['data_pitch_code'] = substr($hashid, 0, 3).' '.substr($hashid, 3, 3);
+						} else if($length==8){
+							$app->bruno->data['data_pitch_code'] = substr($hashid, 0, 4).' '.substr($hashid, 3, 4);
+						}
 					}
 
 					//Start WAMP room
-					if(!self::$webviewer && $style=='question'){
+					if(!$preview && !self::$fixcode && $style=='question'){
 						if($app->bruno->data['data_pitch_code'] && $app->bruno->data['data_pitch_code'] > 0){
 							$entryData = array(
 								'topicid'	=> 'quiz_'.$app->bruno->data['data_pitch_code'],
@@ -286,7 +303,7 @@ class ControllerScreen extends Controller {
 						}
 					}
 
-					$app->bruno->data['slide_next'] = 'https://'.$app->bruno->http_host.$webviewer.'/'.$pitch_enc.'/'.($page+1);
+					$app->bruno->data['slide_next'] = 'https://'.$app->bruno->http_host.$fcuri.'/'.$pitch_enc.'/'.($page+1);
 
 					$questionid_enc = STR::integer_map($question->id);
 
@@ -315,17 +332,23 @@ class ControllerScreen extends Controller {
 						$app->bruno->data['data_pitch_url_hide'] = true;
 						$app->bruno->data['data_pitch_url'] = $base_url.'/bruno/wrapper/images/generic/neutral.png?0';
 					} else {
-						if($session){
-							$app->bruno->data['data_pitch_url'] = $base_url.'/session.jpg?'.$session->id;
+						if(!$preview && $hashid){
+							$app->bruno->data['data_pitch_url'] = $base_url.'/fixcode.jpg?hashid='.$hashid; //hashid is used to recover the fix session
+						} else if(!$preview && $session){
+							$app->bruno->data['data_pitch_url'] = $base_url.'/session.jpg?'.$session->id; //Is used only for cache
 						} else {
-							$app->bruno->data['data_pitch_url'] = $base_url.'/session/'.$questionid_enc.'.jpg?'.$question->id;
+							$app->bruno->data['data_pitch_url'] = $base_url.'/session/'.$questionid_enc.'.jpg?'.$question->id; //Suffix only used for cache
 						}
 					}
 
-					if(self::$webviewer){
+					if($preview){
 						//Just simulate some data for preview purpose
 						$app->bruno->data['data_stats_iframe'] .= '?preview=1';
-						$app->bruno->data['data_pitch_url'] .= '&preview=1';
+						if(strpos($app->bruno->data['data_pitch_url'], '?')>=1){
+							$app->bruno->data['data_pitch_url'] .= '&preview=1';
+						} else {
+							$app->bruno->data['data_pitch_url'] .= '?preview=1';
+						}
 					}
 
 					if($question->style==2){
@@ -416,27 +439,27 @@ class ControllerScreen extends Controller {
 			//We display START or END slide
 			$app->bruno->data['get_style'] = 'answer';
 			if($page<=0){ //Start
-				$session = $this->set_session($pitch->id, null, 1);
+				$session = $this->set_session(null, 1);
 				$app->bruno->data['data_pitch_title'] = $pitch->title;
 				if($user = User::find($pitch->c_by)){
 					$app->bruno->data['data_pitch_by'] = $app->trans->getBRUT('screen', 0, 7).$user->username; //By Bruno Martin
 				}
 				$app->bruno->data['slide_prev'] = false;
-				$app->bruno->data['slide_next'] = 'https://'.$app->bruno->http_host.$webviewer.'/'.$pitch_enc.'/1';
+				$app->bruno->data['slide_next'] = 'https://'.$app->bruno->http_host.$fcuri.'/'.$pitch_enc.'/1';
 				$app->render('/bundles/bruno/screen/templates/screen/info/pitch.twig');
 				return true;
 			} else { // END
-				$session = $this->set_session($pitch->id, null, 0);
+				$session = $this->set_session(null, 0);
 				$app->bruno->data['data_pitch_title'] = strtoupper($app->trans->getBRUT('screen', 0, 6)); //Thank you
 				$app->bruno->data['data_pitch_by'] = '';
 				$last_answer = (2*$pitch->question->count());
-				$app->bruno->data['slide_prev'] = 'https://'.$app->bruno->http_host.$webviewer.'/'.$pitch_enc.'/'.$last_answer;
+				$app->bruno->data['slide_prev'] = 'https://'.$app->bruno->http_host.$fcuri.'/'.$pitch_enc.'/'.$last_answer;
 				$app->bruno->data['slide_next'] = false;
 				$app->render('/bundles/bruno/screen/templates/screen/info/pitch.twig');
 				return true;
 			}
 		}
-		$session = $this->set_session($pitch_id, null, 0);
+		$session = $this->set_session(null, 0);
 		$app->render('/bundles/bruno/screen/templates/generic/sorry.twig');
 		return true;
 	}
@@ -681,7 +704,16 @@ class ControllerScreen extends Controller {
 		return $data;
 	}
 
-	public function session_get($questionid_enc=false){
+	public function fixcode_get(){
+		$fixcode = false;
+		$get = ModelBruno::getData();
+		if(isset($get->preview) && $get->preview){
+			$fixcode = $get->preview;
+		}
+		return $this->session_get(false, $fixcode);
+	}
+
+	public function session_get($questionid_enc=false, $fixcode=false){
 		$app = ModelBruno::getApp();
 		$get = ModelBruno::getData();
 		$base_url = 'http://'.$app->bruno->shortlink;
@@ -690,7 +722,9 @@ class ControllerScreen extends Controller {
 		$header_id = 0;
 		$header_time = ModelBruno::getMStime();
 
-		if(isset($get->preview) && $get->preview){
+		if($fixcode){
+			$url = $base_url.'/c/'.$fixcode;
+		} else if(isset($get->preview) && $get->preview){
 			//In preview mode, we must have at least $questionid_enc definied since the session does not exists
 			if($questionid_enc){
 				$url = $base_url.'/p/'.$questionid_enc;

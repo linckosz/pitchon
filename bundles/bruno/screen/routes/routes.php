@@ -17,6 +17,13 @@ $app->get(
 ))
 ->name('screen_qrcode_session_get');
 
+//NOTE: Must be before screen_picture_get to not be ignored
+$app->get(
+	'/fixcode.jpg',
+	'\bundles\bruno\screen\controllers\ControllerScreen:fixcode_get'
+)
+->name('screen_qrcode_fixcode_get');
+
 $app->get(
 	'/wait/:seconds.xml',
 	'\bundles\bruno\screen\controllers\ControllerScreen:wait_get'
@@ -37,7 +44,7 @@ $app->get(
 ))
 ->name('screen_pitch_get');
 
-//Genrate a picture base on webviewer
+//Generate a picture based on fixcode
 $app->get(
 	'/:pitchid(/:page).:ext',
 	'\bundles\bruno\screen\controllers\ControllerScreen:pitch_picture_get'
@@ -51,14 +58,14 @@ $app->get(
 
 //Unique session with no JS
 $app->get(
-	'/wb/:pitchid(/:page)',
-	'\bundles\bruno\screen\controllers\ControllerScreen:pitch_webviewer_get'
+	'/fc/:pitchid(/:page)',
+	'\bundles\bruno\screen\controllers\ControllerScreen:pitch_fixcode_get'
 )
 ->conditions(array(
 	'pitchid' => '[a-z0-9]+',
 	'page' => '\d+',
 ))
-->name('screen_webviewer_get');
+->name('screen_fixcode_get');
 
 $app->get(
 	'/stats/:questionid(/:step)',
