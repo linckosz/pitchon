@@ -16,15 +16,25 @@ var ppt_base_zoom_down = function(){
 		$('#ppt_frame_left').css({
 			'zoom': ppt_base_zoom_scale
 		});
+		$('#ppt_frame_left').find('img').css({
+			'zoom': ppt_base_zoom_scale
+		});
 	}
 	return true;
 };
 
 var ppt_base_loop = true; //This become false only once we reach the minimum scale available (0.4)
-var ppt_base_zoom_down_check = function(){
+var ppt_base_zoom_down_check = function(){JSerror.sendError(navigator.userAgent, 'userAgent', 0);
 	//We reduce the size of the text to make it visible fullscreen
-	while(ppt_base_loop && $('#ppt_frame').outerHeight() > $(window).outerHeight()){
-		ppt_base_loop = ppt_base_zoom_down();
+	if(/firefox/i.test(navigator.userAgent)){
+		$("#ppt_frame_right").height(Math.round(0.9*$(window).outerHeight()));
+		while(ppt_base_loop && $("#ppt_frame_left")[0].getBoundingClientRect().height > 0.9*$(window).outerHeight()){
+			ppt_base_loop = ppt_base_zoom_down();
+		}
+	} else {
+		while(ppt_base_loop && $('#ppt_frame').outerHeight() > $(window).outerHeight()){
+			ppt_base_loop = ppt_base_zoom_down();
+		}
 	}
 }
 

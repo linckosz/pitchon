@@ -131,61 +131,92 @@ class ControllerScreen extends Controller {
 
 	public function pitch_picture_get($pitch_enc, $page=true, $ext=false){
 
-		//Use fixcode to not display JS button and unique session
+		
 		$app = ModelBruno::getApp();
 		$data = ModelBruno::getData();
 
-		$page = $this->set_page($page);
+		$path = $app->bruno->path.'/bundles/bruno/wrapper/public/images/generic/unavailable.png';
 
-		$url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/fc/'.$pitch_enc.'/'.$page;
+		if($pitch_id = STR::integer_map($pitch_enc, true)){
 
-		$screenCapture = new Capture();
-		$screenCapture->setUrl($url);
-		/*
-		$screenCapture->setWidth(1280);
-		$screenCapture->setHeight(720);
-		$screenCapture->setClipWidth(1280);
-		$screenCapture->setClipHeight(720);
-		$screenCapture->setImageType('png');
-		*/
-		$screenCapture->setWidth(1920);
-		$screenCapture->setHeight(1080);
-		$screenCapture->setClipWidth(1920);
-		$screenCapture->setClipHeight(1080);
-		$screenCapture->setImageType('jpg');
-		$screenCapture->setOptions([
-		    'ignore-ssl-errors' => 'yes',
-		]);
-		$folder = new Folders;
-		$folder->createPath($app->bruno->filePath.'/microweber/jobs/');
-		$folder->createPath($app->bruno->filePath.'/microweber/output/');
-		$screenCapture->jobs->setLocation($app->bruno->filePath.'/microweber/jobs/');
-		$screenCapture->output->setLocation($app->bruno->filePath.'/microweber/output/');
-		$screenCapture->binPath = '/usr/local/bin/';
-		$screenCapture->save('toto');
+			//Use fixcode to not display JS button and unique session
+			$url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/fc/'.$pitch_enc.'/'.$page;
+
+			$screenCapture = new Capture();
+			$screenCapture->setUrl($url);
+
+			$width = 1280;
+			$height = 720;
+			$screenCapture->setWidth($width);
+			$screenCapture->setHeight($height);
+			$screenCapture->setClipWidth($width);
+			$screenCapture->setClipHeight($height);
+			$screenCapture->setImageType($ext);
+			$screenCapture->setOptions([
+			    'ignore-ssl-errors' => 'yes',
+			]);
+			$folder = new Folders;
+			$folder->createPath($app->bruno->filePath.'/microweber/jobs/'.$pitch_id.'/');
+			$folder->createPath($app->bruno->filePath.'/microweber/output/'.$pitch_id.'/');
+			$screenCapture->jobs->setLocation($app->bruno->filePath.'/microweber/jobs/'.$pitch_id.'/');
+			$screenCapture->output->setLocation($app->bruno->filePath.'/microweber/output/'.$pitch_id.'/');
+			$screenCapture->binPath = '/usr/local/bin/';
+			$screenCapture->save($page.'.'.$ext); //JPEG compress is 75% (good ratio)
+			$screenCapture->jobs->clean();
+
+			$path = $app->bruno->filePath.'/microweber/output/'.$pitch_id.'/'.$page.'.'.$ext;
+			$image = WideImage::load($path);
+		} else {
+			$image = WideImage::load($path);
+		}
+
+		$image->output($ext);
+		session_write_close();
+		return exit(0);
+	}
+
+	protected function set_page_array($page){
+		$result = array(
+			'nbr' => 0,
+			'style' => 'question',
+			'prev' => false,
+			'next' => '1a',
+		);
+		if($page===true){
+			if(!isset($_SESSION['screen_page_next'])){
+				$page = 0; //Start from introduction page
+			} else {
+				$page = $_SESSION['screen_page_next'];
+			}
+		}
+
+		if(preg_match("/(\d+)([ab])/ui", $page, $matches)){
+			$result['nbr'] = intval($matches[1]);
+			if($matches[2] == 'b'){
+				$result['style'] = 'answer';
+			}
+			//Next
+			if($matches[2] == 'b'){
+				$result['next'] = ($result['nbr']+1) . 'a';
+			} else {
+				$result['next'] = $result['nbr'] . 'b';
+			}
+			//Previous
+			if($matches[2] == 'b'){
+				$result['prev'] = $result['nbr'] . 'a';
+			} else if($result['nbr']==1){
+				$result['prev'] = 0;
+			} else {
+				$result['prev'] = ($result['nbr']-1) . 'b';
+			}
+		}
+		$_SESSION['screen_page_next'] = $result['next'];
+		return $result;
 	}
 
 	public function pitch_fixcode_get($pitch_enc, $page=true){
 		self::$fixcode = true;
 		return $this->pitch_get($pitch_enc, $page);
-	}
-
-	protected function set_page($page){
-		// $page at true => next page
-		if(is_numeric($page)){
-			$page = (int) $page;
-		}
-		if($page===true){
-			if(!isset($_SESSION['screen_page'])){
-				$page = 0; //Start from introduction page
-			} else {
-				$page = $_SESSION['screen_page']++;
-			}
-		} else if(!is_integer($page) || $page < 0){
-			$page = 0; //Start from introduction page
-		}
-		$_SESSION['screen_page'] = $page;
-		return $page;
 	}
 
 	public function pitch_get($pitch_enc, $page=true, $ext=false){
@@ -194,14 +225,9 @@ class ControllerScreen extends Controller {
 
 		$base_url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'];
 
-		$page = $this->set_page($page);
-		
-		//[toto] For now (June 6th, 2018), I don't see another method than base quest/anser page base on modulo of the page. In the case we have 1 or 3 slide for a style it breaks the logic!
-		$style = 'question'; //odd numbers = question (1, 3, 5)
-		if($page % 2 == 0){ //even numbers = answers (0, 2, 4)
-			$style = 'answer';
-		}
-		$app->bruno->data['get_style'] = $style;
+		$list = $this->set_page_array($page);
+
+		$app->bruno->data['get_style'] = $list['style'];
 
 		$app->bruno->data['listenevent'] = true;
 		$app->bruno->data['fixcode'] = self::$fixcode;
@@ -242,7 +268,6 @@ class ControllerScreen extends Controller {
 		$app->bruno->data['data_pitch_url_hide'] = false;
 		$pitch_id = STR::integer_map($pitch_enc, true);
 		if($pitch = Pitch::find($pitch_id)){
-			$offset = ceil($page/2)-1;
 			$app->bruno->data['data_brand_pic'] = $base_url.'/bruno/screen/images/logo.png';
 			if($pitch->brand_pic && $file = File::Where('id', $pitch->brand_pic)->first(array('id', 'uploaded_by', 'link', 'ori_ext', 'u_at'))){
 				$app->bruno->data['data_brand_pic'] = $base_url.'/files/'.$file->uploaded_by.'/'.$file->link.'.'.$file->ori_ext.'?'.$file->u_at;
@@ -251,18 +276,18 @@ class ControllerScreen extends Controller {
 			if($pitch->brand && strlen($pitch->brand)>0){
 				$app->bruno->data['data_brand'] = $pitch->brand;
 			}
-			if($offset>=0){
+			if($list['nbr']>=1){
 				if(isset($app->bruno->data['listenevent']) && $app->bruno->data['listenevent']){
-					if($page>0){
-						$app->bruno->data['slide_prev'] = 'https://'.$app->bruno->http_host.$fcuri.'/'.$pitch_enc.'/'.($page-1);
+					if($list['prev']!==false){
+						$app->bruno->data['slide_prev'] = 'https://'.$app->bruno->http_host.$fcuri.'/'.$pitch_enc.'/'.$list['prev'];
 					}
 				}
-				if($question = $pitch->question_offset($offset, array('id', 'u_at', 'parent_id', 'number', 'file_id', 'title', 'style'))){
+				if($question = $pitch->question_offset($list['nbr']-1, array('id', 'u_at', 'parent_id', 'number', 'file_id', 'title', 'style'))){
 					$session = false;
 					$app->bruno->data['data_pitch_code'] = false;
 					$app->bruno->data['data_pitch_code_length'] = 4;
 					if(!$preview && !self::$fixcode){
-						if($style=='question'){
+						if($list['style']=='question'){
 							$session = $this->set_session($question->id, 2); //Prepare session
 						} else {
 							$session = $this->set_session(null, 2); //Change to null so we can force mobiles to switch into the waiting screen
@@ -289,7 +314,7 @@ class ControllerScreen extends Controller {
 					}
 
 					//Start WAMP room
-					if(!$preview && !self::$fixcode && $style=='question'){
+					if(!$preview && !self::$fixcode && $list['style']=='question'){
 						if($app->bruno->data['data_pitch_code'] && $app->bruno->data['data_pitch_code'] > 0){
 							$entryData = array(
 								'topicid'	=> 'quiz_'.$app->bruno->data['data_pitch_code'],
@@ -303,7 +328,7 @@ class ControllerScreen extends Controller {
 						}
 					}
 
-					$app->bruno->data['slide_next'] = 'https://'.$app->bruno->http_host.$fcuri.'/'.$pitch_enc.'/'.($page+1);
+					$app->bruno->data['slide_next'] = 'https://'.$app->bruno->http_host.$fcuri.'/'.$pitch_enc.'/'.$list['next'];
 
 					$questionid_enc = STR::integer_map($question->id);
 
@@ -326,7 +351,7 @@ class ControllerScreen extends Controller {
 
 					$app->bruno->data['data_stats_iframe'] = $base_url.'/stats/'.$questionid_enc;
 
-					if($style=='answer'){
+					if($list['style']=='answer'){
 						//Do not refresh for answer
 						$app->bruno->data['data_stats_iframe'] .= '/answer';
 						$app->bruno->data['data_pitch_url_hide'] = true;
@@ -388,12 +413,12 @@ class ControllerScreen extends Controller {
 							unset($answers[$key]);
 							continue;
 						}
-						if($style=='answer' && !$correct && $question->number == $answer->number){
+						if($list['style']=='answer' && !$correct && $question->number == $answer->number){
 							$app->bruno->data[$prefix.'_correct'] = true;
 							$correct = true;
 						}
 					}
-					if($style=='answer' && !$correct){
+					if($list['style']=='answer' && !$correct){
 						foreach ($answers as $key => $answer) {
 							//Use the first one by default as correct if any error
 							$prefix = 'data_answer_'.$answer->number;
@@ -438,21 +463,21 @@ class ControllerScreen extends Controller {
 
 			//We display START or END slide
 			$app->bruno->data['get_style'] = 'answer';
-			if($page<=0){ //Start
+			if($list['nbr']<=0){ //Start
 				$session = $this->set_session(null, 1);
 				$app->bruno->data['data_pitch_title'] = $pitch->title;
 				if($user = User::find($pitch->c_by)){
 					$app->bruno->data['data_pitch_by'] = $app->trans->getBRUT('screen', 0, 7).$user->username; //By Bruno Martin
 				}
 				$app->bruno->data['slide_prev'] = false;
-				$app->bruno->data['slide_next'] = 'https://'.$app->bruno->http_host.$fcuri.'/'.$pitch_enc.'/1';
+				$app->bruno->data['slide_next'] = 'https://'.$app->bruno->http_host.$fcuri.'/'.$pitch_enc.'/1a';
 				$app->render('/bundles/bruno/screen/templates/screen/info/pitch.twig');
 				return true;
 			} else { // END
 				$session = $this->set_session(null, 0);
 				$app->bruno->data['data_pitch_title'] = strtoupper($app->trans->getBRUT('screen', 0, 6)); //Thank you
 				$app->bruno->data['data_pitch_by'] = '';
-				$last_answer = (2*$pitch->question->count());
+				$last_answer = $pitch->question->count() . 'b';
 				$app->bruno->data['slide_prev'] = 'https://'.$app->bruno->http_host.$fcuri.'/'.$pitch_enc.'/'.$last_answer;
 				$app->bruno->data['slide_next'] = false;
 				$app->render('/bundles/bruno/screen/templates/screen/info/pitch.twig');

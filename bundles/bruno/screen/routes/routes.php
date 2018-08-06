@@ -40,7 +40,7 @@ $app->get(
 )
 ->conditions(array(
 	'pitchid' => '[a-z0-9]+',
-	'page' => '\d+',
+	'page' => '\d+[ab]?',
 ))
 ->name('screen_pitch_get');
 
@@ -51,7 +51,7 @@ $app->get(
 )
 ->conditions(array(
 	'pitchid' => '[a-z0-9]+',
-	'page' => '\d+',
+	'page' => '\d+[ab]?',
 	'ext' => 'jpg|png',
 ))
 ->name('screen_picture_get');
@@ -63,7 +63,7 @@ $app->get(
 )
 ->conditions(array(
 	'pitchid' => '[a-z0-9]+',
-	'page' => '\d+',
+	'page' => '\d+[ab]?',
 ))
 ->name('screen_fixcode_get');
 

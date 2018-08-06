@@ -209,14 +209,13 @@ var showppt_launch = function(pitch_id, question_id){
 			if(items[i]["id"]==question_id){
 				showppt_list_index = index;
 			}
-			showppt_list_url.push(pitch_enc+'/'+index);
+			showppt_list_url.push(pitch_enc+'/'+index+'a');
 			showppt_list_scan.push(location.protocol+'//quiz.'+document.domainRoot+'/p/'+wrapper_integer_map(items[i]["id"]));
-			index++;
-			showppt_list_url.push(pitch_enc+'/'+index);
+			showppt_list_url.push(pitch_enc+'/'+index+'b');
 			showppt_list_scan.push(false);
 			index++;
 		}
-		showppt_list_url.push(pitch_enc+'/'+index);
+		showppt_list_url.push(pitch_enc+'/'+index+'a');
 		showppt_list_scan.push(false);
 		index++;
 		if(typeof showppt_list_url[showppt_list_index] != 'string'){

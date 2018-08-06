@@ -12,7 +12,6 @@ use \libs\Datassl;
 use \libs\Translation;
 use \bundles\bruno\data\models\Data;
 use \bundles\bruno\data\models\Inform;
-use \bundles\bruno\data\models\Fixcode;
 use \bundles\bruno\data\models\ModelBruno;
 use \bundles\bruno\wrapper\models\Action;
 use \bundles\bruno\data\models\data\Answer;
@@ -46,8 +45,8 @@ class ControllerTest extends Controller {
 		$app->bruno->time_record = true; //Display timing
 		$tp = null;
 
-		$tp = Question::encrypt(759);
-		\libs\Watch::php( $tp, Question::decrypt($tp), __FILE__, __LINE__, false, false, true);
+		$tp = '23b';
+		preg_match("/(\d+)([ab])/ui", $tp, $tp);
 
 
 		/*

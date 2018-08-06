@@ -5,7 +5,6 @@ namespace bundles\bruno\data\models\data;
 use \libs\Json;
 use \libs\STR;
 use \bundles\bruno\data\models\ModelBruno;
-use \bundles\bruno\data\models\Fixcode;
 use \bundles\bruno\data\models\Session;
 use \bundles\bruno\data\models\data\Answer;
 use \bundles\bruno\data\models\data\Pitch;

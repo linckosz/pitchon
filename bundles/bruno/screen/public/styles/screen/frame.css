@@ -1,5 +1,6 @@
 #ppt_frame {
 	display: table;
+	/*display: flex;*/
 	table-layout: fixed;
 	width: 100%;
 	height: 100%;
@@ -13,6 +14,7 @@
 }
 
 #ppt_frame_left {
+	position: relative;
 	display: table-cell;
 	width: 75%;
 	vertical-align: top;
@@ -38,7 +40,7 @@
 }
 
 #ppt_frame_left_bottom {
-	position: relative;
+	position: absolute;
 	width: 100%;
 	height: 100%;
 	box-sizing: border-box;
