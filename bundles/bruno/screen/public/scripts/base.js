@@ -44,8 +44,8 @@ var ppt_base_zoom_down_check = function(){
 		return false;
 	}
 	//We reduce the size of the text to make it visible fullscreen
-	$("#ppt_frame_right").height(Math.round(0.9*$(window).outerHeight()));
-	while(ppt_base_loop && ($('#ppt_frame_left_top')[0].getBoundingClientRect().height + $('#ppt_frame_left_bottom')[0].getBoundingClientRect().height) > 0.95*$(window).outerHeight()){
+	$("#ppt_frame_right").height(Math.round(0.90*$(window).outerHeight()));
+	while(ppt_base_loop && ($('#ppt_frame_left_top')[0].getBoundingClientRect().height + $('#ppt_frame_left_bottom')[0].getBoundingClientRect().height) > 0.90*$(window).outerHeight()){
 		ppt_base_loop = ppt_base_zoom_down();
 	}
 	/*
