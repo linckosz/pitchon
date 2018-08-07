@@ -194,17 +194,21 @@ submenu_list['app_answer_get_presentation'] = {
 
 	"powerpoint": {
 		"style": "button",
-		"class": "submenu_app_answer_get_presentation_methods",
-		"title": "<span class='fa fa-download'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2117, 'html'), //PowerPoint Presentation
+		"class": "display_none submenu_app_answer_get_presentation_methods",
+		"title": "<span class='fa fa-download'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2118, 'html'), //Download PPT
 		"now": function(Elem, subm){
 			//[plan]
 			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
 				Elem.find("[find=submenu_button_value]").addClass("submenu_button_paypal");
 			}
+			if(Bruno.storage.get('pitch', subm.param)){
+				Elem.removeClass('display_none');
+			}
 		},
 		"action": function(Elem, subm){
-			//[toto] => Download PPT
-			console.log("Download PPT");
+			if(Bruno.storage.get('pitch', subm.param)){
+				Bruno.storage.downloadPPT(subm.param);
+			}
 		},
 	},
 

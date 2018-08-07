@@ -74,6 +74,12 @@ var wrapper_href = window.location.href;
 //Delete URI
 //window.history.replaceState(null, null, document.location.pathname);
 
+var ppt_base_doscale = true;
+{% if data_question_style == 2 %}
+	//Do not rescale if we use picture mode
+	ppt_base_doscale = false;
+{% endif %}
+
 window.name = 'pitchonscreen';
 document.domainRoot = '{{ domain }}';
 document.brunoDev = '{{ bruno_dev }}';

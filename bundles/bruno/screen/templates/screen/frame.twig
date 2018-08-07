@@ -26,6 +26,12 @@
 			#ppt_frame_website_logo {
 				background-image: url("{{ data_brand_pic|raw }}");
 			}
+			{% if data_question_style == 2 %}
+				/* Enable to see the pictures on firefox */
+				#ppt_frame_left_bottom {
+					height: 100%;
+				}
+			{% endif %}
 		</style>
 		<script src="{{ _filelatest('/bruno/screen/scripts/screen/frame.js') }}" type="text/javascript"></script>
 		<script src="{{ _filelatest('/bruno/screen/scripts/screen/event.js') }}" type="text/javascript"></script>

@@ -42,7 +42,7 @@
 #ppt_frame_left_bottom {
 	position: absolute;
 	width: 100%;
-	height: 100%;
+	height: auto;
 	box-sizing: border-box;
 	padding: 2vw;
 	padding: 2vmin;

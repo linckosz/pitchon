@@ -14,6 +14,7 @@ use \bundles\bruno\data\models\data\Pitch;
 use \bundles\bruno\data\models\data\Question;
 use \bundles\bruno\data\models\data\User;
 use \bundles\bruno\wrapper\models\Action;
+use Screen\Capture;
 
 class ControllerApp extends Controller {
 
@@ -77,7 +78,7 @@ class ControllerApp extends Controller {
 		return exit(0);
 	}
 
-	public function sample_pitch_get($pitchid_enc){
+	public function old_sample_pitch_get($pitchid_enc){
 		$app = ModelBruno::getApp();
 		include_once($app->bruno->path.'/libs/TinyButStrong.php'); //Note: Composer is using a too old version of opentbs, and cannot use autoloader because of namespace issue, must be manual
 		$pitch_id = STR::integer_map($pitchid_enc, true);
@@ -243,6 +244,161 @@ class ControllerApp extends Controller {
 			header('Pragma: public');
 			$tbs->Show(true, 'Pitch_'.$pitchid_enc.'_[PowerPoint 2013+].pptx');
 			@unlink($ppt_temp);
+
+			return true;
+		}
+		return false;
+	}
+
+	protected function generate_zip_picture($pitch_enc, $page){
+		$app = ModelBruno::getApp();
+		if($pitch_id = STR::integer_map($pitch_enc, true)){
+			$ext = 'jpg';
+			$url = $_SERVER['REQUEST_SCHEME'].'://screen.'.$app->bruno->domain.'/fc/'.$pitch_enc.'/'.$page;
+			$width = 1280;
+			$height = 720;
+			$screenCapture = new Capture();
+			$screenCapture->setUrl($url);
+			$screenCapture->setWidth($width);
+			$screenCapture->setHeight($height);
+			$screenCapture->setClipWidth($width);
+			$screenCapture->setClipHeight($height);
+			$screenCapture->setImageType($ext);
+			$screenCapture->setOptions([
+			    'ignore-ssl-errors' => 'yes',
+			]);
+			$folder = new Folders;
+			$folder->createPath($app->bruno->filePath.'/microweber/jobs/'.$pitch_id.'/');
+			$folder->createPath($app->bruno->filePath.'/microweber/output/'.$pitch_id.'/');
+			$screenCapture->jobs->setLocation($app->bruno->filePath.'/microweber/jobs/'.$pitch_id.'/');
+			$screenCapture->output->setLocation($app->bruno->filePath.'/microweber/output/'.$pitch_id.'/');
+			$screenCapture->binPath = '/usr/local/bin/';
+			$screenCapture->save('tp1_'.$page.'.'.$ext); //JPEG compress is 75% (good ratio)
+			//$screenCapture->jobs->clean();
+			$path = $app->bruno->filePath.'/microweber/output/'.$pitch_id.'/'.$page.'.'.$ext;
+			@unlink($path);
+			rename($app->bruno->filePath.'/microweber/output/'.$pitch_id.'/tp1_'.$page.'.'.$ext, $path);
+			return $app->bruno->filePath.'/microweber/output/'.$pitch_id.'/'.$page.'.'.$ext;
+		}
+		return $app->bruno->path.'/bundles/bruno/wrapper/public/images/generic/unavailable.png';
+	}
+
+	public function sample_pitch_get($pitch_enc){
+		if(function_exists('proc_nice')){proc_nice(10);} //Higer the number is, lower the script priority is
+		set_time_limit(300); //It may take few minutes (max 5min)
+		$app = ModelBruno::getApp();
+		include_once($app->bruno->path.'/libs/TinyButStrong.php'); //Note: Composer is using a too old version of opentbs, and cannot use autoloader because of namespace issue, must be manual
+		$pitch_id = STR::integer_map($pitch_enc, true);
+		ob_clean();
+		flush();
+		
+		if($pitch = Pitch::find($pitch_id)){
+
+			$bruno_info = $app->trans->getBRUT('app', 6, 1); //1) Please use PowerPoint 2013 or later, with its Add-in Web Viewer installed. And click on "Enable Editing" if you see the notification. 2) Or simply use any browser.
+
+			//Clean sample directory
+			$folder = new Folders;
+			$folder->createPath($app->bruno->filePath.'/sample/');
+			$files = $folder->loopFolder(true);
+			foreach ($files as $file) {
+				if(filemtime($file) < time()-(24*3600)){
+					@unlink($file);
+				}
+			}
+
+			$ppt = $app->bruno->path.'/bundles/bruno/app/models/sample/lbqz.pptm';
+			$ppt_temp = $app->bruno->filePath.'/sample/lbqz_'.$pitch_enc.'_'.time().'.pptm';
+
+			copy($ppt, $ppt_temp);
+			usleep(50000);
+
+			$zip = new \ZipArchive();
+			//Make sure the copy function if completed
+			$open = 0;
+			$i = 0;
+			while($open!=1 && $i<1000){ //Wait 10s max
+				$open = $zip->open($ppt_temp);
+				usleep(10000);
+				$i++;
+			}
+
+			$questions = $pitch->questions(array('id', 'style'));
+
+			$tbs = new \clsTinyButStrong;
+			$tbs->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
+			$tbs->LoadTemplate($ppt_temp);
+			$page_max = $tbs->Plugin(OPENTBS_COUNT_SLIDES);
+			$tbs->LoadTemplate(false);
+
+			$page = 1;
+			$nbr = 1;
+
+			//Introduction page
+			$path_screen = $this->generate_zip_picture($pitch_enc, '0');
+			$zip->addFile($path_screen, 'ppt/media/0.jpg');
+			$rels = 'ppt/slides/_rels/slide'.$page.'.xml.rels';
+			$rels_xml = $zip->getFromName($rels);
+			if(!empty($rels_xml)){
+				$rels_xml = preg_replace("/image1.jpg/i", '0.jpg', $rels_xml);
+				$zip->addFromString($rels, $rels_xml);
+			}
+			$page++;
+
+			$nbr = 1;
+			foreach ($questions as $question) {
+				$arr = array('a', 'b');
+				foreach ($arr as $suffix) {
+					$path_screen = $this->generate_zip_picture($pitch_enc, $nbr.$suffix);
+					$zip->addFile($path_screen, 'ppt/media/'.$nbr.$suffix.'.jpg');
+					$rels = 'ppt/slides/_rels/slide'.$page.'.xml.rels';
+					$rels_xml = $zip->getFromName($rels);
+					if(!empty($rels_xml)){
+						$rels_xml = preg_replace("/image1.jpg/i", $nbr.$suffix.'.jpg', $rels_xml);
+						$zip->addFromString($rels, $rels_xml);
+					}
+					$page++;
+					if($page >= $page_max){
+						break;
+					}
+				}
+				$nbr++;
+			}
+
+			//Thank you page
+			$suffix = 'a';
+			$path_screen = $this->generate_zip_picture($pitch_enc, $nbr.$suffix);
+			$zip->addFile($path_screen, 'ppt/media/'.$nbr.$suffix.'.jpg');
+			$rels = 'ppt/slides/_rels/slide'.$page.'.xml.rels';
+			$rels_xml = $zip->getFromName($rels);
+			if(!empty($rels_xml)){
+				$rels_xml = preg_replace("/image1.jpg/i", $nbr.$suffix.'.jpg', $rels_xml);
+				$zip->addFromString($rels, $rels_xml);
+			}
+			$page++;
+			
+			$zip->close();
+
+			$tbs = new \clsTinyButStrong;
+			$tbs->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
+			$tbs->LoadTemplate($ppt_temp);
+
+			while($page <= $page_max ){
+				$tbs->PlugIn(OPENTBS_DELETE_SHEETS, $page);
+				$page++;
+			}
+
+			if(function_exists('proc_nice')){proc_nice(0);} //Reset the script priority to normal
+
+			//@unlink($ppt_temp);
+			header('Content-Description: File Transfer');
+			header('Content-Type: attachment/force-download;');
+			header('Content-Transfer-Encoding: binary');
+			header('Content-Type: application/force-download;');
+			header('Content-Disposition: attachment; filename="lbqz_'.$pitch_enc.'.pptm"');
+			header('Expires: 0');
+			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+			header('Pragma: public');
+			$tbs->Show(true, 'lbqz_'.$pitch_enc.'.pptm');
 
 			return true;
 		}

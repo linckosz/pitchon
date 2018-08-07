@@ -130,23 +130,19 @@ class ControllerScreen extends Controller {
 	}
 
 	public function pitch_picture_get($pitch_enc, $page=true, $ext=false){
-
-		
 		$app = ModelBruno::getApp();
 		$data = ModelBruno::getData();
 
 		$path = $app->bruno->path.'/bundles/bruno/wrapper/public/images/generic/unavailable.png';
-
 		if($pitch_id = STR::integer_map($pitch_enc, true)){
 
 			//Use fixcode to not display JS button and unique session
 			$url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/fc/'.$pitch_enc.'/'.$page;
 
-			$screenCapture = new Capture();
-			$screenCapture->setUrl($url);
-
 			$width = 1280;
 			$height = 720;
+			$screenCapture = new Capture();
+			$screenCapture->setUrl($url);
 			$screenCapture->setWidth($width);
 			$screenCapture->setHeight($height);
 			$screenCapture->setClipWidth($width);
@@ -161,10 +157,12 @@ class ControllerScreen extends Controller {
 			$screenCapture->jobs->setLocation($app->bruno->filePath.'/microweber/jobs/'.$pitch_id.'/');
 			$screenCapture->output->setLocation($app->bruno->filePath.'/microweber/output/'.$pitch_id.'/');
 			$screenCapture->binPath = '/usr/local/bin/';
-			$screenCapture->save($page.'.'.$ext); //JPEG compress is 75% (good ratio)
-			$screenCapture->jobs->clean();
-
+			$screenCapture->save('tp0_'.$page.'.'.$ext); //JPEG compress is 75% (good ratio)
+			//$screenCapture->jobs->clean();
 			$path = $app->bruno->filePath.'/microweber/output/'.$pitch_id.'/'.$page.'.'.$ext;
+			@unlink($path);
+			rename($app->bruno->filePath.'/microweber/output/'.$pitch_id.'/tp0_'.$page.'.'.$ext, $path);
+
 			$image = WideImage::load($path);
 		} else {
 			$image = WideImage::load($path);
