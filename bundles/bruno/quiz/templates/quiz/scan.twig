@@ -25,7 +25,7 @@
 		<div id="quiz_scan_code">
 			<div id="quiz_scan_code_or" class="display_none">{{ _trans('quiz', 0, 22, 'html') }}{# or #}</div>
 			<div>
-				<input id="quiz_scan_code_text" placeholder="{{ _trans('quiz', 0, 23, 'html') }}{# Type code #}" {% if data_scan_code %}value="{{ data_scan_code }}"{% endif %} />
+				<input id="quiz_scan_code_text" placeholder="{{ _trans('quiz', 0, 23, 'html') }}{# Type code #}" {% if data_scan_code %}value="{{ data_scan_code|lower }}"{% endif %} />
 				<span id="quiz_scan_code_btn" type="button"><span>{{ _trans('quiz', 0, 24, 'html') }}{# GO #}</span></span>
 			</div>
 		</div>

@@ -93,8 +93,8 @@ $(function() {
 		})
 
 	$("#quiz_scan_code_btn").on("click", function(){
-		var code = parseInt($("#quiz_scan_code_text").val(), 10);
-		if(code && code > 0){
+		var code = $("#quiz_scan_code_text").val().toString().toLowerCase();
+		if(code && code.length > 0){
 			window.location.href = '/c/'+code;
 		} else {
 			$("#quiz_scan_code_text").focus();
