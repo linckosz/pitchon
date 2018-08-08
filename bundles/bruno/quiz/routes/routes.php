@@ -29,7 +29,7 @@ $app->get(
 	'\bundles\bruno\quiz\controllers\ControllerQuiz:code_get'
 )
 ->conditions(array(
-	'code' => '\d+',
+	'code' => '[a-zA-Z0-9]+', //"only numeric" are real session, "with alphabet" are fix question code
 ))
 ->name('quiz_code_get');
 

@@ -184,7 +184,7 @@ class ControllerQuiz extends Controller {
 			if(!$session){
 				//Create the session, but must be in a try because hundred of users can do this operation at the same time
 				$session = new Session;
-				$session->md5 = $md5;
+				$session->md5 = Session::get_session_md5();
 				$session->question_id = $question_id;
 				$session->question_hashid = $code;
 				try {

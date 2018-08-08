@@ -304,7 +304,8 @@ class User extends ModelBruno {
 				}
 				$answer->save();
 			}
-
+/*
+[toto] => There is a mix between chinese pictures and english pictures
 			$question = new Question;
 			$question->style = 2; //Pictures
 			$question->parent_id = $pitch->id;
@@ -350,7 +351,7 @@ class User extends ModelBruno {
 				$answer->file_id = $file->id;
 				$answer->save();
 			}
-
+*/
 			$question = new Question;
 			$question->style = 1;
 			$question->parent_id = $pitch->id;

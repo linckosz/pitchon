@@ -27,61 +27,12 @@ class ControllerScreen extends Controller {
 
 	protected static $session = false;
 
-	protected function get_session_md5(){
-		$app = ModelBruno::getApp();
-		if(isset($_COOKIE[$app->bruno->data['bruno_dev'].'_screen_session_md5'])){
-			$md5 = $_COOKIE[$app->bruno->data['bruno_dev'].'_screen_session_md5'];
-		} else {
-			$md5 = md5(uniqid('', true));
-			//Find a unique md5
-			while(Session::Where('id', $md5)->first(array('id'))){
-				$md5 = md5(uniqid('', true));
-			}
-		}
-		$timelimit = time()+(8*3600); //8H maximum without consulting it
-		setcookie($app->bruno->data['bruno_dev'].'_screen_session_md5', $md5, $timelimit, '/');
-		$_COOKIE[$app->bruno->data['bruno_dev'].'_screen_session_md5'] = $md5;
-		return $md5;
-	}
-
-	protected function get_session_code(){
-		//Clean unused codes (older than 24H)
-		$limit = ModelBruno::getMStime() - (24*3600*1000); //Cut 24H
-		//For session where user_id exists, it means it's a fix session (no time limit!)
-		Session::WhereNotNull('code')->where('u_at', '<', $limit)->whereNull('question_hashid')->getQuery()->update(['code' => null]);
-
-		//Get a unique code number
-		$length = 4;
-		$tries = 5000;
-		$code = null;
-		$loop = true;
-		while($loop){
-			$loop = false;
-			$code = rand( pow(10, $length-1), pow(10, $length)-1 ); //for length 4, min is 1000, max is 9999
-			//Find a unique md5
-			if(Session::Where('code', $code)->first(array('id'))){
-				$loop = true;
-				$tries--;
-				if($tries<=0){
-					$tries = 5000;
-					$length = $length + 2; //It's easier for user to insert a even number length, 4 6 8
-				}
-				if($length>8){
-					$code = null;
-					$loop = false;
-					break;
-				}
-			}
-		}
-		return $code;
-	}
-
 	protected function get_session(){
 		if(self::$session){
 			return self::$session;
 		}
 		$app = ModelBruno::getApp();
-		$md5 = $this->get_session_md5();
+		$md5 = Session::get_session_md5();
 		$session = false;
 		if(isset($_COOKIE[$app->bruno->data['bruno_dev'].'_screen_session_id'])){
 			$session = Session::Where('id', $_COOKIE[$app->bruno->data['bruno_dev'].'_screen_session_id'])->where('md5', $md5)->first();
@@ -92,7 +43,7 @@ class ControllerScreen extends Controller {
 		if(!$session){
 			$session = new Session;
 			$session->md5 = $md5;
-			$session->code = $this->get_session_code();
+			$session->code = Session::get_session_code();
 			if($session->save()){
 				$info = new \stdClass;
 				$info->env = Action::getUserInfo();
@@ -730,8 +681,8 @@ class ControllerScreen extends Controller {
 	public function fixcode_get(){
 		$fixcode = false;
 		$get = ModelBruno::getData();
-		if(isset($get->preview) && $get->preview){
-			$fixcode = $get->preview;
+		if(isset($get->hashid) && $get->hashid){
+			$fixcode = $get->hashid;
 		}
 		return $this->session_get(false, $fixcode);
 	}
