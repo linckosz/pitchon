@@ -207,7 +207,7 @@ var showppt_launch = function(pitch_id, question_id){
 		for(var i in items){
 			page = 2 * (parseInt(i, 10)+1);
 			if(items[i]["id"]==question_id){
-				showppt_list_index = index;
+				showppt_list_index = index+1; //+1 is because the first page is the welcome
 			}
 			showppt_list_url.push(pitch_enc+'/'+index+'a');
 			showppt_list_scan.push(location.protocol+'//quiz.'+document.domainRoot+'/p/'+wrapper_integer_map(items[i]["id"]));
@@ -221,7 +221,7 @@ var showppt_launch = function(pitch_id, question_id){
 		if(typeof showppt_list_url[showppt_list_index] != 'string'){
 			showppt_list_index = 0;
 		}
-		showppt_insert_slide(index);
+		showppt_insert_slide();
 		result = showppt(showppt_list_index);
 	}
 	if(!result){
@@ -230,12 +230,12 @@ var showppt_launch = function(pitch_id, question_id){
 	return result;
 };
 
-var showppt_insert_slide = function(slides){
+var showppt_insert_slide = function(){;
 	var odd = true;
 	var slide;
 	var scrollbar_list = $("#showppt_scrollbar_list");
 	scrollbar_list.recursiveEmpty();
-	for(var index = 0; index < slides; index++){
+	for(var index = 0; index < showppt_list_url.length; index++){
 		slide = $("#-showppt_scrollbar_list_slide").clone();
 		slide
 			.prop('id', '')
@@ -257,6 +257,9 @@ var showppt_quiz_close = function(){
 };
 
 var showppt_close = function(){
+	if($("#showppt").hasClass('display_none')){
+		return false;
+	}
 	$('#showppt_iframe').prop('src', '');
 	$("#showppt").addClass('display_none');
 	$("#showppt_lazer").velocity("stop");
@@ -268,6 +271,7 @@ var showppt_close = function(){
 	app_generic_state.change({
 		showppt: false,
 	}, null, -1);
+	return true;
 };
 
 var showppt_timer = false;

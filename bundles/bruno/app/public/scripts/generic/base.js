@@ -169,7 +169,10 @@ var base_toggle_myQRcode = function(display){
 
 $(document).on('keyup', function(event){
 	event.stopPropagation();
-	if(event.which==27){ //esc
+	if(event.which == 27){ //esc
+		if(showppt_close()){
+			return true;
+		}
 		window.history.go(-1);
 	}
 });

@@ -45,39 +45,7 @@ class ControllerTest extends Controller {
 		$app->bruno->time_record = true; //Display timing
 		$tp = null;
 
-		$tp = '23b';
-		preg_match("/(\d+)([ab])/ui", $tp, $tp);
-
-
-		/*
-		$url = 'https://screen.pitchon.net/6qfsb/1';
-		$url = 'https://screen.pitchon.net/acpga/12';
-
-		$screenCapture = new Capture();
-		$screenCapture->setUrl($url);
-		
-		$screenCapture->setWidth(1280);
-		$screenCapture->setHeight(720);
-		$screenCapture->setClipWidth(1280);
-		$screenCapture->setClipHeight(720);
-		$screenCapture->setImageType('png');
-		
-		$screenCapture->setWidth(1920);
-		$screenCapture->setHeight(1080);
-		$screenCapture->setClipWidth(1920);
-		$screenCapture->setClipHeight(1080);
-		$screenCapture->setImageType('jpg');
-		$screenCapture->setOptions([
-		    'ignore-ssl-errors' => 'yes',
-		]);
-		$folder = new Folders;
-		$folder->createPath($app->bruno->filePath.'/microweber/jobs/');
-		$folder->createPath($app->bruno->filePath.'/microweber/output/');
-		$screenCapture->jobs->setLocation($app->bruno->filePath.'/microweber/jobs/');
-		$screenCapture->output->setLocation($app->bruno->filePath.'/microweber/output/');
-		$screenCapture->binPath = '/usr/local/bin/';
-		$screenCapture->save('test');
-		*/
+		$tp = $app->trans->getClientLanguage();
 
 		//wrapper_sendAction('', 'post', 'api/test');
 		//\libs\Watch::php( $db->getQueryLog() , 'QueryLog', __FILE__, __LINE__, false, false, true);

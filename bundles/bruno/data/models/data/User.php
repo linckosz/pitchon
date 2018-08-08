@@ -304,12 +304,11 @@ class User extends ModelBruno {
 				}
 				$answer->save();
 			}
-/*
-[toto] => There is a mix between chinese pictures and english pictures
+
 			$question = new Question;
 			$question->style = 2; //Pictures
 			$question->parent_id = $pitch->id;
-			$question->title = $app->trans->getBRUT('api', 4, 10); //(Fan Bingbing question in chinese) Which supercar is made in Lebanon?
+			$question->title = $app->trans->getBRUT('api', 4, 10); //(Fan Bingbing question in chinese)Which supercar is made in Lebanon?
 			$question->save();
 			//Additional answers
 			$answer = new Answer;
@@ -324,23 +323,19 @@ class User extends ModelBruno {
 			$answers = $question->answer;
 			foreach ($answers as $answer) {
 				if($answer->number==1){
-					$file_id = 10001;
-					if($language=='en'){ $file_id = 10005; }
-					$answer->title = '';
+					$file_id = 10005;
+					if($language=='zh-chs' || $language=='zh-cht'){ $file_id = 10001; }
 				} else if($answer->number==2){ //correct
-					$file_id = 10002;
-					if($language=='en'){ $file_id = 10006; }
-					$answer->title = '';
+					$file_id = 10006;
+					if($language=='zh-chs' || $language=='zh-cht'){ $file_id = 10002; }
 					$question->number = $answer->number;
 					$question->save();
 				} else if($answer->number==3){
-					$file_id = 10003;
-					if($language=='en'){ $file_id = 10007; }
-					$answer->title = '';
+					$file_id = 10007;
+					if($language=='zh-chs' || $language=='zh-cht'){ $file_id = 10003; }
 				} else if($answer->number==4){
-					$file_id = 10004;
-					if($language=='en'){ $file_id = 10008; }
-					$answer->title = '';
+					$file_id = 10008;
+					if($language=='zh-chs' || $language=='zh-cht'){ $file_id = 10004; }
 				}
 				$file = File::find($file_id)->replicate();
 				$file->updated_json = null;
@@ -349,9 +344,10 @@ class User extends ModelBruno {
 				$file->parent_id = $answer->id;
 				$file->saveParent();
 				$answer->file_id = $file->id;
+				$answer->title = '';
 				$answer->save();
 			}
-*/
+
 			$question = new Question;
 			$question->style = 1;
 			$question->parent_id = $pitch->id;
