@@ -144,8 +144,8 @@ class ControllerQuiz extends Controller {
 		$app = ModelBruno::getApp();
 		$app->bruno->data['data_scan_code'] = false;
 		$quiz_code = $app->bruno->data['bruno_dev'].'_quiz_code';
-		if(isset($_COOKIE) && isset($_COOKIE[$quiz_code]) && mb_strlen($_COOKIE[$quiz_code]) > 0){
-			$app->bruno->data['data_scan_code'] = intval($_COOKIE[$quiz_code]);
+		if(isset($_COOKIE) && isset($_COOKIE[$quiz_code]) && strlen($_COOKIE[$quiz_code]) > 0){
+			$app->bruno->data['data_scan_code'] = mb_strtolower($_COOKIE[$quiz_code]);
 		}
 		$app->render('/bundles/bruno/quiz/templates/quiz/scan.twig');
 		return true;
