@@ -1094,15 +1094,15 @@ Bruno.storage.getPitchURL = function(pitch_id, question_id){
 				var page_temp = 0;
 				for(var i in items){
 					if(question_id == items[i]['id']){
-						page = 2 * (parseInt(i, 10)+1);
+						page = parseInt(i, 10)+1;
 						break;
 					}
 				}
-				pitch_id = question['parent_id']; //Just in case we use the worng pitch_id as first parameter
-				return location.protocol+'//screen.'+document.domainRoot+"/"+wrapper_integer_map(pitch_id)+"/"+page;
+				pitch_id = question['parent_id']; //Just in case we use the wrong pitch_id as first parameter
+				return location.protocol+'//screen.'+document.domainRoot+"/"+wrapper_integer_map(pitch_id)+"/"+page+"a";
 			}
 		}
-		return location.protocol+'//screen.'+document.domainRoot+"/"+wrapper_integer_map(pitch_id);
+		return location.protocol+'//screen.'+document.domainRoot+"/"+wrapper_integer_map(pitch_id)+"/0";
 	}
 	return false;
 }

@@ -232,6 +232,11 @@ class ControllerScreen extends Controller {
 			$app->bruno->data['fixcode'] = false;
 		}
 
+		if($preview){
+			$app->bruno->data['fixpicture'] = false;
+			$app->bruno->data['show_hand'] = false;
+		}
+
 		$app->bruno->data['slide_prev'] = false;
 		$app->bruno->data['slide_next'] = false;
 		$app->bruno->data['get_refresh'] = false;
@@ -415,7 +420,7 @@ class ControllerScreen extends Controller {
 						$i++;
 					}
 					
-					if($list['style']=='question' && self::$show_hand){
+					if($list['style']=='question' && self::$show_hand && !$preview){
 						$app->bruno->data['show_hand'] = true;
 					}
 

@@ -156,8 +156,14 @@ submenu_list['app_answer_get_presentation'] = {
 			Elem.prop("id", "app_submenu_answer_get_presentation_preview_"+subm.id);
 		},
 		"action": function(Elem, subm){
-			var question_id = app_layers_answer_question['id'];
-			var pitch_id = Bruno.storage.get("question", question_id, "parent_id");
+			var pitch_id = subm.param;
+			var question_id = false;
+			if(typeof app_layers_answer_question == "object" && app_layers_answer_question != null && typeof app_layers_answer_question['id'] != "undefined"){
+				question_id = app_layers_answer_question['id'];
+				if(question_id){
+					pitch_id = Bruno.storage.get("question", question_id, "parent_id");
+				}
+			}
 			showppt_launch(pitch_id, question_id);
 		},
 	},
