@@ -134,6 +134,9 @@
 	right: 0;
 	top: 0;
 }
+#ppt_frame_right_top_domain_div.fixpicture {
+	display: none !important;
+}
 
 #ppt_frame_right_top.answer,
 #ppt_frame_right_top_code.answer,
@@ -154,6 +157,12 @@
 	padding-left: 0;
 	padding-top: 8%;
 	overflow: hidden;
+}
+#ppt_frame_right_bottom.invisible {
+	opacity: 0;
+}
+#ppt_frame_right_bottom.fixpicture {
+	display: none !important;
 }
 
 #ppt_question_picture {
@@ -229,6 +238,12 @@
 	-moz-opacity: 0.30;
 	-khtml-opacity: 0.30;
 }
+#ppt_frame_style.invisible {
+	opacity: 0;
+}
+#ppt_frame_style.fixpicture {
+	display: none !important;
+}
 
 #ppt_frame_average {
 	position: fixed;
@@ -256,4 +271,24 @@
 	border: 0 solid rgba(255, 255, 255, 0.39);
 	border-bottom-width: 1px;
 	box-sizing: border-box;
+}
+
+#ppt_frame_hand {
+	z-index: 2;
+	position: absolute;
+	height: 56%;
+	height: 56vmin;
+	right: -1%;
+	right: -1vmin;
+	bottom: -13%;
+	bottom: -13vmin;
+	transform: rotate(-9deg);
+	-webkit-transform: rotate(-9deg);
+	-moz-transform: rotate(-9deg);
+	-ms-transform: rotate(-9deg);
+	-o-transform: rotate(-9deg);
+}
+#ppt_frame_hand.fixpicture {
+	height: 65% !important;
+	height: 62vmin !important;
 }

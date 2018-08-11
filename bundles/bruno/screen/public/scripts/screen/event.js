@@ -40,6 +40,10 @@ if(ppt_event_slide.listenevent){
 				event.stopPropagation();
 			});
 	}
+	$('#ppt_event_slide').addClass('display_none');
+	$(document).on('mousemove', function(event){
+		$('#ppt_event_slide').removeClass('display_none');
+	});
 	$(document).on('mouseleave', function(event){
 		$('#ppt_event_slide').addClass('display_none');
 	});

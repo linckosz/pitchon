@@ -87,6 +87,7 @@ html, .font_sans_serif {
 
 #ppt_event_slide {
 	position: absolute;
+	z-index: 3;
 	right: 12vw;
 	right: 12vmin;
 	bottom: 1%;

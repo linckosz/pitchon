@@ -58,16 +58,20 @@
 			<div id="ppt_frame_right_top" class="{{ get_style }} {% if data_pitch_url_hide %}hidden{% endif %}">
 				<img id="ppt_frame_right_top_qrcode" class="{{ get_style }}" />
 				<div id="ppt_frame_right_top_domain" class="{{ get_style }} {% if not data_pitch_code %}hidden{% endif %}">
-					<div id="ppt_frame_right_top_domain_div">{{ shortlink }}</div>
+					<div id="ppt_frame_right_top_domain_div" class="{% if fixpicture %}fixpicture{% endif %}">{{ shortlink }}</div>
 				</div>
 			</div>
-			<div id="ppt_frame_right_bottom">
+			<div id="ppt_frame_right_bottom" class="{% if show_hand %}display_none invisible{% endif %} {% if fixpicture %}fixpicture{% endif %}">
 				{% if not fixcode %}
 					<iframe id="ppt_stats_iframe" name="ppt_stats_iframe" frameborder="0" scrolling="no" src="{{ data_stats_iframe|raw }}"></iframe>
 				{% endif %}
 			</div>
 		</div>
 	</div>
+
+	{% if show_hand %}
+		<img id="ppt_frame_hand" class="{% if fixpicture %}fixpicture{% endif %}" src="{{ _filelatest('/bruno/screen/images/hand.png') }}" />
+	{% endif %}
 
 	<div id="ppt_frame_website">
 		<span id="ppt_frame_website_logo"></span>
@@ -76,7 +80,7 @@
 
 	<span id="ppt_frame_average" class="visibility_hidden"></span>
 
-	<img id="ppt_frame_style" src="{{ _filelatest(data_question_style_picture) }}" />
+	<img id="ppt_frame_style" class="{% if show_hand %}display_none invisible{% endif %} {% if fixpicture %}fixpicture{% endif %}" src="{{ _filelatest(data_question_style_picture) }}" />
 
 	<div id="end_ppt_frame" class="visibility_hidden">
 		<script type="text/javascript">
@@ -85,6 +89,12 @@
 				$("#ppt_frame_right_top_qrcode").on('load', function(){
 					$("#ppt_frame_right_top").css("visibility", "visible");
 				});
+			{% endif %}
+			{% if show_hand %}
+				$(function() {
+					ppt_frame_hand_move();
+				});
+			{% else %}
 			{% endif %}
 			$("#ppt_frame_right_top_qrcode").attr('src', "{{ data_pitch_url|raw }}{% if body_preview %}&preview=1{% endif %}");
 		</script>

@@ -27,7 +27,8 @@
 	<div id="end_quiz_result_statistics" class="visibility_hidden">
 		{% if data_ad_link %}
 			<script type="text/javascript">
-				$('#ad_link, #ad_picture')
+				//$('#ad_link, #ad_picture')
+				$('#ad_link')
 					.addClass('base_pointer')
 					.on('click', function(){
 						{% if data_statistics_id and data_statistics_md5 %}

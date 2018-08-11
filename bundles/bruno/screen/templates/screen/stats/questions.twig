@@ -24,6 +24,7 @@
 				
 				statsjs_data_participants = parseInt(statsjs_data_participants, 10);
 				if(statsjs_data_participants){
+					window.parent.ppt_frame_iframe_show();
 					$("#ppt_stats_questions_participants_nbr").html(statsjs_data_participants);
 					$("#ppt_stats_questions_participants").removeClass("visibility_hidden");
 				} else {

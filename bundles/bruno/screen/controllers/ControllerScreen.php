@@ -25,6 +25,10 @@ class ControllerScreen extends Controller {
 
 	protected static $fixcode = false;
 
+	protected static $fixpicture = false;
+
+	protected static $show_hand = true;
+
 	protected static $session = false;
 
 	protected function get_session(){
@@ -87,8 +91,12 @@ class ControllerScreen extends Controller {
 		$path = $app->bruno->path.'/bundles/bruno/wrapper/public/images/generic/unavailable.png';
 		if($pitch_id = STR::integer_map($pitch_enc, true)){
 
+			$fixpicture = 1; //Default we fix the picture
+			if(isset($data->fixpicture) && !$data->fixpicture){
+				$fixpicture = 0;
+			}
 			//Use fixcode to not display JS button and unique session
-			$url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/fc/'.$pitch_enc.'/'.$page;
+			$url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/fc/'.$pitch_enc.'/'.$page.'?fixpicture='.$fixpicture;
 
 			$width = 1280;
 			$height = 720;
@@ -164,6 +172,15 @@ class ControllerScreen extends Controller {
 	}
 
 	public function pitch_fixcode_get($pitch_enc, $page=true){
+		$data = ModelBruno::getData();
+		//We default at fixing the picture (not PPT)
+		self::$fixpicture = true;
+		self::$show_hand = true;
+		if(isset($data->fixpicture) && !$data->fixpicture){
+			self::$fixpicture = false; //PPT with hand animation
+			self::$show_hand = false;
+		}
+
 		self::$fixcode = true;
 		return $this->pitch_get($pitch_enc, $page);
 	}
@@ -173,6 +190,10 @@ class ControllerScreen extends Controller {
 		$data = ModelBruno::getData();
 
 		$base_url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'];
+
+		$app->bruno->data['show_hand'] = false;
+
+		$app->bruno->data['fixpicture'] = self::$fixpicture;
 
 		$list = $this->set_page_array($page);
 
@@ -393,6 +414,10 @@ class ControllerScreen extends Controller {
 						$app->bruno->data['data_answers'][$key] = $prefix;
 						$i++;
 					}
+					
+					if($list['style']=='question' && self::$show_hand){
+						$app->bruno->data['show_hand'] = true;
+					}
 
 					if($question->style==1){
 						$app->render('/bundles/bruno/screen/templates/screen/qanda/questions.twig');
@@ -414,6 +439,7 @@ class ControllerScreen extends Controller {
 			$app->bruno->data['get_style'] = 'answer';
 			if($list['nbr']<=0){ //Start
 				$session = $this->set_session(null, 1);
+				$app->bruno->data['show_hand'] = false;
 				$app->bruno->data['data_pitch_title'] = $pitch->title;
 				if($user = User::find($pitch->c_by)){
 					$app->bruno->data['data_pitch_by'] = $app->trans->getBRUT('screen', 0, 7).$user->username; //By Bruno Martin
@@ -424,6 +450,7 @@ class ControllerScreen extends Controller {
 				return true;
 			} else { // END
 				$session = $this->set_session(null, 0);
+				$app->bruno->data['show_hand'] = false;
 				$app->bruno->data['data_pitch_title'] = strtoupper($app->trans->getBRUT('screen', 0, 6)); //Thank you
 				$app->bruno->data['data_pitch_by'] = '';
 				$last_answer = $pitch->question->count() . 'b';
