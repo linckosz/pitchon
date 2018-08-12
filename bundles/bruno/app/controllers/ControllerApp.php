@@ -158,6 +158,10 @@ class ControllerApp extends Controller {
 			$page_max = $tbs->Plugin(OPENTBS_COUNT_SLIDES);
 			$tbs->LoadTemplate(false);
 
+			//image1.jpg => White background
+			//image2.png => Transparent Score
+			//image3.png => Hand
+
 			$page = 1;
 			$nbr = 1;
 
@@ -169,7 +173,7 @@ class ControllerApp extends Controller {
 			$rels_xml = $zip->getFromName($rels);
 			if(!empty($rels_xml)){
 				$rels_xml = preg_replace("/image1.jpg/i", '0.jpg', $rels_xml);
-				$rels_xml = preg_replace("/image2.png/i", 'neutral.png', $rels_xml); //Do not display the hand
+				$rels_xml = preg_replace("/image3.png/i", 'neutral.png', $rels_xml); //Do not display the hand
 				$zip->addFromString($rels, $rels_xml);
 			}
 			//Faster animation to enable click next slide
@@ -194,20 +198,27 @@ class ControllerApp extends Controller {
 					if(!empty($rels_xml)){
 						$rels_xml = preg_replace("/image1.jpg/i", $nbr.$suffix.'.jpg', $rels_xml);
 						if($suffix!='a'){
-							$rels_xml = preg_replace("/image2.png/i", 'neutral.png', $rels_xml); //Do not display the hand
+							$rels_xml = preg_replace("/image3.png/i", 'neutral.png', $rels_xml); //Do not display the hand
 						}
 						$zip->addFromString($rels, $rels_xml);
 					}
-					if($suffix!='a'){
-						//Faster animation to enable click next slide
-						$rels = 'ppt/slides/slide'.$page.'.xml';
-						$rels_xml = $zip->getFromName($rels);
-						if(!empty($rels_xml)){
+					$rels = 'ppt/slides/slide'.$page.'.xml';
+					$rels_xml = $zip->getFromName($rels);
+					if(!empty($rels_xml)){
+						if($suffix=='a'){
+							$rels_xml = preg_replace("/lbqz@Type/i", 'question', $rels_xml);
+						} else if($suffix=='b'){
+							$rels_xml = preg_replace("/lbqz@Type/i", 'answer', $rels_xml);
+						}
+						$rels_xml = preg_replace("/lbqz@Question/i", $_SERVER['REQUEST_SCHEME'].'://screen.'.$app->bruno->domain.'/'.$pitch_enc.'/'.$nbr.$suffix.'.jpg', $rels_xml);
+						//$rels_xml = preg_replace("/lbqz@Score/i", $_SERVER['REQUEST_SCHEME'].'://screen.'.$app->bruno->domain.'/stats/'.$session_code.'.jpg', $rels_xml); //toto
+						if($suffix!='a'){
+							//Faster animation to enable click next slide
 							$rels_xml = preg_replace("/dur=\"\d+\"/i", 'dur="1"', $rels_xml);
 							$rels_xml = preg_replace("/delay=\"\d+\"/i", 'delay="0"', $rels_xml);
 							$rels_xml = preg_replace("/<p:childTnLst>.*<\/p:childTnLst>/i", '', $rels_xml);
-							$zip->addFromString($rels, $rels_xml);
 						}
+						$zip->addFromString($rels, $rels_xml);
 					}
 					$page++;
 					if($page >= $page_max){
@@ -217,19 +228,19 @@ class ControllerApp extends Controller {
 				$nbr++;
 			}
 
-			//Thank you page
+			//[$page_max] Thank you page
 			$suffix = 'a';
 			$path_screen = $this->generate_zip_picture($pitch_enc, $nbr.$suffix);
 			$zip->addFile($path_screen, 'ppt/media/'.$nbr.$suffix.'.jpg');
-			$rels = 'ppt/slides/_rels/slide'.$page.'.xml.rels';
+			$rels = 'ppt/slides/_rels/slide'.$page_max.'.xml.rels';
 			$rels_xml = $zip->getFromName($rels);
 			if(!empty($rels_xml)){
 				$rels_xml = preg_replace("/image1.jpg/i", $nbr.$suffix.'.jpg', $rels_xml);
-				$rels_xml = preg_replace("/image2.png/i", 'neutral.png', $rels_xml); //Do not display the hand
+				$rels_xml = preg_replace("/image3.png/i", 'neutral.png', $rels_xml); //Do not display the hand
 				$zip->addFromString($rels, $rels_xml);
 			}
 			//Faster animation to enable click next slide
-			$rels = 'ppt/slides/slide'.$page.'.xml';
+			$rels = 'ppt/slides/slide'.$page_max.'.xml';
 			$rels_xml = $zip->getFromName($rels);
 			if(!empty($rels_xml)){
 				$rels_xml = preg_replace("/dur=\"\d+\"/i", 'dur="1"', $rels_xml);
@@ -237,7 +248,6 @@ class ControllerApp extends Controller {
 				$rels_xml = preg_replace("/<p:childTnLst>.*<\/p:childTnLst>/i", '', $rels_xml);
 				$zip->addFromString($rels, $rels_xml);
 			}
-			$page++;
 			
 			$zip->close();
 
@@ -245,7 +255,8 @@ class ControllerApp extends Controller {
 			$tbs->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
 			$tbs->LoadTemplate($ppt_temp);
 
-			while($page <= $page_max ){
+			//We keep the last page which is the Thank you age
+			while($page <= $page_max-1 ){
 				$tbs->PlugIn(OPENTBS_DELETE_SHEETS, $page);
 				$page++;
 			}

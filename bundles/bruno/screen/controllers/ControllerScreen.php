@@ -100,6 +100,11 @@ class ControllerScreen extends Controller {
 
 			$width = 1280;
 			$height = 720;
+			//We don't adapt the resultion, we only fit the ratio
+			if(isset($data->width) && is_numeric($data->width) && $data->width>0 && isset($data->height) && is_numeric($data->height) && $data->height>0){
+				$width = round($height*$data->width/$data->height);
+			}
+			
 			$screenCapture = new Capture();
 			$screenCapture->setUrl($url);
 			$screenCapture->setWidth($width);

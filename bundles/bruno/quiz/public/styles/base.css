@@ -110,7 +110,8 @@ html, .font_sans_serif {
 	border: 0 solid;
 	border-radius: 0.6vw;
 	border-radius: 0.6vmin;
-	background-color: #FBA026;
+	background-color: #FFFFFF;
+	color: #023762;
 	display: inline-block;
 	font-size: 5.2vw;
 	font-size: 5.2vmin;
