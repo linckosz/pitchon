@@ -86,7 +86,7 @@
 		</script>
 	</div>
 
-	<div id="ppt_stats_questions_participants" class="visibility_hidden" title="{{ _trans('screen', 0, 5, 'html') }}{# answers #}"><span id="ppt_stats_questions_participants_nbr">{{ data_participants }}</span> <span>{{ _trans('screen', 0, 5, 'html') }}{# answers #}<span></div>
+	<div id="ppt_stats_questions_participants" class="{% if not fix_stats or data_participants == 0 %}visibility_hidden{% endif %}" title="{{ _trans('screen', 0, 5, 'html') }}{# answers #}"><span id="ppt_stats_questions_participants_nbr">{{ data_participants }}</span> <span>{{ _trans('screen', 0, 5, 'html') }}{# answers #}<span></div>
 
 	<div id="ppt_stats_questions_wrapper">
 		<div id="ppt_stats_questions_correct">
@@ -100,7 +100,9 @@
 
 	<div id="end_ppt_stats_questions" class="visibility_hidden">
 		<script type="text/javascript">
-			{% if get_refresh %}
+			{% if fix_stats %}
+				//Do nothing, for picture the result should not move
+			{% elseif get_refresh %}
 				$("#ppt_stats_questions_participants_nbr").html("");
 				$("#ppt_stats_questions_participants").addClass("visibility_hidden");
 				$("#ppt_stats_questions_number_correct").html("");

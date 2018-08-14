@@ -46,18 +46,14 @@ class Answered extends Model {
 		}
 	}
 
-	public static function isAuthorized($guest_id, $statistics_id, $question_id){
+	public static function isAuthorized($guest_id, $statistics_id, $question_id, $fixcode=false){
 		//Check if the guest already answered on this session
-		if(Answered::Where('guest_id', $guest_id)->where('statistics_id', $statistics_id)->where('question_id', $question_id)->first(array('id'))){
+		if($answered = Answered::Where('guest_id', $guest_id)->where('statistics_id', $statistics_id)->where('question_id', $question_id)->first(array('id', 'c_at'))){
+			if($fixcode && $answered->c_at <= (ModelBruno::getMStime() - 60*1000)){ //Gap of 1min only for fixcode
+				return true;
+			}
 			return false;
 		}
-		//Check if the guest already answered on another session within 8H
-		/*
-		$timems_limit = ModelBruno::getMStime() - 8*3600*1000; //Gap of 8H
-		if(Answered::Where('guest_id', $guest_id)->where('c_at', '>', $timems_limit)->where('question_id', $question_id)->first(array('id'))){
-			return false;
-		}
-		*/
 		return true;
 	}
 

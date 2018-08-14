@@ -27,8 +27,8 @@ function my_autoload($pClassName){
 	}
 }
 
-// \micro_seconds();
-function micro_seconds(){
+// \ms_seconds(); Milliseconds
+function ms_seconds(){
 	list($usec, $sec) = explode(' ', microtime());
 	return (1000 * (int)$sec) + round(1000 * (float)$usec);
 }

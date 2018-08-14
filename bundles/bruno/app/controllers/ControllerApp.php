@@ -96,17 +96,17 @@ class ControllerApp extends Controller {
 			    'ignore-ssl-errors' => 'yes',
 			]);
 			$folder = new Folders;
-			$folder->createPath($app->bruno->filePath.'/microweber/jobs/'.$pitch_id.'/');
-			$folder->createPath($app->bruno->filePath.'/microweber/output/'.$pitch_id.'/');
-			$screenCapture->jobs->setLocation($app->bruno->filePath.'/microweber/jobs/'.$pitch_id.'/');
-			$screenCapture->output->setLocation($app->bruno->filePath.'/microweber/output/'.$pitch_id.'/');
+			$folder->createPath($app->bruno->filePath.'/microweber/jobs/pitch/'.$pitch_id.'/');
+			$folder->createPath($app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/');
+			$screenCapture->jobs->setLocation($app->bruno->filePath.'/microweber/jobs/pitch/'.$pitch_id.'/');
+			$screenCapture->output->setLocation($app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/');
 			$screenCapture->binPath = '/usr/local/bin/';
 			$screenCapture->save('tp1_'.$page.'.'.$ext); //JPEG compress is 75% (good ratio)
 			//$screenCapture->jobs->clean();
-			$path = $app->bruno->filePath.'/microweber/output/'.$pitch_id.'/'.$page.'.'.$ext;
+			$path = $app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/'.$page.'.'.$ext;
 			@unlink($path);
-			rename($app->bruno->filePath.'/microweber/output/'.$pitch_id.'/tp1_'.$page.'.'.$ext, $path);
-			return $app->bruno->filePath.'/microweber/output/'.$pitch_id.'/'.$page.'.'.$ext;
+			rename($app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/tp1_'.$page.'.'.$ext, $path);
+			return $path;
 		}
 		return $app->bruno->path.'/bundles/bruno/wrapper/public/images/generic/unavailable.png';
 	}
@@ -158,6 +158,7 @@ class ControllerApp extends Controller {
 			$page_max = $tbs->Plugin(OPENTBS_COUNT_SLIDES);
 			$tbs->LoadTemplate(false);
 
+			//NOTE => The name may change once the new PPT is created (or if PPT sample is update)
 			//image1.jpg => White background
 			//image2.png => Transparent Score
 			//image3.png => Hand
@@ -205,13 +206,15 @@ class ControllerApp extends Controller {
 					$rels = 'ppt/slides/slide'.$page.'.xml';
 					$rels_xml = $zip->getFromName($rels);
 					if(!empty($rels_xml)){
+						$hashid = Question::encrypt($question->id);
 						if($suffix=='a'){
 							$rels_xml = preg_replace("/lbqz@Type/i", 'question', $rels_xml);
+							$rels_xml = preg_replace("/lbqz@Score/i", $_SERVER['REQUEST_SCHEME'].'://screen.'.$app->bruno->domain.'/statspic/question/'.$hashid.'.png', $rels_xml);
 						} else if($suffix=='b'){
 							$rels_xml = preg_replace("/lbqz@Type/i", 'answer', $rels_xml);
+							$rels_xml = preg_replace("/lbqz@Score/i", $_SERVER['REQUEST_SCHEME'].'://screen.'.$app->bruno->domain.'/statspic/answer/'.$hashid.'.png', $rels_xml);
 						}
 						$rels_xml = preg_replace("/lbqz@Question/i", $_SERVER['REQUEST_SCHEME'].'://screen.'.$app->bruno->domain.'/'.$pitch_enc.'/'.$nbr.$suffix.'.jpg', $rels_xml);
-						//$rels_xml = preg_replace("/lbqz@Score/i", $_SERVER['REQUEST_SCHEME'].'://screen.'.$app->bruno->domain.'/stats/'.$session_code.'.jpg', $rels_xml); //toto
 						if($suffix!='a'){
 							//Faster animation to enable click next slide
 							$rels_xml = preg_replace("/dur=\"\d+\"/i", 'dur="1"', $rels_xml);

@@ -203,22 +203,18 @@ video {
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.60);
 	background-color: #2ECC71;
 	color: #ECF0F1;
-	transition: background-color 0.3s;
+	transition: background-color 0.1s;
 }
 
 #quiz_scan_code_btn:hover, #quiz_scan_code_btn:focus {
 	background-color: #27AE60;
 }
 
-#quiz_scan_code_btn span {
-	display: block;
-	padding: 6px 12px;
-	height: 10.0vw;
-	height: 10.0vmin;
-	line-height: 10.0vw;
-	line-height: 10.0vmin;
+#quiz_scan_code_btn:active, #quiz_scan_code_btn:focus {
+	background-color: #62CB8E;
 }
 
+/*
 #quiz_scan_code_btn:before {
 	content: "";
 	position: absolute;
@@ -235,11 +231,23 @@ video {
 	-o-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);
 }
-
+*/
+/*This makes Firefox not working properly, we cannot click on GO*/
+/*
 #quiz_scan_code_btn:active:before {
-  width: 140%;
-  padding-top: 140%;
-  transition: width 0.2s ease-out, padding-top 0.2s ease-out;
+	width: 140%;
+	padding-top: 140%;
+	transition: width 0.2s ease-out, padding-top 0.2s ease-out;
+}
+*/
+
+#quiz_scan_code_btn span {
+	display: block;
+	padding: 6px 12px;
+	height: 10.0vw;
+	height: 10.0vmin;
+	line-height: 10.0vw;
+	line-height: 10.0vmin;
 }
 
 /* ---------------------- */

@@ -11,6 +11,7 @@ use \bundles\bruno\wrapper\models\Action;
 use \bundles\bruno\data\models\ModelBruno;
 use \bundles\bruno\data\models\Session;
 use \bundles\bruno\data\models\Statistics;
+use \bundles\bruno\data\models\Answered;
 use \bundles\bruno\data\models\data\Answer;
 use \bundles\bruno\data\models\data\File;
 use \bundles\bruno\data\models\data\Question;
@@ -116,16 +117,16 @@ class ControllerScreen extends Controller {
 			    'ignore-ssl-errors' => 'yes',
 			]);
 			$folder = new Folders;
-			$folder->createPath($app->bruno->filePath.'/microweber/jobs/'.$pitch_id.'/');
-			$folder->createPath($app->bruno->filePath.'/microweber/output/'.$pitch_id.'/');
-			$screenCapture->jobs->setLocation($app->bruno->filePath.'/microweber/jobs/'.$pitch_id.'/');
-			$screenCapture->output->setLocation($app->bruno->filePath.'/microweber/output/'.$pitch_id.'/');
+			$folder->createPath($app->bruno->filePath.'/microweber/jobs/pitch/'.$pitch_id.'/');
+			$folder->createPath($app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/');
+			$screenCapture->jobs->setLocation($app->bruno->filePath.'/microweber/jobs/pitch/'.$pitch_id.'/');
+			$screenCapture->output->setLocation($app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/');
 			$screenCapture->binPath = '/usr/local/bin/';
 			$screenCapture->save('tp0_'.$page.'.'.$ext); //JPEG compress is 75% (good ratio)
 			//$screenCapture->jobs->clean();
-			$path = $app->bruno->filePath.'/microweber/output/'.$pitch_id.'/'.$page.'.'.$ext;
+			$path = $app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/'.$page.'.'.$ext;
 			@unlink($path);
-			rename($app->bruno->filePath.'/microweber/output/'.$pitch_id.'/tp0_'.$page.'.'.$ext, $path);
+			rename($app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/tp0_'.$page.'.'.$ext, $path);
 
 			$image = WideImage::load($path);
 		} else {
@@ -475,14 +476,20 @@ class ControllerScreen extends Controller {
 		return true;
 	}
 
-	public function stats_get($questionid_enc, $step='question'){
+	public function stats_get($questionid_enc, $step='question', $question_hashid=false){
 		$app = ModelBruno::getApp();
-		$data = $this->stats_data($questionid_enc);
+		$data = $this->stats_data($questionid_enc, $question_hashid);
 		$app->bruno->data['data_step'] = 'question';
 		$app->bruno->data['get_refresh'] = true;
 		if($step=='answer'){
 			$app->bruno->data['get_refresh'] = false;
 			$app->bruno->data['data_step'] = 'answer';
+		}
+		if(!isset($app->bruno->data['fix_stats'])){
+			$app->bruno->data['fix_stats'] = false;
+		}
+		if($app->bruno->data['fix_stats']){
+			$app->bruno->data['get_refresh'] = false;
 		}
 		if(isset($data['data_question_style'])){
 			if($data['data_question_style']==1){
@@ -500,6 +507,7 @@ class ControllerScreen extends Controller {
 			}
 		}
 		$app->render('/bundles/bruno/screen/templates/generic/blank.twig');
+		return true;
 	}
 
 	public function statsjson_get($questionid_enc){
@@ -519,23 +527,115 @@ class ControllerScreen extends Controller {
 		}
 	}
 
-	public function stats_data($questionid_enc){
+	public function statshash_get($step, $question_hashid){
+		$app = ModelBruno::getApp();
+		$app->bruno->data['fix_stats'] = true;
+		return $this->stats_get(false, $step, $question_hashid);
+	}
+
+	public function statspic_get($step, $question_hashid){
+		$app = ModelBruno::getApp();
+		$data = ModelBruno::getData();
+		$ext = 'png'; //We need to keep the transparency background
+		$timestamp = time()-1200; //By default we get the last 20min of data
+		if(isset($data->timestamp) && intval($data->timestamp) >= 0){
+			$timestamp = intval($data->timestamp);
+		}
+		$url = $_SERVER['REQUEST_SCHEME'].'://screen.'.$app->bruno->domain.'/statshash/'.$step.'/'.$question_hashid.'?timestamp='.$timestamp;
+		$width = 600;
+		$height = 500;
+		if(isset($data->width) && is_numeric($data->width) && $data->width>0 && isset($data->height) && is_numeric($data->height) && $data->height>0){
+			//The 1.5 rtio helps to avoid too much aliasing on PPT
+			$width = round(1.5*$data->width);
+			$height = round(1.5*$data->height);
+		}
+		$screenCapture = new Capture();
+		$screenCapture->setUrl($url);
+		$screenCapture->setWidth($width);
+		$screenCapture->setHeight($height);
+		$screenCapture->setClipWidth($width);
+		$screenCapture->setClipHeight($height);
+		$screenCapture->setImageType($ext);
+		$screenCapture->setOptions([
+		    'ignore-ssl-errors' => 'yes',
+		]);
+		$folder = new Folders;
+		$folder->createPath($app->bruno->filePath.'/microweber/jobs/hash/');
+		$folder->createPath($app->bruno->filePath.'/microweber/output/hash/');
+		$screenCapture->jobs->setLocation($app->bruno->filePath.'/microweber/jobs/hash/');
+		$screenCapture->output->setLocation($app->bruno->filePath.'/microweber/output/hash/');
+		$screenCapture->binPath = '/usr/local/bin/';
+		$screenCapture->save('tp0_'.$question_hashid.'.'.$ext); //JPEG compress is 75% (good ratio)
+		//$screenCapture->jobs->clean();
+		$path = $app->bruno->filePath.'/microweber/output/hash/'.$question_hashid.'.'.$ext;
+		@unlink($path);
+		rename($app->bruno->filePath.'/microweber/output/hash/tp0_'.$question_hashid.'.'.$ext, $path);
+		$image = WideImage::load($path);
+		$image->output($ext);
+		session_write_close();
+		return exit(0);
+	}
+
+	public function stats_data($questionid_enc, $question_hashid=false){
 		$app = ModelBruno::getApp();
 		$get = ModelBruno::getData();
+		if($question_hashid && $question_id = Question::decrypt($question_hashid)){
+			$questionid_enc = STR::integer_map($question_id);
+		}
+		//$ms_time is used for Fixcode, not for session
+		$ms_time = 0;
 		$question_id = STR::integer_map($questionid_enc, true);
 		$question = Question::Where('id', $question_id)->first(array('id', 'style', 'number'));
 		$statistics = false;
 		$preview = false;
-		$app->bruno->data['data_pitch_code'] = false;
+		$app->bruno->data['data_pitch_code'] = false; //used to refresh the client mobile screen with next question
 		if(isset($get->preview) && $get->preview){
 			$preview = true;
-		} else {
-			if(isset($_COOKIE[$app->bruno->data['bruno_dev'].'_screen_session_id'])){
-				if($session = Session::find($_COOKIE[$app->bruno->data['bruno_dev'].'_screen_session_id'])){
-					$statistics = Statistics::Where('session_id', $session->id)->where('question_id', $question_id)->first();
-					if(!is_null($session->code)){
-						$app->bruno->data['data_pitch_code'] = $session->code;
+		} else if($question_hashid && $session = Session::Where('question_hashid', $question_hashid)->first()){
+			if($statistics = Statistics::Where('session_id', $session->id)->where('question_id', $question_id)->first()){
+				//Initialize a fake $statistics (faster than populating from database), and we don't need to save it
+				$statistics->style = $question->style;
+				$statistics->number = $question->number;
+				$statistics->answers = 0;
+
+				$array_letters = ['a', 'b', 'c', 'd', 'e', 'f'];
+				foreach ($array_letters as $letter) {
+					if(!is_null($statistics->$letter)){
+						$statistics->$letter = 0;
 					}
+					if(!is_null($statistics->{'t_'.$letter})){
+						$statistics->{'t_'.$letter} = 0;
+					}
+				}
+
+				//By default we get the last 20min of data. We use milliseconds because the database is using ms too
+				$ms_time = ModelBruno::getMStime() - (1200*1000);
+				if(isset($data->timestamp) && intval($data->timestamp) >= 0){
+					$ms_time = 1000*intval($data->timestamp);
+					//Containe a check within 24H
+					if($ms_time < (ModelBruno::getMStime() - (24*3600*1000)) || $ms_time > ModelBruno::getMStime()){
+						$ms_time = ModelBruno::getMStime() - (1200*1000);
+					}
+				}
+
+				if($question && $answereds = Answered::Where('c_at', '>=', $ms_time)->where('statistics_id', $statistics->id)->where('style', $question->style)->where('question_id', $question->id)->get()){
+					foreach ($answereds as $answered) {
+						$letter = ModelBruno::numToAplha($answered->number);
+						$statistics->answers++;
+						$statistics->$letter += 1;
+						$statistics->{'t_'.$letter} += $answered->{'s_'.$letter};
+					}
+				}
+
+				if($statistics->answers <= 0){
+					$statistics = false; //Make sure we display nothing
+				}
+			}
+		} else if(isset($_COOKIE[$app->bruno->data['bruno_dev'].'_screen_session_id'])){
+			if($session = Session::find($_COOKIE[$app->bruno->data['bruno_dev'].'_screen_session_id'])){
+				$statistics = Statistics::Where('session_id', $session->id)->where('question_id', $question_id)->first();
+				if(!is_null($session->code)){
+					$app->bruno->data['data_pitch_code'] = $session->code;
 				}
 			}
 		}

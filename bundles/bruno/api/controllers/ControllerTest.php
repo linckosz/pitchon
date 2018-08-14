@@ -12,6 +12,7 @@ use \libs\Datassl;
 use \libs\Translation;
 use \bundles\bruno\data\models\Data;
 use \bundles\bruno\data\models\Inform;
+use \bundles\bruno\data\models\Answered;
 use \bundles\bruno\data\models\ModelBruno;
 use \bundles\bruno\wrapper\models\Action;
 use \bundles\bruno\data\models\data\Answer;
@@ -45,8 +46,14 @@ class ControllerTest extends Controller {
 		$app->bruno->time_record = true; //Display timing
 		$tp = null;
 
-		$tp = $app->trans->getClientLanguage();
 
+		$answereds = Answered::get(array('id', 'number', 'answer_id'));
+		foreach ($answereds as $answered) {
+			$answer = Answer::Where('id', $answered->answer_id)->first(array('id', 'number'));
+			Answered::Where('id', $answered->id)->getQuery()->update(['number' => $answer->number]);
+		}
+		
+		
 		//wrapper_sendAction('', 'post', 'api/test');
 		//\libs\Watch::php( $db->getQueryLog() , 'QueryLog', __FILE__, __LINE__, false, false, true);
 		\libs\Watch::php( $tp, time(), __FILE__, __LINE__, false, false, true);

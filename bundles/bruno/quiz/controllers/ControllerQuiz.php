@@ -22,6 +22,8 @@ class ControllerQuiz extends Controller {
 
 	protected $prepared = false;
 
+	protected $fixcode = false;
+
 	//In Controllers, __construct does not work, so we use prepare()
 	protected function prepare(){
 		if($this->prepared){
@@ -291,6 +293,9 @@ class ControllerQuiz extends Controller {
 		} else {
 			$statistics_id = STR::integer_map($statisticsid_enc, true);
 			if($statistics = Statistics::Where('id', $statistics_id)->first()){
+				if(Session::Where('id', $statistics->session_id)->whereNotNull('question_hashid')->first(array('id'))){
+					$this->fixcode = true;
+				}
 				$app->bruno->data['data_statistics_id'] = $statistics->id;
 				$app->bruno->data['data_statistics_md5'] = $statistics->md5;
 				$question = Question::Where('id', $statistics->question_id)->first(array('id', 'style', 'number', 'parent_id'));
@@ -314,11 +319,12 @@ class ControllerQuiz extends Controller {
 					}
 				}
 				//Check if already answered
-				if(!Answered::isAuthorized($guest_id, $statistics->id, $statistics->question_id)){
+				if(!Answered::isAuthorized($guest_id, $statistics->id, $statistics->question_id, $this->fixcode)){
 					$app->bruno->data['data_answered'] = true;
 					$app->render('/bundles/bruno/quiz/templates/quiz/result/wait.twig');
 					return true;
-				} else if($answer = Answer::Where('id', $answer_id)->first(array('id', 'number', 'parent_id'))){
+				}
+				if($answer = Answer::Where('id', $answer_id)->first(array('id', 'number', 'parent_id'))){
 					$letter = $answer->letter();
 					if(isset($statistics->$letter)){
 						if($question){
@@ -335,6 +341,7 @@ class ControllerQuiz extends Controller {
 							$answered->answer_id = $answer->id;
 							$answered->style = $question->style;
 							$answered->correct = null;
+							$answered->number = $answer->number;
 							if($question->style==1 || $question->style==2){ //Answers or Pictures
 								$answered->correct = $app->bruno->data['data_correct'];
 							}
@@ -406,6 +413,9 @@ class ControllerQuiz extends Controller {
 		} else {
 			$statistics_id = STR::integer_map($statisticsid_enc, true);
 			if($statistics = Statistics::Where('id', $statistics_id)->first()){
+				if(Session::Where('id', $statistics->session_id)->whereNotNull('question_hashid')->first(array('id'))){
+					$this->fixcode = true;
+				}
 				$question = Question::Where('id', $statistics->question_id)->first(array('id', 'style', 'parent_id'));
 				if($question && $pitch = Pitch::find($question->parent_id)){
 					Vanquish::set(array('host_id' => $pitch->c_by,)); //This will hold a guest to the latest pitch creator
@@ -426,11 +436,12 @@ class ControllerQuiz extends Controller {
 					}
 				}
 				//Check if already answered
-				if(!Answered::isAuthorized($guest_id, $statistics->id, $statistics->question_id)){
+				if(!Answered::isAuthorized($guest_id, $statistics->id, $statistics->question_id, $this->fixcode)){
 					$app->bruno->data['data_answered'] = true;
 					$app->render('/bundles/bruno/quiz/templates/quiz/result/wait.twig');
 					return true;
-				} else if($question){
+				}
+				if($question){
 					$data = ModelBruno::getData();					
 					$answered = new Answered;
 					$answered->guest_id = $guest_id;

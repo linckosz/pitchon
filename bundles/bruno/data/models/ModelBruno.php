@@ -243,7 +243,7 @@ abstract class ModelBruno extends Model {
 	//Help to fix the time in MS once for the whole process
 	public static function getMStime(){
 		if(!self::$ms){
-			self::$ms = \micro_seconds();
+			self::$ms = \ms_seconds();
 		}
 		return self::$ms;
 	}

@@ -78,6 +78,26 @@ $app->get(
 ->name('screen_stats_get');
 
 $app->get(
+	'/statshash/:step/:hashid',
+	'\bundles\bruno\screen\controllers\ControllerScreen:statshash_get'
+)
+->conditions(array(
+	'step' => 'question|answer',
+	'hashid' => '[a-z0-9]+',
+))
+->name('screen_statshash_get_pic');
+
+$app->get(
+	'/statspic/:step/:hashid.png',
+	'\bundles\bruno\screen\controllers\ControllerScreen:statspic_get'
+)
+->conditions(array(
+	'step' => 'question|answer',
+	'hashid' => '[a-z0-9]+',
+))
+->name('screen_statspic_get');
+
+$app->get(
 	'/statsjson/:questionid',
 	'\bundles\bruno\screen\controllers\ControllerScreen:statsjson_get'
 )
