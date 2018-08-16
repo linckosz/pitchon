@@ -360,7 +360,7 @@ class ControllerQuiz extends Controller {
 							if($this->fixcode){
 								$answered = Answered::Where('guest_id', $guest_id)->where('statistics_id', $statistics_id)->where('question_id', $question->id)->first();
 							}
-							if($$answered){
+							if($answered){
 								$answered->reset();
 							} else {
 								$answered = new Answered;
@@ -489,7 +489,7 @@ class ControllerQuiz extends Controller {
 					if($this->fixcode){
 						$answered = Answered::Where('guest_id', $guest_id)->where('statistics_id', $statistics_id)->where('question_id', $question->id)->first();
 					}
-					if($$answered){
+					if($answered){
 						$answered->reset();
 					} else {
 						$answered = new Answered;
