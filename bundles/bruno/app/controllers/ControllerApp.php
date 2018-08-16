@@ -122,8 +122,6 @@ class ControllerApp extends Controller {
 		
 		if($pitch = Pitch::find($pitch_id)){
 
-			$bruno_info = $app->trans->getBRUT('app', 6, 1); //1) Please use PowerPoint 2013 or later, with its Add-in Web Viewer installed. And click on "Enable Editing" if you see the notification. 2) Or simply use any browser.
-
 			//Clean sample directory
 			$folder = new Folders;
 			$folder->createPath($app->bruno->filePath.'/sample/');
@@ -166,6 +164,8 @@ class ControllerApp extends Controller {
 			$page = 1;
 			$nbr = 1;
 
+			$bruno_update = $app->trans->getBRUT('app', 6, 9); //Enable dynamic update
+
 			//Introduction page
 			$path_screen = $this->generate_zip_picture($pitch_enc, '0');
 			$zip->addFile($path_screen, 'ppt/media/0.jpg');
@@ -184,6 +184,7 @@ class ControllerApp extends Controller {
 				$rels_xml = preg_replace("/dur=\"\d+\"/i", 'dur="1"', $rels_xml);
 				$rels_xml = preg_replace("/delay=\"\d+\"/i", 'delay="0"', $rels_xml);
 				$rels_xml = preg_replace("/<p:childTnLst>.*<\/p:childTnLst>/i", '', $rels_xml);
+				$rels_xml = preg_replace("/lbqz@Update/i", $bruno_update, $rels_xml);
 				$zip->addFromString($rels, $rels_xml);
 			}
 			$page++;
@@ -215,6 +216,7 @@ class ControllerApp extends Controller {
 							$rels_xml = preg_replace("/lbqz@Score/i", $_SERVER['REQUEST_SCHEME'].'://screen.'.$app->bruno->domain.'/statspic/answer/'.$hashid.'.png', $rels_xml);
 						}
 						$rels_xml = preg_replace("/lbqz@Question/i", $_SERVER['REQUEST_SCHEME'].'://screen.'.$app->bruno->domain.'/'.$pitch_enc.'/'.$nbr.$suffix.'.jpg', $rels_xml);
+						$rels_xml = preg_replace("/lbqz@Update/i", $bruno_update, $rels_xml);
 						if($suffix!='a'){
 							//Faster animation to enable click next slide
 							$rels_xml = preg_replace("/dur=\"\d+\"/i", 'dur="1"', $rels_xml);
@@ -249,6 +251,7 @@ class ControllerApp extends Controller {
 				$rels_xml = preg_replace("/dur=\"\d+\"/i", 'dur="1"', $rels_xml);
 				$rels_xml = preg_replace("/delay=\"\d+\"/i", 'delay="0"', $rels_xml);
 				$rels_xml = preg_replace("/<p:childTnLst>.*<\/p:childTnLst>/i", '', $rels_xml);
+				$rels_xml = preg_replace("/lbqz@Update/i", $bruno_update, $rels_xml);
 				$zip->addFromString($rels, $rels_xml);
 			}
 			

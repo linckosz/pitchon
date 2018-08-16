@@ -88,7 +88,7 @@
 
 	<div id="ppt_stats_questions_participants" class="{% if not fix_stats or data_participants == 0 %}visibility_hidden{% endif %}" title="{{ _trans('screen', 0, 5, 'html') }}{# answers #}"><span id="ppt_stats_questions_participants_nbr">{{ data_participants }}</span> <span>{{ _trans('screen', 0, 5, 'html') }}{# answers #}<span></div>
 
-	<div id="ppt_stats_questions_wrapper">
+	<div id="ppt_stats_questions_wrapper" class="{% if fix_stats %}fix_stats{% endif %}">
 		<div id="ppt_stats_questions_correct">
 			<div id="ppt_stats_questions_number_correct" class="ppt_stats_questions_number">{{ data_correct }}%</div>
 			<div class="ppt_stats_questions_check fa fa-check"></div>

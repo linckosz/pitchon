@@ -46,13 +46,6 @@ class ControllerTest extends Controller {
 		$app->bruno->time_record = true; //Display timing
 		$tp = null;
 
-
-		$answereds = Answered::get(array('id', 'number', 'answer_id'));
-		foreach ($answereds as $answered) {
-			$answer = Answer::Where('id', $answered->answer_id)->first(array('id', 'number'));
-			Answered::Where('id', $answered->id)->getQuery()->update(['number' => $answer->number]);
-		}
-		
 		
 		//wrapper_sendAction('', 'post', 'api/test');
 		//\libs\Watch::php( $db->getQueryLog() , 'QueryLog', __FILE__, __LINE__, false, false, true);

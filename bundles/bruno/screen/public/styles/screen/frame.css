@@ -291,4 +291,6 @@
 #ppt_frame_hand.fixpicture {
 	height: 65% !important;
 	height: 62vmin !important;
+	bottom: -12.5%;
+	bottom: -12.5vmin;
 }

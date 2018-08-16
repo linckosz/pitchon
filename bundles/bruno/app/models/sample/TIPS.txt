@@ -1,0 +1,2 @@
+https://stackoverflow.com/questions/39397067/asynchronous-http-post-request-in-ms-access
+The keypoint is to export/import the class and adding in another IDE "Attribute OnReadyStateChange.VB_UserMemId = 0" right below Sub OnReadyStateChange()

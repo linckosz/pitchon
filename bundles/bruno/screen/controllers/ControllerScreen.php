@@ -612,7 +612,7 @@ class ControllerScreen extends Controller {
 				$ms_time = ModelBruno::getMStime() - (1200*1000);
 				if(isset($data->timestamp) && intval($data->timestamp) >= 0){
 					$ms_time = 1000*intval($data->timestamp);
-					//Containe a check within 24H
+					//Contain a check within 24H
 					if($ms_time < (ModelBruno::getMStime() - (24*3600*1000)) || $ms_time > ModelBruno::getMStime()){
 						$ms_time = ModelBruno::getMStime() - (1200*1000);
 					}
