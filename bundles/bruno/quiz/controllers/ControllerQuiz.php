@@ -358,7 +358,9 @@ class ControllerQuiz extends Controller {
 							}
 							$answered = false;
 							if($this->fixcode){
-								$answered = Answered::Where('guest_id', $guest_id)->where('statistics_id', $statistics_id)->where('question_id', $question_id)->first();
+								$answered = Answered::Where('guest_id', $guest_id)->where('statistics_id', $statistics_id)->where('question_id', $question->id)->first();
+							}
+							if($$answered){
 								$answered->reset();
 							} else {
 								$answered = new Answered;
@@ -485,7 +487,9 @@ class ControllerQuiz extends Controller {
 					$data = ModelBruno::getData();					
 					$answered = false;
 					if($this->fixcode){
-						$answered = Answered::Where('guest_id', $guest_id)->where('statistics_id', $statistics_id)->where('question_id', $question_id)->first();
+						$answered = Answered::Where('guest_id', $guest_id)->where('statistics_id', $statistics_id)->where('question_id', $question->id)->first();
+					}
+					if($$answered){
 						$answered->reset();
 					} else {
 						$answered = new Answered;

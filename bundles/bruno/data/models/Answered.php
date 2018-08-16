@@ -16,8 +16,8 @@ class Answered extends Model {
 
 	protected $enable_overwrite = false;
 
-	const FC_TIME = 28800; //For dynamic code we block 8H
-	const DYN_TIME = 60; //For fixcode we block 60s
+	const DYN_TIME = 28800; //For dynamic code we block 8H
+	const FC_TIME = 60; //For fixcode we block 60s
 
 	public $timestamps = false;
 
