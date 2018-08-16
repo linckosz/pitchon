@@ -312,7 +312,7 @@
 
 	<div id="ppt_stats_statistics_participants" class="{% if not fix_stats or data_participants == 0 %}visibility_hidden{% endif %}" title="{{ _trans('screen', 0, 5, 'html') }}{# answers #}"><span id="ppt_stats_statistics_participants_nbr">{{ data_participants }}</span> <span>{{ _trans('screen', 0, 5, 'html') }}{# answers #}<span></div>
 
-	<div id="ppt_stats_statistics_wrapper" class="{% if fix_stats %}fix_stats{% endif %}">
+	<div id="ppt_stats_statistics_wrapper" class="{% if fix_stats %}ppt_stats_statistics_wrapper_fix_stats{% endif %}">
 		<div id="ppt_stats_statistics_1" class="{% if not fix_stats or data_number_1 == 0 %}display_none{% endif %} ppt_stats_statistics_column">
 			<div id="ppt_stats_statistics_1_number" class="ppt_stats_statistics_number">{{ data_number_1 }}%</div>
 			<div id="ppt_stats_statistics_1_letter" class="ppt_stats_statistics_letter">A</div>

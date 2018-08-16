@@ -21,7 +21,7 @@ html, body {
 	left: 0;
 	height: 80%;
 }
-#ppt_stats_questions_wrapper.fix_stats {
+.ppt_stats_questions_wrapper_fix_stats {
 	border-bottom: 1vmin solid rgba(255, 255, 255, 0.80);
 }
 
