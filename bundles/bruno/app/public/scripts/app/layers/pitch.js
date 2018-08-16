@@ -107,6 +107,36 @@ var app_layers_pitch_feedPage = function(param){
 			wrapper_IScroll();
 		}
 	});
+
+	//All the focus/blur trick is to solve an issue than when the focus is on the textarea we have to click twice on OK (or CANCEL) because the first click does only a blur on textarea
+	//This still be a qdirty fix because the problem still exits with any other area of the screen, but it's less obvious and annoying for the user
+	Elem.find("[find=input_textarea]").data('focus', false);
+	Elem.find("[find=input_textarea]").on('focus', function(event){
+		$(this).textarea.data('focus', true);
+	});
+	Elem.find("[find=input_textarea]").on('blur', function(event){
+		$(this).textarea.data('focus', false);
+	});
+	Elem.find("[find=input_create], [find=input_cancel]").hover(
+		//MouseIn
+		function(){
+			var textarea = $("#app_layers_pitch_add_icon").find("[find=input_textarea]");
+			if(textarea.is( ":focus" )){
+				textarea.data('focus', true);
+				textarea.blur();
+			} else {
+				textarea.data('focus', false);
+			}
+		},
+		//MouseOut
+		function(){
+			var textarea = $("#app_layers_pitch_add_icon").find("[find=input_textarea]");
+			if(textarea.data('focus')){
+				textarea.focus();
+			}
+		}
+	);
+
 	Elem.find("[find=input_cancel]").on('click', function(event){
 		app_layers_pitch_icon_back();
 		event.preventDefault();

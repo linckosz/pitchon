@@ -491,6 +491,13 @@ var app_application_mask_hide = function(){
 	}, 500);
 };
 
+var app_application_alert = function(msg){
+	if(msg){
+		$('#app_application_alert').removeClass("display_none");
+		$('#app_application_alert_msg').html(msg);
+	}
+};
+
 JSfiles.finish(function(){
 	app_application_action(1, wrapper_user_info); //Logged
 	//Update every 15s automatically
@@ -499,8 +506,13 @@ JSfiles.finish(function(){
 		app_application_bruno.prepare(false, true);
 	}, 15000); //15s Production
 
+	$('#app_application_alert_ok').on('click', function(event){
+		$('#app_application_alert_msg').html("");
+		$('#app_application_alert').addClass("display_none");
+	});
+
 	//Onboarding
-	$('#app_application_mask').on('click', function(event){
+	$('#app_application_alert').on('click', function(event){
 		$(document.body).trigger('click.bubble');
 		event.stopPropagation();
 		if(Bruno.storage.onboarding_opened){

@@ -14,6 +14,11 @@ class Answered extends Model {
 
 	protected $primaryKey = 'id';
 
+	protected $enable_overwrite = false;
+
+	const FC_TIME = 28800; //For dynamic code we block 8H
+	const DYN_TIME = 60; //For fixcode we block 60s
+
 	public $timestamps = false;
 
 ////////////////////////////////////////////
@@ -32,7 +37,7 @@ class Answered extends Model {
 ////////////////////////////////////////////
 
 	public function save(array $options = array()){
-		if(!isset($this->id)){
+		if(!isset($this->id) || $this->enable_overwrite){
 			$this->c_at = ModelBruno::getMStime();
 			return parent::save($options);
 		} else {
@@ -46,10 +51,28 @@ class Answered extends Model {
 		}
 	}
 
+	public function reset(){
+		$this->enable_overwrite = true;
+		$this->style = 1;
+		$this->answer_id = null;
+		$this->number = null;
+		$this->correct = null;
+		$this->s_a = null;
+		$this->s_b = null;
+		$this->s_c = null;
+		$this->s_d = null;
+		$this->s_e = null;
+		$this->s_f = null;
+		$this->info_0 = null;
+		$this->info_1 = null;
+		$this->info_2 = null;
+		$this->info_3 = null;
+	}
+
 	public static function isAuthorized($guest_id, $statistics_id, $question_id, $fixcode=false){
 		//Check if the guest already answered on this session
 		if($answered = Answered::Where('guest_id', $guest_id)->where('statistics_id', $statistics_id)->where('question_id', $question_id)->first(array('id', 'c_at'))){
-			if($fixcode && $answered->c_at <= (ModelBruno::getMStime() - 60*1000)){ //Gap of 1min only for fixcode
+			if($fixcode && $answered->c_at <= (ModelBruno::getMStime() - (self::FC_TIME)*1000)){ //Gap of 1min only for fixcode
 				return true;
 			}
 			return false;

@@ -40,7 +40,8 @@ function useMobileNotification(){
 }
 
 function device_download(url, target, name){
-	if(typeof target == 'undefined'){ target = '_system'; }
+	//if(typeof target == 'undefined'){ target = '_system'; }
+	if(typeof target == 'undefined'){ target = '_top'; } //Using top should not overwrite the current app if the file header is properly setup
 	if(typeof name == 'undefined'){ name = 'file'; }
 	
 	if(/MicroMessenger|firefox|opera/i.test(navigator.userAgent)){

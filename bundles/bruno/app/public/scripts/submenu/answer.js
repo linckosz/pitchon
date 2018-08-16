@@ -205,15 +205,44 @@ submenu_list['app_answer_get_presentation'] = {
 		"now": function(Elem, subm){
 			//[plan]
 			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
-				Elem.find("[find=submenu_button_value]").addClass("submenu_button_paypal");
+				//Elem.find("[find=submenu_button_value]").addClass("submenu_button_paypal");
 			}
 			if(Bruno.storage.get('pitch', subm.param)){
 				Elem.removeClass('display_none');
 			}
 		},
 		"action": function(Elem, subm){
-			if(Bruno.storage.get('pitch', subm.param)){
+			if(false && Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
+				//submenu_Build_return('subscription', true, true, null, false); //toto
+			} else if(Bruno.storage.get('pitch', subm.param)){
 				Bruno.storage.downloadPPT(subm.param);
+				$(window).focus();
+				var items = Bruno.storage.list('question', -1, null, 'pitch', subm.param);
+				var time = 5 + 5*items.length;
+				var msg = Bruno.Translation.get('app', 2119, 'js', { time: time }); //Operation in process The download will start in approximately [{time}] seconds.
+				app_application_alert(msg);
+			}
+		},
+	},
+
+	"powerpoint_addin": {
+		"style": "button",
+		"class": "display_none submenu_app_answer_get_presentation_methods",
+		"title": "<span class='fa fa-download'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2120, 'html'), //Download PowerPoint Add-In
+		"now": function(Elem, subm){
+			//[plan]
+			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
+				//Elem.find("[find=submenu_button_value]").addClass("submenu_button_paypal");
+			}
+			if(Bruno.storage.get('pitch', subm.param)){
+				Elem.removeClass('display_none');
+			}
+		},
+		"action": function(Elem, subm){
+			if(false && Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
+				//submenu_Build_return('subscription', true, true, null, false); //toto
+			} else if(Bruno.storage.get('pitch', subm.param)){
+				device_download(app_application_add_in);
 			}
 		},
 	},

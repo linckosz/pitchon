@@ -201,6 +201,11 @@ class ControllerQuiz extends Controller {
 				if($statistics = Statistics::unlock($session->id, $question_id)){
 					$app->bruno->data['data_statisticsid_enc'] = STR::integer_map($statistics->id);
 				}
+				//We block only 1min for fixcode
+				if(isset($_SESSION['block_'.$statistics->id]) && $_SESSION['block_'.$statistics->id] > time()){
+					$app->render('/bundles/bruno/quiz/templates/quiz/result/wait.twig');
+					return true;
+				}
 				return $this->question_display($question_id);
 			}
 		} else if($session = Session::Where('code', $code)->first(array('id', 'question_id', 'code'))){
@@ -212,6 +217,11 @@ class ControllerQuiz extends Controller {
 			if($session->question_id){
 				if($statistics = Statistics::unlock($session->id, $session->question_id)){
 					$app->bruno->data['data_statisticsid_enc'] = STR::integer_map($statistics->id);
+				}
+				//We block 8H for dynamic code (since a code a renew frequently, this should not affect the user)
+				if(isset($_SESSION['block_'.$statistics->id]) && $_SESSION['block_'.$statistics->id] > time()){
+					$app->render('/bundles/bruno/quiz/templates/quiz/result/wait.twig');
+					return true;
 				}
 				return $this->question_display($session->question_id);
 			}
@@ -318,12 +328,24 @@ class ControllerQuiz extends Controller {
 						}
 					}
 				}
+
 				//Check if already answered
-				if(!Answered::isAuthorized($guest_id, $statistics->id, $statistics->question_id, $this->fixcode)){
+				if(
+					   (isset($_SESSION['block_'.$statistics->id]) && $_SESSION['block_'.$statistics->id] > time())
+					|| !Answered::isAuthorized($guest_id, $statistics->id, $statistics->question_id, $this->fixcode)
+				){
 					$app->bruno->data['data_answered'] = true;
 					$app->render('/bundles/bruno/quiz/templates/quiz/result/wait.twig');
 					return true;
 				}
+				//Setup a blocking timer
+				if($this->fixcode){
+					//This stay true while the website is alive (browser not closed because of the PHP session)
+					$_SESSION['block_'.$statistics->id] = time() + Answered::FC_TIME; //+60s
+				} else {
+					$_SESSION['block_'.$statistics->id] = time() + Answered::DYN_TIME; //+8H (but in all the case we don't allow overwring for dynamic code)
+				}
+
 				if($answer = Answer::Where('id', $answer_id)->first(array('id', 'number', 'parent_id'))){
 					$letter = $answer->letter();
 					if(isset($statistics->$letter)){
@@ -334,7 +356,13 @@ class ControllerQuiz extends Controller {
 							if($answer->number == $question->number){
 								$app->bruno->data['data_correct'] = true;
 							}
-							$answered = new Answered;
+							$answered = false;
+							if($this->fixcode){
+								$answered = Answered::Where('guest_id', $guest_id)->where('statistics_id', $statistics_id)->where('question_id', $question_id)->first();
+								$answered->reset();
+							} else {
+								$answered = new Answered;
+							}
 							$answered->guest_id = $guest_id;
 							$answered->statistics_id = $statistics->id;
 							$answered->question_id = $question->id;
@@ -435,15 +463,33 @@ class ControllerQuiz extends Controller {
 						}
 					}
 				}
+
 				//Check if already answered
-				if(!Answered::isAuthorized($guest_id, $statistics->id, $statistics->question_id, $this->fixcode)){
+				if(
+					   (isset($_SESSION['block_'.$statistics->id]) && $_SESSION['block_'.$statistics->id] > time())
+					|| !Answered::isAuthorized($guest_id, $statistics->id, $statistics->question_id, $this->fixcode)
+				){
 					$app->bruno->data['data_answered'] = true;
 					$app->render('/bundles/bruno/quiz/templates/quiz/result/wait.twig');
 					return true;
 				}
+				//Setup a blocking timer
+				if($this->fixcode){
+					//This stay true while the website is alive (browser not closed because of the PHP session)
+					$_SESSION['block_'.$statistics->id] = time() + Answered::FC_TIME; //+60s
+				} else {
+					$_SESSION['block_'.$statistics->id] = time() + Answered::DYN_TIME; //+8H (but in all the case we don't allow overwring for dynamic code)
+				}
+
 				if($question){
 					$data = ModelBruno::getData();					
-					$answered = new Answered;
+					$answered = false;
+					if($this->fixcode){
+						$answered = Answered::Where('guest_id', $guest_id)->where('statistics_id', $statistics_id)->where('question_id', $question_id)->first();
+						$answered->reset();
+					} else {
+						$answered = new Answered;
+					}
 					$answered->guest_id = $guest_id;
 					$answered->statistics_id = $statistics->id;
 					$answered->question_id = $question->id;

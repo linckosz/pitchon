@@ -1058,7 +1058,7 @@ Bruno.storage.getFile = function(id, type){
 
 Bruno.storage.downloadPPT = function(id){
 	var ppt_url = location.protocol+'//'+document.domain+"/sample/pitch/"+wrapper_integer_map(id);
-	device_download(ppt_url, "_system", "error.txt");
+	device_download(ppt_url, "_top", "error.txt");
 };
 
 Bruno.storage.getURLShorcut = function(type, id){

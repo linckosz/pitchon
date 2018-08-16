@@ -164,8 +164,6 @@ class ControllerApp extends Controller {
 			$page = 1;
 			$nbr = 1;
 
-			$bruno_update = $app->trans->getBRUT('app', 6, 9); //Enable dynamic update
-
 			//Introduction page
 			$path_screen = $this->generate_zip_picture($pitch_enc, '0');
 			$zip->addFile($path_screen, 'ppt/media/0.jpg');
@@ -184,7 +182,6 @@ class ControllerApp extends Controller {
 				$rels_xml = preg_replace("/dur=\"\d+\"/i", 'dur="1"', $rels_xml);
 				$rels_xml = preg_replace("/delay=\"\d+\"/i", 'delay="0"', $rels_xml);
 				$rels_xml = preg_replace("/<p:childTnLst>.*<\/p:childTnLst>/i", '', $rels_xml);
-				$rels_xml = preg_replace("/lbqz@Update/i", $bruno_update, $rels_xml);
 				$zip->addFromString($rels, $rels_xml);
 			}
 			$page++;
@@ -216,7 +213,6 @@ class ControllerApp extends Controller {
 							$rels_xml = preg_replace("/lbqz@Score/i", $_SERVER['REQUEST_SCHEME'].'://screen.'.$app->bruno->domain.'/statspic/answer/'.$hashid.'.png', $rels_xml);
 						}
 						$rels_xml = preg_replace("/lbqz@Question/i", $_SERVER['REQUEST_SCHEME'].'://screen.'.$app->bruno->domain.'/'.$pitch_enc.'/'.$nbr.$suffix.'.jpg', $rels_xml);
-						$rels_xml = preg_replace("/lbqz@Update/i", $bruno_update, $rels_xml);
 						if($suffix!='a'){
 							//Faster animation to enable click next slide
 							$rels_xml = preg_replace("/dur=\"\d+\"/i", 'dur="1"', $rels_xml);
@@ -251,7 +247,6 @@ class ControllerApp extends Controller {
 				$rels_xml = preg_replace("/dur=\"\d+\"/i", 'dur="1"', $rels_xml);
 				$rels_xml = preg_replace("/delay=\"\d+\"/i", 'delay="0"', $rels_xml);
 				$rels_xml = preg_replace("/<p:childTnLst>.*<\/p:childTnLst>/i", '', $rels_xml);
-				$rels_xml = preg_replace("/lbqz@Update/i", $bruno_update, $rels_xml);
 				$zip->addFromString($rels, $rels_xml);
 			}
 			

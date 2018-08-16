@@ -45,7 +45,6 @@ class ControllerTest extends Controller {
 		$db->enableQueryLog();
 		$app->bruno->time_record = true; //Display timing
 		$tp = null;
-
 		
 		//wrapper_sendAction('', 'post', 'api/test');
 		//\libs\Watch::php( $db->getQueryLog() , 'QueryLog', __FILE__, __LINE__, false, false, true);
