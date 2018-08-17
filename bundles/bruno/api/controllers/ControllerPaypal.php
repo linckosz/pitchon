@@ -194,4 +194,10 @@ class ControllerPaypal extends Controller {
 		return exit(0);
 	}
 
+	public function _get(){
+		$msg = array('msg' => 'ok');
+		(new Json($msg))->render();
+		return exit(0);
+	}
+
 }
