@@ -61,11 +61,13 @@
 <script type="text/javascript">
 	var wrapper_user_ip = "{{ user_ip }}";
 </script>
-<script type="text/javascript" src="https://l2.io/ip.js?var=wrapper_user_ip"></script>
+{% if not cookie_ip %}
+	<script type="text/javascript" src="https://l2.io/ip.js?var=wrapper_user_ip"></script>
+{% endif %}
 
 <script type="text/javascript">
 
-setCookie('ip', wrapper_user_ip, 90);
+setCookie('ip', wrapper_user_ip, 8/24);
 
 var wrapper_href = window.location.href;
 //Delete URI
@@ -90,7 +92,7 @@ if(!window.console){
 	};
 }
 
-var base_scanner = function(){
+var base_home = function(){
 	window.location.href = '/';
 };
 </script>

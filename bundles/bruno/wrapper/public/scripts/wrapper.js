@@ -14,11 +14,11 @@ $(window).on('keyup blur', function(event){
 	wrapper_keydown = false;
 });
 
-//Keep track of IP in cookies every 24H
-setCookie('ip', wrapper_user_ip, 90);
+setCookie('ip', wrapper_user_ip, 8/24);
+//Keep track of IP in cookies every 4H
 setInterval(function(){
-	setCookie('ip', wrapper_user_ip, 90);
-}, 24*60*60*1000);
+	setCookie('ip', wrapper_user_ip, 8/24);
+}, 4*60*60*1000);
 
 var wrapper_sendAction = function(param, method, action, cb_success, cb_error, cb_begin, cb_complete){
 	if(typeof cb_success==="undefined" || cb_success===null){ cb_success = function(){}; }

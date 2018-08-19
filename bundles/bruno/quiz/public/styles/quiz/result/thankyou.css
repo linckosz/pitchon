@@ -1,38 +1,27 @@
-.quiz_result_answer_top {
+.quiz_result_thankyou_top {
 	width: 94%;
 	padding: 3%;
-	padding-bottom: 0;
-	font-size: 1.2em;
+	padding-top: 12%;
+	padding-bottom: 8%;
+	font-size: 2.5em;
 	text-align: center;
 	font-weight: 300;
 }
 
-#quiz_result_answer_count {
-	padding: 30px 0;
-	font-size: 4em;
-	position: absolute;
-	width: 100%;
-	left: 0;
-	right: 0;
-	text-align: center;
+.quiz_result_thankyou_answered {
+	padding-bottom: 0.3em;
 }
 
-#quiz_result_answer_answer {
-	visibility: hidden;
-}
-
-#quiz_result_answer_gif {
+#quiz_result_thankyou_gif {
 	margin: 10px 0;
 	max-width: 90%;
 	max-width: 90vw;
 	max-height: 25%;
 	max-height: 25vh;
 	border: 1px solid rgba(255, 255, 255, 0.2);
-	visibility: hidden;
 }
 
-#quiz_result_answer_scan {
-	visibility: hidden;
+#quiz_result_thankyou_scan {
 	position: fixed;
 	text-align: right;
 	bottom: 3vw;
@@ -41,7 +30,7 @@
 	right: 5vmin;
 }
 
-#quiz_result_answer_scan_sentence {
+#quiz_result_thankyou_scan_sentence {
 	vertical-align: middle;
 	filter: alpha(opacity=80);
 	opacity: 0.80;
@@ -50,7 +39,7 @@
 	padding: 10px;
 }
 
-#quiz_result_answer_scan_picture {
+#quiz_result_thankyou_scan_picture {
 	vertical-align: middle;
 	font-size: 0;
 	max-width: 10%;
@@ -66,22 +55,22 @@
 	-webkit-box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.15);
 	opacity: 0.9;
 }
-#quiz_result_answer_scan_picture:hover {
+#quiz_result_thankyou_scan_picture:hover {
 	background-color: rgba(255, 255, 255, 0.10);
 	opacity: 1;
 }
-#quiz_result_answer_scan_picture:active {
+#quiz_result_thankyou_scan_picture:active {
 	background-color: rgba(255, 255, 255, 0.20);
 	opacity: 1;
 }
 
-.quiz_result_answer_followus {
+.quiz_result_thankyou_followus {
 	margin: 24px auto 60px auto;
 	width: 100%;
 	text-align: center;
 }
 
-.quiz_result_answer_picture {
+.quiz_result_thankyou_picture {
 	margin: 4px 0;
 	width: 65vw;
 	width: 65vmin;
@@ -90,7 +79,7 @@
 	background-color: #FFFFFF;
 }
 
-.quiz_result_answer_ad_link_visit {
+.quiz_result_thankyou_ad_link_visit {
 	font-size: 2.6vw;
 	font-size: 2.6vmax;
 	opacity: 0.8;

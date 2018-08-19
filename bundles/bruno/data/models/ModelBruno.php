@@ -444,7 +444,6 @@ abstract class ModelBruno extends Model {
 			if(in_array('u_by', $columns)){
 				$this->u_by = $app->bruno->data['user_id'];
 			}
-			$this->updateTimestamps();
 		}
 				
 		if(in_array('u_at', $columns)){
@@ -523,16 +522,17 @@ abstract class ModelBruno extends Model {
 	}
 
 	//This will update u_at, even if the user doesn't have write permission
-	public function touchUpdateAt($users_tables=array()){
+	public function touchUpdateAt(){
 		$app = ModelBruno::getApp();
-		if (!$this->timestamps || !isset($this->u_at) || !isset($this->id)) {
+		if (!isset($this->u_at) || !isset($this->id)) {
 			return false;
 		}
 		$time_ms = ModelBruno::getMStime();
 		$result = $this::withTrashed()->where('id', $this->id)->getQuery()->update(['u_at' => $time_ms]);
+		$this->getNoSQL(true); //Cache the data as NoSQL format
 		usleep(rand(10000, 15000)); //10ms
 		$this->forceRead();
-		return $users_tables;
+		return $this;
 	}
 	
 	public function delete(){
@@ -553,7 +553,7 @@ abstract class ModelBruno extends Model {
 			$time_ms = ModelBruno::getMStime();
 			$this::withTrashed()->where('id', $this->id)->getQuery()->update(['d_at' => $time_ms]);
 			usleep(rand(10000, 15000)); //10ms
-			$this->touchUpdateAt();
+			$this->touchUpdateAt(); //Update of NoSQL is inside this method
 			$this->forceRead(false);
 		}
 		return true;

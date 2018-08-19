@@ -247,6 +247,51 @@ submenu_list['app_answer_get_presentation'] = {
 		},
 	},
 
+	"jpeg": {
+		"style": "button",
+		"title": "<span class='fa fa-download'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2121, 'html'), //Download JPEG
+		"now": function(Elem, subm){
+			//[plan]
+			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
+				//Elem.find("[find=submenu_button_value]").addClass("submenu_button_paypal");
+			}
+			if(Bruno.storage.get('pitch', subm.param)){
+				Elem.removeClass('display_none');
+			}
+		},
+		"action": function(Elem, subm){
+			var pitch_id = subm.param;
+			var question_id = false;
+			if(typeof app_layers_answer_question == "object" && app_layers_answer_question != null && typeof app_layers_answer_question['id'] != "undefined"){
+				question_id = app_layers_answer_question['id'];
+				if(question_id){
+					pitch_id = Bruno.storage.get("question", question_id, "parent_id");
+				}
+			}
+			if(false && Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
+				//submenu_Build_return('subscription', true, true, null, false); //toto
+			} else if(Bruno.storage.get('pitch', subm.param)){
+				var index = 0;
+				var pitch_enc = wrapper_integer_map(subm.param);
+				device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/0.jpg?download=1', '0', 'toto.jpg');
+				index++;
+				var items = Bruno.storage.list('question', -1, null, 'pitch', subm.param);
+				items = Bruno.storage.sort_items(items, 'id', 0, -1, true);
+				items = Bruno.storage.sort_items(items, 'sort', 0, -1, false);
+				for(var i in items){
+					//device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/'+index+'a.jpg?download=1', index+'a');
+					//device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/'+index+'b.jpg?download=1', index+'b');
+					index++;
+				}
+				device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/'+index+'a.jpg?download=1', index+'a', 'tata.jpg');
+				index++;
+				var time = 5 + 5*items.length;
+				var msg = Bruno.Translation.get('app', 2119, 'js', { time: time }); //Operation in process The download will start in approximately [{time}] seconds.
+				app_application_alert(msg);
+			}
+		},
+	},
+
 	"space1": {
 		"style": "space",
 		"title": "space",

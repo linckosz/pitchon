@@ -173,6 +173,7 @@ $app->bruno->translation = array(
 $app->bruno->data = array(
 	'user_id' => false,
 	'user_ip' => $_SERVER['REMOTE_ADDR'],
+	'cookie_ip' => false,
 	'guest_id' => false,
 	'guest_md5' => false,
 	'domain' => $app->bruno->domain,
@@ -184,6 +185,11 @@ $app->bruno->data = array(
 	'bruno_dev' => $_SERVER['BRUNO_DEV'],
 	'bruno_show_dev' => 'false', //Display some error for developpers on JS (NOTE: it has to be a string because of Twig conversion to JS)
 );
+
+if(isset($_COOKIE['ip'])){
+	$app->bruno->data['cookie_ip'] = true;
+	$app->bruno->data['user_ip'] = $_COOKIE['ip'];	
+}
 
 //Messages to be sent along with rendering
 $app->bruno->flash = array();

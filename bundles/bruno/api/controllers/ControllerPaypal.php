@@ -65,9 +65,12 @@ class ControllerPaypal extends Controller {
 		// Set merchant preferences
 		$merchantPreferences = new MerchantPreferences();
 		$merchantPreferences
-			->setReturnUrl('https://app.pitchon.net/api/paypal/pay')
-			->setCancelUrl('https://app.pitchon.net/api/paypal/fail')
-			->setNotifyUrl('https://app.pitchon.net/api/paypal/notify')
+			//->setReturnUrl('https://app.pitchon.net/api/paypal/pay')
+			//->setCancelUrl('https://app.pitchon.net/api/paypal/fail')
+			//->setNotifyUrl('https://app.pitchon.net/api/paypal/notify')
+			->setReturnUrl('https://app.lebonquiz.fr/api/paypal/pay')
+			->setCancelUrl('https://app.lebonquiz.fr/api/paypal/fail')
+			->setNotifyUrl('https://app.lebonquiz.fr/api/paypal/notify')
 			->setAutoBillAmount('yes')
 			->setInitialFailAmountAction('CONTINUE')
 			->setMaxFailAttempts('0')

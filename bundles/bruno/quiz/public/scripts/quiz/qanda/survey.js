@@ -33,5 +33,6 @@ $("#quiz_confirm").on("click", function(event){
 	if(wrapper_html_zoom){
 		url = url+"&zoom="+wrapper_html_zoom;
 	}
+	$(this).off('click');
 	window.location.href = url;
 });

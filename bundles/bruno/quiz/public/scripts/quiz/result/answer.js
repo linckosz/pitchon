@@ -8,6 +8,6 @@ var quiz_result_answer_statistics = function(){
 
 $(function() {
 	$('#quiz_result_answer_scan_picture').on('click', function(){
-		base_scanner();
+		base_home();
 	});
 });

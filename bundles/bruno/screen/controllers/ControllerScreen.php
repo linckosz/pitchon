@@ -48,6 +48,9 @@ class ControllerScreen extends Controller {
 		if(!$session){
 			$session = new Session;
 			$session->md5 = $md5;
+			if(self::$fixcode){
+				$session->status = 2;
+			}
 			$session->code = Session::get_session_code();
 			if($session->save()){
 				$info = new \stdClass;
@@ -66,6 +69,10 @@ class ControllerScreen extends Controller {
 	protected function set_session($question_id, $status=0){
 		if($session = $this->get_session()){
 			$session->question_id = $question_id;
+			if(self::$fixcode){
+				//Always keep running a session for for fixcode
+				$status = 2;
+			}
 			$session->status = $status;
 			$session->save();
 		}
@@ -105,6 +112,9 @@ class ControllerScreen extends Controller {
 			if(isset($data->width) && is_numeric($data->width) && $data->width>0 && isset($data->height) && is_numeric($data->height) && $data->height>0){
 				$width = round($height*$data->width/$data->height);
 			}
+
+			//$name = $width.'_'.$height.'_'.$page.'.'.$ext;
+			//toto => Check if the image exists (timestamp file >= u_at)
 			
 			$screenCapture = new Capture();
 			$screenCapture->setUrl($url);
@@ -127,13 +137,17 @@ class ControllerScreen extends Controller {
 			$path = $app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/'.$page.'.'.$ext;
 			@unlink($path);
 			rename($app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/tp0_'.$page.'.'.$ext, $path);
-
 			$image = WideImage::load($path);
 		} else {
 			$image = WideImage::load($path);
 		}
 
 		$image->output($ext);
+		if(isset($data->download) && $data->download){
+			header('Content-Type: application/force-download;');
+			$name = $pitch_enc.'_'.$page.'.'.$ext;
+			header('Content-Disposition: attachment; filename="'.$name.'"');
+		}
 		session_write_close();
 		return exit(0);
 	}

@@ -205,9 +205,8 @@ var showppt_launch = function(pitch_id, question_id){
 		items = Bruno.storage.sort_items(items, 'id', 0, -1, true);
 		items = Bruno.storage.sort_items(items, 'sort', 0, -1, false);
 		for(var i in items){
-			page = 2 * (parseInt(i, 10)+1);
 			if(items[i]["id"]==question_id){
-				showppt_list_index = index+1; //+1 is because the first page is the welcome
+				showppt_list_index = 2*index - 1;
 			}
 			showppt_list_url.push(pitch_enc+'/'+index+'a');
 			showppt_list_scan.push(location.protocol+'//quiz.'+document.domainRoot+'/p/'+wrapper_integer_map(items[i]["id"]));

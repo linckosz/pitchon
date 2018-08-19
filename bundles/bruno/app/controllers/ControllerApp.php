@@ -266,7 +266,6 @@ class ControllerApp extends Controller {
 
 			//@unlink($ppt_temp);
 			header('Content-Description: File Transfer');
-			header('Content-Type: attachment/force-download;');
 			header('Content-Transfer-Encoding: binary');
 			header('Content-Type: application/force-download;');
 			header('Content-Disposition: attachment; filename="lbqz_'.$pitch_enc.'.pptm"');

@@ -187,6 +187,7 @@ class ControllerQuiz extends Controller {
 				//Create the session, but must be in a try because hundred of users can do this operation at the same time
 				$session = new Session;
 				$session->md5 = Session::get_session_md5();
+				$session->status = 2;
 				$session->question_id = $question_id;
 				$session->question_hashid = $code;
 				try {
@@ -208,11 +209,15 @@ class ControllerQuiz extends Controller {
 				}
 				return $this->question_display($question_id);
 			}
-		} else if($session = Session::Where('code', $code)->first(array('id', 'question_id', 'code'))){
+		} else if($session = Session::Where('code', $code)->first(array('id', 'question_id', 'code', 'status'))){
 			if($session->code){
 				setcookie($app->bruno->data['bruno_dev'].'_quiz_code', $session->code, time()+1800, '/'); //Only 30min (because a pitch should not exceed 30 min)
 			} else {
 				setcookie($app->bruno->data['bruno_dev'].'_quiz_code', null, time()-3600, '/');
+			}
+			if($session->status == 3){
+				$app->render('/bundles/bruno/quiz/templates/quiz/result/thankyou.twig');
+				return true;
 			}
 			if($session->question_id){
 				if($statistics = Statistics::unlock($session->id, $session->question_id)){

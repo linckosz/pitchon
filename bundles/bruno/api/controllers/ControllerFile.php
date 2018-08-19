@@ -257,7 +257,6 @@ class ControllerFile extends Controller {
 					//note that the root and internal redirect paths are concatenated.
 					//https://www.nginx.com/resources/wiki/start/topics/examples/xsendfile/
 					header('Content-Description: File Transfer');
-					header('Content-Type: attachment/force-download;');
 					header('Content-Transfer-Encoding: binary');
 					$content_type = $file->ori_type;
 					header('Content-Type: '.$content_type.';');

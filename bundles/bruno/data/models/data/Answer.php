@@ -198,6 +198,14 @@ class Answer extends ModelBruno {
 		}
 	}
 
+	public function save(array $options = array()){
+		//Update Question u_at
+		if(isset($this->parent_id) && $this->parent_id > 0 && $question = Question::Where('id', $this->parent_id)->first()){
+			$question->touchUpdateAt();
+		}
+		return parent::save($options);
+	}
+
 ////////////////////////////////////////////
 
 	public function letter(){
