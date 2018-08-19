@@ -8,19 +8,6 @@
 	font-weight: 300;
 }
 
-.quiz_result_thankyou_answered {
-	padding-bottom: 0.3em;
-}
-
-#quiz_result_thankyou_gif {
-	margin: 10px 0;
-	max-width: 90%;
-	max-width: 90vw;
-	max-height: 25%;
-	max-height: 25vh;
-	border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
 #quiz_result_thankyou_scan {
 	position: fixed;
 	text-align: right;

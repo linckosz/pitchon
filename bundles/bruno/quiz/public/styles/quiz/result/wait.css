@@ -5,6 +5,8 @@
 	font-size: 1.2em;
 	text-align: center;
 	font-weight: 300;
+	min-height: 25%;
+	min-height: 25vh;
 }
 
 .quiz_result_wait_answered {
