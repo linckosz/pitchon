@@ -81,7 +81,7 @@ function SetLogin(){
 	//Clear if remember if false
 	$remember = Vanquish::get('remember');
 	if(!isset($_SESSION['set_login']) && !$remember){
-		Vanquish::unsetAll(array('user_language', 'remember', 'host_id'));
+		//Vanquish::unsetAll(array('user_language', 'remember', 'host_id'));
 	}
 	$_SESSION['set_login'] = true;
 
