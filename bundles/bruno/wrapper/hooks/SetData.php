@@ -81,7 +81,7 @@ function SetLogin(){
 	//Clear if remember if false
 	$remember = Vanquish::get('remember');
 	if(!isset($_SESSION['set_login']) && !$remember){
-		//Vanquish::unsetAll(array('user_language', 'remember', 'host_id'));
+		Vanquish::unsetAll(array('user_language', 'remember', 'host_id'));
 	}
 	$_SESSION['set_login'] = true;
 
@@ -94,8 +94,13 @@ function SetLogin(){
 	$app->bruno->data['user_id'] = false;
 	if($user_id && $user_md5 && $user_language && $user_email){
 		//Simple verification of the user
-		if(User::Where('id', $user_id)->where('md5', $user_md5)->where('email', $user_email)->first(array('id'))){
+		if($user = User::Where('id', $user_id)->where('md5', $user_md5)->first(array('id', 'email'))){
 			$app->bruno->data['user_id'] = $user_id;
+			//This is a dirty fix: When I switch account, I do not understand why Vanquish::get('user_email') keep the old account.
+			if($user_email  != $user->email){
+				$user_email = $user->email;
+				Vanquish::set(array('user_email' => $user_email,));
+			}
 		}
 	}
 	if(!$app->bruno->data['user_id']){

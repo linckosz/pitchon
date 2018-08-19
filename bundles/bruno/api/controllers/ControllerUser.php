@@ -41,6 +41,10 @@ class ControllerUser extends Controller {
 				if(isset($data->remember) && $data->remember){
 					$remember = true;
 				}
+				$app->bruno->data['user_md5'] = $user->md5;
+				$app->bruno->data['user_email'] = $user->email;
+				$app->bruno->data['user_language'] = $user->language;
+				$app->bruno->data['remember'] = $remember;
 				$data = array(
 					'user_id' => $user->id,
 					'user_md5' => $user->md5,

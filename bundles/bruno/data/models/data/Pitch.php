@@ -100,7 +100,6 @@ class Pitch extends ModelBruno {
 			//Give access to the user itself
 			$pivot = new \stdClass;
 			$pivot->{'user>access'} = new \stdClass;
-			\libs\Watch::php($app->bruno->data, '$var', __FILE__, __LINE__, false, false, true);
 			$pivot->{'user>access'}->{$app->bruno->data['user_id']} = true;
 			$model->pivots_format($pivot);
 		}

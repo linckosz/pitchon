@@ -604,7 +604,7 @@ abstract class ModelBruno extends Model {
 		//We use a NoSQL format to speedup the result displayed
 		if($force || !isset($this->nosql) || is_null($this->nosql)){
 			//Make sure we cache with all fields
-			$model = static::find($this->id);
+			$model = static::withTrashed()->where('id', $this->id)->first();
 			$result = json_decode($model->toJson());
 			foreach(static::$class_timestamp as $value) {
 				if(isset($result->$value)){ $result->$value = (int) (new \DateTime($result->$value))->getTimestamp(); }
