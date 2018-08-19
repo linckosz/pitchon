@@ -273,17 +273,17 @@ submenu_list['app_answer_get_presentation'] = {
 			} else if(Bruno.storage.get('pitch', subm.param)){
 				var index = 0;
 				var pitch_enc = wrapper_integer_map(subm.param);
-				device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/0.jpg?download=1', '0', 'toto.jpg');
+				device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/0.jpg?download=1', '0', '0');
 				index++;
 				var items = Bruno.storage.list('question', -1, null, 'pitch', subm.param);
 				items = Bruno.storage.sort_items(items, 'id', 0, -1, true);
 				items = Bruno.storage.sort_items(items, 'sort', 0, -1, false);
 				for(var i in items){
-					//device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/'+index+'a.jpg?download=1', index+'a');
-					//device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/'+index+'b.jpg?download=1', index+'b');
+					device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/'+index+'a.jpg?download=1', index+'a');
+					device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/'+index+'b.jpg?download=1', index+'b');
 					index++;
 				}
-				device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/'+index+'a.jpg?download=1', index+'a', 'tata.jpg');
+				device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/'+index+'a.jpg?download=1', index+'a', index+'a');
 				index++;
 				var time = 5 + 5*items.length;
 				var msg = Bruno.Translation.get('app', 2119, 'js', { time: time }); //Operation in process The download will start in approximately [{time}] seconds.
