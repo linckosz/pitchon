@@ -113,41 +113,86 @@ class ControllerScreen extends Controller {
 				$width = round($height*$data->width/$data->height);
 			}
 
-			//$name = $width.'_'.$height.'_'.$page.'.'.$ext;
-			//toto => Check if the image exists (timestamp file >= u_at)
+			$capture = true;
+			$name = $width.'_'.$height.'_'.$fixpicture.'_'.$page.'.'.$ext;
+			$path = $app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/'.$name;
+			if(is_file($path)){
+				$pitch_id = STR::integer_map($pitch_enc, true);
+				$list = $this->set_page_array($page);
+				if($pitch = Pitch::find($pitch_id)){
+					$question = false;
+					if($list['nbr']>=1){
+						if($question = $pitch->question_offset($list['nbr']-1, array('id', 'u_at'))){
+							if($question->u_at <= 1000*filemtime($path)){
+								//If the Question is untouched, it will fasten a lot the picture generation
+								$capture = false;
+							}
+						}
+					}
+					if(!$question && $pitch->u_at <= 1000*filemtime($path)){
+						if($list['nbr']<=0){
+							//Start
+							$capture = false;
+						} else {
+							//End
+							$capture = false;
+						}
+					}
+				}
+			}
 			
-			$screenCapture = new Capture();
-			$screenCapture->setUrl($url);
-			$screenCapture->setWidth($width);
-			$screenCapture->setHeight($height);
-			$screenCapture->setClipWidth($width);
-			$screenCapture->setClipHeight($height);
-			$screenCapture->setImageType($ext);
-			$screenCapture->setOptions([
-			    'ignore-ssl-errors' => 'yes',
-			]);
-			$folder = new Folders;
-			$folder->createPath($app->bruno->filePath.'/microweber/jobs/pitch/'.$pitch_id.'/');
-			$folder->createPath($app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/');
-			$screenCapture->jobs->setLocation($app->bruno->filePath.'/microweber/jobs/pitch/'.$pitch_id.'/');
-			$screenCapture->output->setLocation($app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/');
-			$screenCapture->binPath = '/usr/local/bin/';
-			$screenCapture->save('tp0_'.$page.'.'.$ext); //JPEG compress is 75% (good ratio)
-			//$screenCapture->jobs->clean();
-			$path = $app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/'.$page.'.'.$ext;
-			@unlink($path);
-			rename($app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/tp0_'.$page.'.'.$ext, $path);
-			$image = WideImage::load($path);
-		} else {
-			$image = WideImage::load($path);
+			if($capture){sleep(3);
+				$screenCapture = new Capture();
+				$screenCapture->setUrl($url);
+				$screenCapture->setWidth($width);
+				$screenCapture->setHeight($height);
+				$screenCapture->setClipWidth($width);
+				$screenCapture->setClipHeight($height);
+				$screenCapture->setImageType($ext);
+				$screenCapture->setOptions([
+				    'ignore-ssl-errors' => 'yes',
+				]);
+				$folder = new Folders;
+				$folder->createPath($app->bruno->filePath.'/microweber/jobs/pitch/'.$pitch_id.'/');
+				$folder->createPath($app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/');
+				$screenCapture->jobs->setLocation($app->bruno->filePath.'/microweber/jobs/pitch/'.$pitch_id.'/');
+				$screenCapture->output->setLocation($app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/');
+				$screenCapture->binPath = '/usr/local/bin/';
+				$screenCapture->save('tp0_'.$name); //JPEG compress is 75% (good ratio)
+				//$screenCapture->jobs->clean();
+				
+				@unlink($path);
+				rename($app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/tp0_'.$name, $path);
+			} else if(is_file($path)){
+				$item_timestamp = filemtime($path);
+				$gmt_mtime = gmdate('r', $item_timestamp);
+				header('Last-Modified: '.$gmt_mtime);
+				header('Expires: '.gmdate(DATE_RFC1123, time()+16000000)); //About 6 months cached
+				header('ETag: "'.md5($name.'-'.$item_timestamp).'"');
+				if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) || isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
+					if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime || str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == md5($name.'-'.$item_timestamp)) {
+						header('HTTP/1.1 304 Not Modified');
+						return exit(0);
+					}
+				}
+			}
+			
 		}
 
+		$image = WideImage::load($path);
 		$image->output($ext);
+
+		$item_timestamp = filemtime($path);
+		$gmt_mtime = gmdate('r', $item_timestamp);
+		header('Last-Modified: '.$gmt_mtime);
+		header('Expires: '.gmdate(DATE_RFC1123, time()+16000000)); //About 6 months cached
+		header('ETag: "'.md5($name.'-'.$item_timestamp).'"');
 		if(isset($data->download) && $data->download){
 			header('Content-Type: application/force-download;');
-			$name = $pitch_enc.'_'.$page.'.'.$ext;
-			header('Content-Disposition: attachment; filename="'.$name.'"');
+			$filename = $pitch_enc.'_'.$page.'.'.$ext;
+			header('Content-Disposition: attachment; filename="'.$filename.'"');
 		}
+		header('Cache-Control: public, no-transform, max-age=86400'); //24H cache
 		session_write_close();
 		return exit(0);
 	}
