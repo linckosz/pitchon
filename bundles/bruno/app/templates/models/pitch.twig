@@ -9,7 +9,7 @@
 	<div id="-models_pitch_top" class="models_pitch_top">
 		<div class="models_pitch_top_title">
 			<span class="models_pitch_top_title_front">{{ _trans('app', 4, 8, 'html') }}{# Pitch:  #}</span>
-			<textarea find="input_textarea" class="models_pitch_top_title_textarea font_sans_serif selectable" rows="1" maxrows="3"></textarea>
+			<textarea {%if read_only %}readonly{% endif %} find="input_textarea" class="models_pitch_top_title_textarea font_sans_serif selectable {%if read_only %}readonly{% endif %}" rows="1" maxrows="3"></textarea>
 			<span class="models_pitch_top_title_preview"><span find="preview" class="models_pitch_top_title_preview_icon icon-Settings" title="{{ _trans('app', 2, 2, 'html') }}{# Settings #}"></span></span>
 		</div>
 	</div>

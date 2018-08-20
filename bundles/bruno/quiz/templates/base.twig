@@ -61,13 +61,30 @@
 <script type="text/javascript">
 	var wrapper_user_ip = "{{ user_ip }}";
 </script>
-{% if not cookie_ip %}
-	<script type="text/javascript" src="https://l2.io/ip.js?var=wrapper_user_ip"></script>
-{% endif %}
 
 <script type="text/javascript">
 
-setCookie('ip', wrapper_user_ip, 8/24);
+
+var wrapper_user_ip_set = function(){
+	$.ajax({
+		url: "https://api.ipify.org?format=json",
+		type: "GET",
+		contentType: 'application/json; charset=UTF-8',
+		dataType: 'json',
+		timeout: 10000,
+		success: function(data){
+			if(data && typeof data.ip == "string"){
+				wrapper_user_ip = data.ip;
+				setCookie('ip', wrapper_user_ip, 8/24);
+			}
+		},
+	});
+}
+{% if not cookie_ip %}
+	wrapper_user_ip_set();
+{% endif %}
+
+
 
 var wrapper_href = window.location.href;
 //Delete URI

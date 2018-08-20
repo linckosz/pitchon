@@ -22,8 +22,9 @@
 		<script src="{{ _filelatest('/scripts/libs/mediaelementjs/mediaelement-and-player.min.js') }}" type="text/javascript"></script>
 		<link rel="stylesheet" href="{{ _filelatest('/scripts/libs/mediaelementjs/mediaelementplayer.css') }}" type="text/css" />
 
-		{# #}
-		<script src="https://www.paypalobjects.com/api/checkout.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			JSfiles.later("https://www.paypalobjects.com/api/checkout.js");
+		</script>
 
 		<script src="{{ _filelatest('/scripts/libs/grumble/js/jquery.grumble.min.js') }}" type="text/javascript"></script>
 		<link rel="stylesheet" href="{{ _filelatest('/scripts/libs/grumble/css/grumble.min.css') }}" type="text/css" />

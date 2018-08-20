@@ -18,7 +18,7 @@ submenu_list['subscription'] = {
 					submenu_subscription_features(event.data.find("[find=features]"));
 				}
 			});
-			var plan = Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan');
+			var plan = Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan'); //Must get the real plan value regardless it's read_only
 			if(plan){
 				var Elem_plan = Elem.find("[plan="+plan+"]:first");
 				Elem_plan.addClass("selected");

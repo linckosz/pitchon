@@ -250,7 +250,7 @@ var app_layers_answer_feedPage = function(param){
 	Elem.find("[find=select_style]").css("background-image", "url('"+app_layers_icon_source30(app_layers_answer_question['style'])+"')");
 
 	//[plan] Delete survey mode
-	if(app_layers_answer_question["style"]!=4 && Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
+	if(app_layers_answer_question["style"]!=4 && Bruno.storage.getPlan() < 2){
 		Elem.find("[find=select_style]").find("[value=4]").recursiveRemove();
 	}
 

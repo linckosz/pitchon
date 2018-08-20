@@ -82,6 +82,7 @@ $(function() {
 	$("#quiz_scan_code_text")
 		.on("focus", function(){
 			$("#quiz_scan_code_text").get(0).scrollIntoView(true);
+			$("#quiz_scan_code_text").select();
 			setTimeout(function(){
 				$("#quiz_scan_code_text").get(0).scrollIntoView(true);
 			}, 400);

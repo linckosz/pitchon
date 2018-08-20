@@ -141,7 +141,7 @@ class ControllerScreen extends Controller {
 				}
 			}
 			
-			if($capture){sleep(3);
+			if($capture){
 				$screenCapture = new Capture();
 				$screenCapture->setUrl($url);
 				$screenCapture->setWidth($width);
@@ -537,6 +537,12 @@ class ControllerScreen extends Controller {
 
 	public function stats_get($questionid_enc, $step='question', $question_hashid=false){
 		$app = ModelBruno::getApp();
+		$get = ModelBruno::getData();
+		//This help to have inverted color to be seen on white background
+		$app->bruno->data['invert_color'] = false;
+		if(isset($get->invert) && $get->invert){
+			$app->bruno->data['invert_color'] = true;
+		}
 		$data = $this->stats_data($questionid_enc, $question_hashid);
 		$app->bruno->data['data_step'] = 'question';
 		$app->bruno->data['get_refresh'] = true;
@@ -600,7 +606,12 @@ class ControllerScreen extends Controller {
 		if(isset($data->timestamp) && intval($data->timestamp) >= 0){
 			$timestamp = intval($data->timestamp);
 		}
-		$url = $_SERVER['REQUEST_SCHEME'].'://screen.'.$app->bruno->domain.'/statshash/'.$step.'/'.$question_hashid.'?timestamp='.$timestamp;
+		$invert = 0;
+		if(isset($get->invert) && $get->invert){
+			$invert = 1;
+		}
+		$url = $_SERVER['REQUEST_SCHEME'].'://screen.'.$app->bruno->domain.'/statshash/'.$step.'/'.$question_hashid.'?invert='.$invert.'&timestamp='.$timestamp;
+
 		$width = 600;
 		$height = 500;
 		if(isset($data->width) && is_numeric($data->width) && $data->width>0 && isset($data->height) && is_numeric($data->height) && $data->height>0){
@@ -608,29 +619,71 @@ class ControllerScreen extends Controller {
 			$width = round(1.5*$data->width);
 			$height = round(1.5*$data->height);
 		}
-		$screenCapture = new Capture();
-		$screenCapture->setUrl($url);
-		$screenCapture->setWidth($width);
-		$screenCapture->setHeight($height);
-		$screenCapture->setClipWidth($width);
-		$screenCapture->setClipHeight($height);
-		$screenCapture->setImageType($ext);
-		$screenCapture->setOptions([
-		    'ignore-ssl-errors' => 'yes',
-		]);
-		$folder = new Folders;
-		$folder->createPath($app->bruno->filePath.'/microweber/jobs/hash/');
-		$folder->createPath($app->bruno->filePath.'/microweber/output/hash/');
-		$screenCapture->jobs->setLocation($app->bruno->filePath.'/microweber/jobs/hash/');
-		$screenCapture->output->setLocation($app->bruno->filePath.'/microweber/output/hash/');
-		$screenCapture->binPath = '/usr/local/bin/';
-		$screenCapture->save('tp0_'.$question_hashid.'.'.$ext); //JPEG compress is 75% (good ratio)
-		//$screenCapture->jobs->clean();
-		$path = $app->bruno->filePath.'/microweber/output/hash/'.$question_hashid.'.'.$ext;
-		@unlink($path);
-		rename($app->bruno->filePath.'/microweber/output/hash/tp0_'.$question_hashid.'.'.$ext, $path);
+
+		$capture = true;
+		$name = $width.'_'.$height.'_'.$invert.'_'.$timestamp.'_'.$question_hashid.'.'.$ext;
+		$path = $app->bruno->filePath.'/microweber/output/hash/'.$name;
+		if(is_file($path)){
+			if($question_hashid && $session = Session::Where('question_hashid', $question_hashid)->first(array('id'))){
+				$question_id = Question::decrypt($question_hashid);
+				if($question_id && $statistics = Statistics::Where('session_id', $session->id)->where('question_id', $question_id)->first(array('id', 'u_at'))){
+					if($statistics->u_at <= 1000*filemtime($path)){
+						//If the Question is untouched, it will fasten a lot the picture generation
+						$capture = false;
+					}
+				} else {
+					$capture = false;
+				}
+			} else {
+				$capture = false;
+			}
+		}
+		
+		if($capture){
+			$screenCapture = new Capture();
+			$screenCapture->setUrl($url);
+			$screenCapture->setWidth($width);
+			$screenCapture->setHeight($height);
+			$screenCapture->setClipWidth($width);
+			$screenCapture->setClipHeight($height);
+			$screenCapture->setImageType($ext);
+			$screenCapture->setOptions([
+			    'ignore-ssl-errors' => 'yes',
+			]);
+			$folder = new Folders;
+			$folder->createPath($app->bruno->filePath.'/microweber/jobs/hash/');
+			$folder->createPath($app->bruno->filePath.'/microweber/output/hash/');
+			$screenCapture->jobs->setLocation($app->bruno->filePath.'/microweber/jobs/hash/');
+			$screenCapture->output->setLocation($app->bruno->filePath.'/microweber/output/hash/');
+			$screenCapture->binPath = '/usr/local/bin/';
+			$screenCapture->save('tp0_'.$name); //JPEG compress is 75% (good ratio)
+			//$screenCapture->jobs->clean();
+
+			@unlink($path);
+			rename($app->bruno->filePath.'/microweber/output/hash/tp0_'.$name, $path);
+		} else if(is_file($path)){
+			$item_timestamp = filemtime($path);
+			$gmt_mtime = gmdate('r', $item_timestamp);
+			header('Last-Modified: '.$gmt_mtime);
+			header('Expires: '.gmdate(DATE_RFC1123, time()+16000000)); //About 6 months cached
+			header('ETag: "'.md5($name.'-'.$item_timestamp).'"');
+			if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) || isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
+				if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime || str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == md5($name.'-'.$item_timestamp)) {
+					header('HTTP/1.1 304 Not Modified');
+					return exit(0);
+				}
+			}
+		}
+
 		$image = WideImage::load($path);
 		$image->output($ext);
+
+		$item_timestamp = filemtime($path);
+		$gmt_mtime = gmdate('r', $item_timestamp);
+		header('Last-Modified: '.$gmt_mtime);
+		header('Expires: '.gmdate(DATE_RFC1123, time()+16000000)); //About 6 months cached
+		header('ETag: "'.md5($name.'-'.$item_timestamp).'"');
+		header('Cache-Control: public, no-transform, max-age=86400'); //24H cache
 		session_write_close();
 		return exit(0);
 	}
@@ -675,17 +728,26 @@ class ControllerScreen extends Controller {
 					if($ms_time < (ModelBruno::getMStime() - (24*3600*1000)) || $ms_time > ModelBruno::getMStime()){
 						$ms_time = ModelBruno::getMStime() - (1200*1000);
 					}
-				}
+				}				
 
 				if($question && $answereds = Answered::Where('c_at', '>=', $ms_time)->where('statistics_id', $statistics->id)->where('style', $question->style)->where('question_id', $question->id)->get()){
 					foreach ($answereds as $answered) {
-						$letter = ModelBruno::numToAplha($answered->number);
+						if($statistics->style == 4){
+							foreach ($array_letters as $letter) {
+								if(!is_null($answered->{'s_'.$letter})){
+									$statistics->{'t_'.$letter} += $answered->{'s_'.$letter};
+									$statistics->$letter += 1;
+								}
+							}
+						} else {
+							if($letter = ModelBruno::numToAplha($answered->number)){
+								$statistics->$letter += 1;
+							}
+						}
 						$statistics->answers++;
-						$statistics->$letter += 1;
-						$statistics->{'t_'.$letter} += $answered->{'s_'.$letter};
 					}
 				}
-
+				
 				if($statistics->answers <= 0){
 					$statistics = false; //Make sure we display nothing
 				}
@@ -746,15 +808,20 @@ class ControllerScreen extends Controller {
 				$data['data_number_5'] = $app->bruno->data['data_number_5'] = 0;
 				$data['data_number_6'] = $app->bruno->data['data_number_6'] = 0;
 				if($preview){
-					//We need a SQL call here because we don't store information into statistics
-					$answers_count = Answer::Where('parent_id', $question->id)
-						->where(function($query) {
-							$query
-								->whereNotNull('file_id')
-								->orWhere('title', '!=', '');
-						})
-						->take(6)
-						->count();
+					if(isset($_SESSION['answers_count_'.$question->id.'_'.$question->u_at])){
+						$answers_count = $_SESSION['answers_count_'.$question->id.'_'.$question->u_at];
+					} else {
+						//We need a SQL call here because we don't store information into statistics
+						$answers_count = Answer::Where('parent_id', $question->id)
+							->where(function($query) {
+								$query
+									->whereNotNull('file_id')
+									->orWhere('title', '!=', '');
+							})
+							->take(6)
+							->count();
+						$_SESSION['answers_count_'.$question->id.'_'.$question->u_at] = $answers_count;
+					}
 
 					$random_array = array(0, 0, 0, 0, 0, 0);
 					for($i=0; $i<100; $i++){
@@ -767,7 +834,20 @@ class ControllerScreen extends Controller {
 					$data['data_number_5'] = $app->bruno->data['data_number_5'] = $random_array[4];
 					$data['data_number_6'] = $app->bruno->data['data_number_6'] = $random_array[5];
 				} else if(!$statistics){
-					//Just display nothing
+					if(isset($_SESSION['answers_count_'.$question->id.'_'.$question->u_at])){
+						$answers_count = $_SESSION['answers_count_'.$question->id.'_'.$question->u_at];
+					} else {
+						//We need a SQL call here because we don't store information into statistics
+						$answers_count = Answer::Where('parent_id', $question->id)
+							->where(function($query) {
+								$query
+									->whereNotNull('file_id')
+									->orWhere('title', '!=', '');
+							})
+							->take(6)
+							->count();
+						$_SESSION['answers_count_'.$question->id.'_'.$question->u_at] = $answers_count;
+					}
 				} else {
 					if($total>0){
 						$array_letters = ['a', 'b', 'c', 'd', 'e', 'f'];
@@ -776,6 +856,22 @@ class ControllerScreen extends Controller {
 								$answers_count++;
 								$data['data_number_'.$answers_count] = $app->bruno->data['data_number_'.$answers_count] = round(100 * $statistics->$letter / $total);
 							}
+						}
+						$_SESSION['answers_count_'.$question->id.'_'.$question->u_at] = $answers_count;
+					} else {
+						if(isset($_SESSION['answers_count_'.$question->id.'_'.$question->u_at])){
+							$answers_count = $_SESSION['answers_count_'.$question->id.'_'.$question->u_at];
+						} else {
+							//We need a SQL call here because we don't store information into statistics
+							$answers_count = Answer::Where('parent_id', $question->id)
+								->where(function($query) {
+									$query
+										->whereNotNull('file_id')
+										->orWhere('title', '!=', '');
+								})
+								->take(6)
+								->count();
+							$_SESSION['answers_count_'.$question->id.'_'.$question->u_at] = $answers_count;
 						}
 					}
 				}
@@ -810,15 +906,20 @@ class ControllerScreen extends Controller {
 				$data['data_number_5'] = $app->bruno->data['data_number_5'] = 0;
 				$data['data_number_6'] = $app->bruno->data['data_number_6'] = 0;
 				if($preview){
-					//We need a SQL call here because we don't store information into statistics
-					$answers_count = Answer::Where('parent_id', $question->id)
-						->where(function($query) {
-							$query
-								->whereNotNull('file_id')
-								->orWhere('title', '!=', '');
-						})
-						->take(6)
-						->count();
+					if(isset($_SESSION['answers_count_'.$question->id.'_'.$question->u_at])){
+						$answers_count = $_SESSION['answers_count_'.$question->id.'_'.$question->u_at];
+					} else {
+						//We need a SQL call here because we don't store information into statistics
+						$answers_count = Answer::Where('parent_id', $question->id)
+							->where(function($query) {
+								$query
+									->whereNotNull('file_id')
+									->orWhere('title', '!=', '');
+							})
+							->take(6)
+							->count();
+						$_SESSION['answers_count_'.$question->id.'_'.$question->u_at] = $answers_count;
+					}
 					$data['data_number_1'] = $app->bruno->data['data_number_1'] = rand(0, 100);
 					$data['data_number_2'] = $app->bruno->data['data_number_2'] = rand(0, 100);
 					$data['data_number_3'] = $app->bruno->data['data_number_3'] = rand(0, 100);
@@ -826,7 +927,20 @@ class ControllerScreen extends Controller {
 					$data['data_number_5'] = $app->bruno->data['data_number_5'] = rand(0, 100);
 					$data['data_number_6'] = $app->bruno->data['data_number_6'] = rand(0, 100);
 				} else if(!$statistics){
-					//Just display nothing
+					if(isset($_SESSION['answers_count_'.$question->id.'_'.$question->u_at])){
+						$answers_count = $_SESSION['answers_count_'.$question->id.'_'.$question->u_at];
+					} else {
+						//We need a SQL call here because we don't store information into statistics
+						$answers_count = Answer::Where('parent_id', $question->id)
+							->where(function($query) {
+								$query
+									->whereNotNull('file_id')
+									->orWhere('title', '!=', '');
+							})
+							->take(6)
+							->count();
+						$_SESSION['answers_count_'.$question->id.'_'.$question->u_at] = $answers_count;
+					}
 				} else {
 					$data['data_participants'] = $app->bruno->data['data_participants'] = $statistics->answers;
 					if($total>0){
@@ -840,6 +954,22 @@ class ControllerScreen extends Controller {
 									$data['data_number_'.$answers_count] = $app->bruno->data['data_number_'.$answers_count] = 0;
 								}
 							}
+						}
+						$_SESSION['answers_count_'.$question->id.'_'.$question->u_at] = $answers_count;
+					} else {
+						if(isset($_SESSION['answers_count_'.$question->id.'_'.$question->u_at])){
+							$answers_count = $_SESSION['answers_count_'.$question->id.'_'.$question->u_at];
+						} else {
+							//We need a SQL call here because we don't store information into statistics
+							$answers_count = Answer::Where('parent_id', $question->id)
+								->where(function($query) {
+									$query
+										->whereNotNull('file_id')
+										->orWhere('title', '!=', '');
+								})
+								->take(6)
+								->count();
+							$_SESSION['answers_count_'.$question->id.'_'.$question->u_at] = $answers_count;
 						}
 					}
 				}

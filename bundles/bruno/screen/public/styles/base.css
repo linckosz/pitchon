@@ -75,6 +75,7 @@ html, .font_sans_serif {
 }
 
 .base_color_text_white { color: #FFFFFF; }
+.base_color_text_white.invert { color: #505050; }
 
 .base_color_bg_main_gradient {
 	background-color: #023762;

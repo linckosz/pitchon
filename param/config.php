@@ -172,6 +172,7 @@ $app->bruno->translation = array(
 //Some generic data for translation twig
 $app->bruno->data = array(
 	'user_id' => false,
+	'read_only' => false, //If the user has an expired plan, it will be true
 	'user_ip' => $_SERVER['REMOTE_ADDR'],
 	'cookie_ip' => false,
 	'guest_id' => false,

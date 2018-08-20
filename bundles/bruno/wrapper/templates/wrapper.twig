@@ -71,11 +71,28 @@
 <script type="text/javascript">
 	var wrapper_user_ip = "{{ user_info_3 }}";
 </script>
-{% if not cookie_ip %}
-	<script type="text/javascript" src="https://l2.io/ip.js?var=wrapper_user_ip"></script>
-{% endif %}
 
 <script type="text/javascript">
+
+var wrapper_user_ip_set = function(){
+	$.ajax({
+		url: "https://api.ipify.org?format=json",
+		type: "GET",
+		contentType: 'application/json; charset=UTF-8',
+		dataType: 'json',
+		timeout: 10000,
+		success: function(data){
+			if(data && typeof data.ip == "string"){
+				wrapper_user_ip = data.ip;
+				wrapper_user_info[3] = wrapper_user_ip;
+				setCookie('ip', wrapper_user_ip, 8/24);
+			}
+		},
+	});
+}
+{% if not cookie_ip %}
+	wrapper_user_ip_set();
+{% endif %}
 
 var wrapper_user_info = [
 	"{{ user_info_0 }}",
@@ -97,6 +114,11 @@ document.brunoDev = '{{ bruno_dev }}';
 var wrapper_show_error = {{ bruno_show_dev }};
 var wrapper_title = "";
 var wrapper_main_title = "{{ title }}";
+
+var wrapper_ready_only = false;
+{% if not ready_only %}
+	wrapper_ready_only = true;
+{% endif %}
 
 //In IE console is undefined if the dev tool is closed
 if(!window.console){

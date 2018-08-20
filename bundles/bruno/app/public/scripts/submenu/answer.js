@@ -204,7 +204,7 @@ submenu_list['app_answer_get_presentation'] = {
 		"title": "<span class='fa fa-download'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2118, 'html'), //Download PPT
 		"now": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
+			if(Bruno.storage.getPlan() < 2){
 				//Elem.find("[find=submenu_button_value]").addClass("submenu_button_paypal");
 			}
 			if(Bruno.storage.get('pitch', subm.param)){
@@ -212,7 +212,7 @@ submenu_list['app_answer_get_presentation'] = {
 			}
 		},
 		"action": function(Elem, subm){
-			if(false && Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
+			if(false && Bruno.storage.getPlan() < 2){
 				//submenu_Build_return('subscription', true, true, null, false); //toto
 			} else if(Bruno.storage.get('pitch', subm.param)){
 				Bruno.storage.downloadPPT(subm.param);
@@ -231,7 +231,7 @@ submenu_list['app_answer_get_presentation'] = {
 		"title": "<span class='fa fa-download'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2120, 'html'), //Download PowerPoint Add-In
 		"now": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
+			if(Bruno.storage.getPlan() < 2){
 				//Elem.find("[find=submenu_button_value]").addClass("submenu_button_paypal");
 			}
 			if(Bruno.storage.get('pitch', subm.param)){
@@ -239,7 +239,7 @@ submenu_list['app_answer_get_presentation'] = {
 			}
 		},
 		"action": function(Elem, subm){
-			if(false && Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
+			if(false && Bruno.storage.getPlan() < 2){
 				//submenu_Build_return('subscription', true, true, null, false); //toto
 			} else if(Bruno.storage.get('pitch', subm.param)){
 				device_download(app_application_add_in);
@@ -252,7 +252,7 @@ submenu_list['app_answer_get_presentation'] = {
 		"title": "<span class='fa fa-download'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2121, 'html'), //Download JPEG
 		"now": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
+			if(Bruno.storage.getPlan() < 2){
 				//Elem.find("[find=submenu_button_value]").addClass("submenu_button_paypal");
 			}
 			if(Bruno.storage.get('pitch', subm.param)){
@@ -268,22 +268,22 @@ submenu_list['app_answer_get_presentation'] = {
 					pitch_id = Bruno.storage.get("question", question_id, "parent_id");
 				}
 			}
-			if(false && Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
+			if(false && Bruno.storage.getPlan() < 2){
 				//submenu_Build_return('subscription', true, true, null, false); //toto
 			} else if(Bruno.storage.get('pitch', subm.param)){
 				var index = 0;
 				var pitch_enc = wrapper_integer_map(subm.param);
-				device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/0.jpg?download=1', '0', '0');
+				device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/0.jpg?download=1', '0', '0.jpg');
 				index++;
 				var items = Bruno.storage.list('question', -1, null, 'pitch', subm.param);
 				items = Bruno.storage.sort_items(items, 'id', 0, -1, true);
 				items = Bruno.storage.sort_items(items, 'sort', 0, -1, false);
 				for(var i in items){
-					device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/'+index+'a.jpg?download=1', index+'a');
-					device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/'+index+'b.jpg?download=1', index+'b');
+					device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/'+index+'a.jpg?download=1', index+'a', index+'a.jpg');
+					device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/'+index+'b.jpg?download=1', index+'b', index+'b.jpg');
 					index++;
 				}
-				device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/'+index+'a.jpg?download=1', index+'a', index+'a');
+				device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/'+index+'a.jpg?download=1', index+'a', index+'a.jpg');
 				index++;
 				var time = 5 + 5*items.length;
 				var msg = Bruno.Translation.get('app', 2119, 'js', { time: time }); //Operation in process The download will start in approximately [{time}] seconds.
@@ -298,7 +298,7 @@ submenu_list['app_answer_get_presentation'] = {
 		"value": 20,
 		"now": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
+			if(Bruno.storage.getPlan() < 2){
 				Elem.addClass("display_none");
 			}
 		},
@@ -315,7 +315,7 @@ submenu_list['app_answer_get_presentation'] = {
 		},
 		"now": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 2){
+			if(Bruno.storage.getPlan() < 2){
 				Elem.addClass("display_none");
 			}
 		},
@@ -331,7 +331,7 @@ submenu_list['app_answer_get_presentation'] = {
 		},
 		"now": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 3){
+			if(Bruno.storage.getPlan() < 3){
 				Elem.addClass("display_none");
 			}
 			var value = this.value;
@@ -362,7 +362,7 @@ submenu_list['app_answer_get_presentation'] = {
 		"value": 20,
 		"now": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 3){
+			if(Bruno.storage.getPlan() < 3){
 				Elem.addClass("display_none");
 			}
 		},
@@ -373,7 +373,7 @@ submenu_list['app_answer_get_presentation'] = {
 		"title": Bruno.Translation.get('app', 98, 'html'), //Brand name or Link
 		"now": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 3){
+			if(Bruno.storage.getPlan() < 3){
 				Elem.addClass("display_none");
 			}
 			Elem.find("[find=submenu_value]").addClass("no_focus");
@@ -431,7 +431,7 @@ submenu_list['app_answer_get_presentation'] = {
 		},
 		"now": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 3){
+			if(Bruno.storage.getPlan() < 3){
 				Elem.addClass("display_none");
 			}
 			var item = Bruno.storage.get("pitch", subm.param);
@@ -460,7 +460,7 @@ submenu_list['app_answer_get_presentation'] = {
 		"title": Bruno.Translation.get('app', 100, 'html'), //Advertising name or link
 		"now": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 3){
+			if(Bruno.storage.getPlan() < 3){
 				Elem.addClass("display_none");
 			}
 			Elem.find("[find=submenu_value]").addClass("no_focus");
@@ -516,7 +516,7 @@ submenu_list['app_answer_get_presentation'] = {
 		},
 		"now": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') < 3){
+			if(Bruno.storage.getPlan() < 3){
 				Elem.addClass("display_none");
 			}
 			var item = Bruno.storage.get("pitch", subm.param);

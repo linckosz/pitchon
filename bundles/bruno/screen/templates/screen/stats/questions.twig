@@ -25,7 +25,11 @@
 				statsjs_data_participants = parseInt(statsjs_data_participants, 10);
 				if(statsjs_data_participants){
 					window.parent.ppt_frame_iframe_show();
-					$("#ppt_stats_questions_participants_nbr").html(statsjs_data_participants);
+					if(statsjs_data_participants == 1){
+						$("#ppt_stats_questions_participants_nbr").html(statsjs_data_participants+" {{ _trans('screen', 0, 10, 'html') }}{# answer #}");
+					} else {
+						$("#ppt_stats_questions_participants_nbr").html(statsjs_data_participants+" {{ _trans('screen', 0, 5, 'html') }}{# answers #}");
+					}
 					$("#ppt_stats_questions_participants").removeClass("visibility_hidden");
 				} else {
 					$("#ppt_stats_questions_participants_nbr").html("");
@@ -86,12 +90,12 @@
 		</script>
 	</div>
 
-	<div id="ppt_stats_questions_participants" class="{% if not fix_stats or data_participants == 0 %}visibility_hidden{% endif %}" title="{{ _trans('screen', 0, 5, 'html') }}{# answers #}"><span id="ppt_stats_questions_participants_nbr">{{ data_participants }}</span> <span>{{ _trans('screen', 0, 5, 'html') }}{# answers #}<span></div>
+	<div id="ppt_stats_questions_participants" class="{% if not fix_stats or data_participants == 0 %}visibility_hidden{% endif %}" title="{{ _trans('screen', 0, 5, 'html') }}{# answers #}"><span id="ppt_stats_questions_participants_nbr">{{ data_participants }} {% if data_participants <= 1 %}{{ _trans('screen', 0, 10, 'html') }}{# answer #}{% else %}{{ _trans('screen', 0, 5, 'html') }}{# answers #}{% endif %}<span></div>
 
 	<div id="ppt_stats_questions_wrapper" class="{% if fix_stats %}ppt_stats_questions_wrapper_fix_stats{% endif %}">
 		<div id="ppt_stats_questions_correct">
 			<div id="ppt_stats_questions_number_correct" class="ppt_stats_questions_number">{{ data_correct }}%</div>
-			<div class="ppt_stats_questions_check fa fa-check"></div>
+			<div class="ppt_stats_questions_check fa fa-check {% if invert_color %}invert{% endif %}"></div>
 		</div>
 		<div id="ppt_stats_questions_not_correct">
 			<div id="ppt_stats_questions_number_not_correct" class="ppt_stats_questions_number">{{ data_not_correct }}%</div>

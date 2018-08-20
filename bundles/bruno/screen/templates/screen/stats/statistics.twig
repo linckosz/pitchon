@@ -5,57 +5,105 @@
 		<style type="text/css">
 			#ppt_stats_statistics_1 {
 				{% if fix_stats %}
-					height: {{ data_number_1|number_format(2, '.', '') }}%;
+					{% if data_question_style == 4 %}
+						{% if data_step == 'answer' %}
+							height: {{ 10 * data_number_1|number_format(2, '.', '') }}%;
+						{% else %}
+							height: 0%;
+						{% endif %}
+					{% else %}
+						height: {{ data_number_1|number_format(2, '.', '') }}%;
+					{% endif %}
 				{% else %}
 					height: 0%;
 				{% endif %}
 				left: {{ data_column_left_1|number_format(2, '.', '') }}%;
-				{% if data_answers_count < 1 %}display: none !important;{% endif %}
+				{% if data_answers_count < 1 %}display: none;{% endif %}
 			}
 			#ppt_stats_statistics_2 {
 				{% if fix_stats %}
-					height: {{ data_number_2|number_format(2, '.', '') }}%;
+					{% if data_question_style == 4 %}
+						{% if data_step == 'answer' %}
+							height: {{ 10 * data_number_2|number_format(2, '.', '') }}%;
+						{% else %}
+							height: 0%;
+						{% endif %}
+					{% else %}
+						height: {{ data_number_2|number_format(2, '.', '') }}%;
+					{% endif %}
 				{% else %}
 					height: 0%;
 				{% endif %}
 				left: {{ data_column_left_2|number_format(2, '.', '') }}%;
-				{% if data_answers_count < 2 %}display: none !important;{% endif %}
+				{% if data_answers_count < 2 %}display: none;{% endif %}
 			}
 			#ppt_stats_statistics_3 {
 				{% if fix_stats %}
-					height: {{ data_number_3|number_format(2, '.', '') }}%;
+					{% if data_question_style == 4 %}
+						{% if data_step == 'answer' %}
+							height: {{ 10 * data_number_3|number_format(2, '.', '') }}%;
+						{% else %}
+							height: 0%;
+						{% endif %}
+					{% else %}
+						height: {{ data_number_3|number_format(2, '.', '') }}%;
+					{% endif %}
 				{% else %}
 					height: 0%;
 				{% endif %}
 				left: {{ data_column_left_3|number_format(2, '.', '') }}%;
-				{% if data_answers_count < 3 %}display: none !important;{% endif %}
+				{% if data_answers_count < 3 %}display: none;{% endif %}
 			}
 			#ppt_stats_statistics_4 {
 				{% if fix_stats %}
-					height: {{ data_number_4|number_format(2, '.', '') }}%;
+					{% if data_question_style == 4 %}
+						{% if data_step == 'answer' %}
+							height: {{ 10 * data_number_4|number_format(2, '.', '') }}%;
+						{% else %}
+							height: 0%;
+						{% endif %}
+					{% else %}
+						height: {{ data_number_4|number_format(2, '.', '') }}%;
+					{% endif %}
 				{% else %}
 					height: 0%;
 				{% endif %}
 				left: {{ data_column_left_4|number_format(2, '.', '') }}%;
-				{% if data_answers_count < 4 %}display: none !important;{% endif %}
+				{% if data_answers_count < 4 %}display: none;{% endif %}
 			}
 			#ppt_stats_statistics_5 {
 				{% if fix_stats %}
-					height: {{ data_number_5|number_format(2, '.', '') }}%;
+					{% if data_question_style == 4 %}
+						{% if data_step == 'answer' %}
+							height: {{ 10 * data_number_5|number_format(2, '.', '') }}%;
+						{% else %}
+							height: 0%;
+						{% endif %}
+					{% else %}
+						height: {{ data_number_5|number_format(2, '.', '') }}%;
+					{% endif %}
 				{% else %}
 					height: 0%;
 				{% endif %}
 				left: {{ data_column_left_5|number_format(2, '.', '') }}%;
-				{% if data_answers_count < 5 %}display: none !important;{% endif %}
+				{% if data_answers_count < 5 %}display: none;{% endif %}
 			}
 			#ppt_stats_statistics_6 {
 				{% if fix_stats %}
-					height: {{ data_number_6|number_format(2, '.', '') }}%;
+					{% if data_question_style == 4 %}
+						{% if data_step == 'answer' %}
+							height: {{ 10 * data_number_6|number_format(2, '.', '') }}%;
+						{% else %}
+							height: 0%;
+						{% endif %}
+					{% else %}
+						height: {{ data_number_6|number_format(2, '.', '') }}%;
+					{% endif %}
 				{% else %}
 					height: 0%;
 				{% endif %}
 				left: {{ data_column_left_6|number_format(2, '.', '') }}%;
-				{% if data_answers_count < 6 %}display: none !important;{% endif %}
+				{% if data_answers_count < 6 %}display: none;{% endif %}
 			}
 		</style>
 		<script type="text/javascript">
@@ -135,7 +183,11 @@
 				statsjs_data_participants = parseInt(statsjs_data_participants, 10);
 				if(statsjs_data_participants){
 					window.parent.ppt_frame_iframe_show();
-					$("#ppt_stats_statistics_participants_nbr").html(statsjs_data_participants);
+					if(statsjs_data_participants == 1){
+						$("#ppt_stats_statistics_participants_nbr").html(statsjs_data_participants+" {{ _trans('screen', 0, 10, 'html') }}{# answer #}");
+					} else {
+						$("#ppt_stats_statistics_participants_nbr").html(statsjs_data_participants+" {{ _trans('screen', 0, 5, 'html') }}{# answers #}");
+					}
 					$("#ppt_stats_statistics_participants").removeClass("visibility_hidden");
 				} else {
 					$("#ppt_stats_statistics_participants_nbr").html("");
@@ -149,7 +201,7 @@
 					} else {
 						$("#ppt_stats_statistics_1")
 							.removeClass('display_none')
-							.css('display', '');
+							.css('display', 'block');
 					}
 					$("#ppt_stats_statistics_1").data("number", statsjs_data_number_1);
 					$("#ppt_stats_statistics_1_number").html(ppt_stats_statistics_format(statsjs_data_number_1));
@@ -164,7 +216,7 @@
 					} else {
 						$("#ppt_stats_statistics_2")
 							.removeClass('display_none')
-							.css('display', '');
+							.css('display', 'block');
 					}
 					$("#ppt_stats_statistics_2").data("number", statsjs_data_number_2);
 					$("#ppt_stats_statistics_2_number").html(ppt_stats_statistics_format(statsjs_data_number_2));
@@ -179,7 +231,7 @@
 					} else {
 						$("#ppt_stats_statistics_3")
 							.removeClass('display_none')
-							.css('display', '');
+							.css('display', 'block');
 					}
 					$("#ppt_stats_statistics_3").data("number", statsjs_data_number_3);
 					$("#ppt_stats_statistics_3_number").html(ppt_stats_statistics_format(statsjs_data_number_3));
@@ -194,7 +246,7 @@
 					} else {
 						$("#ppt_stats_statistics_4")
 							.removeClass('display_none')
-							.css('display', '');
+							.css('display', 'block');
 					}
 					$("#ppt_stats_statistics_4").data("number", statsjs_data_number_4);
 					$("#ppt_stats_statistics_4_number").html(ppt_stats_statistics_format(statsjs_data_number_4));
@@ -209,7 +261,7 @@
 					} else {
 						$("#ppt_stats_statistics_5")
 							.removeClass('display_none')
-							.css('display', '');
+							.css('display', 'block');
 					}
 					$("#ppt_stats_statistics_5").data("number", statsjs_data_number_5);
 					$("#ppt_stats_statistics_5_number").html(ppt_stats_statistics_format(statsjs_data_number_5));
@@ -224,7 +276,7 @@
 					} else {
 						$("#ppt_stats_statistics_6")
 							.removeClass('display_none')
-							.css('display', '');
+							.css('display', 'block');
 					}
 					$("#ppt_stats_statistics_6").data("number", statsjs_data_number_6);
 					$("#ppt_stats_statistics_6_number").html(ppt_stats_statistics_format(statsjs_data_number_5));
@@ -310,32 +362,32 @@
 		</script>
 	</div>
 
-	<div id="ppt_stats_statistics_participants" class="{% if not fix_stats or data_participants == 0 %}visibility_hidden{% endif %}" title="{{ _trans('screen', 0, 5, 'html') }}{# answers #}"><span id="ppt_stats_statistics_participants_nbr">{{ data_participants }}</span> <span>{{ _trans('screen', 0, 5, 'html') }}{# answers #}<span></div>
+	<div id="ppt_stats_statistics_participants" class="{% if not fix_stats or data_participants == 0 %}visibility_hidden{% endif %}" title="{{ _trans('screen', 0, 5, 'html') }}{# answers #}"><span id="ppt_stats_statistics_participants_nbr">{{ data_participants }} {% if data_participants <= 1 %}{{ _trans('screen', 0, 10, 'html') }}{# answer #}{% else %}{{ _trans('screen', 0, 5, 'html') }}{# answers #}{% endif %}<span></div>
 
 	<div id="ppt_stats_statistics_wrapper" class="{% if fix_stats %}ppt_stats_statistics_wrapper_fix_stats{% endif %}">
-		<div id="ppt_stats_statistics_1" class="{% if not fix_stats or data_number_1 == 0 %}display_none{% endif %} ppt_stats_statistics_column">
-			<div id="ppt_stats_statistics_1_number" class="ppt_stats_statistics_number">{{ data_number_1 }}%</div>
-			<div id="ppt_stats_statistics_1_letter" class="ppt_stats_statistics_letter">A</div>
+		<div id="ppt_stats_statistics_1" class="{% if not fix_stats or data_number_1 == 0 %}display_none{% endif %} {% if data_question_style == 4 and data_step == 'question' %}display_none{% endif %} ppt_stats_statistics_column">
+			<div id="ppt_stats_statistics_1_number" class="ppt_stats_statistics_number">{{ data_number_1 }}{% if data_question_style != 4%}%{% endif %}</div>
+			<div id="ppt_stats_statistics_1_letter" class="ppt_stats_statistics_letter {% if invert_color %}invert{% endif %}">A</div>
 		</div>
-		<div id="ppt_stats_statistics_2" class="{% if not fix_stats or data_number_2 == 0 %}display_none{% endif %} ppt_stats_statistics_column">
-			<div id="ppt_stats_statistics_2_number" class="ppt_stats_statistics_number">{{ data_number_2 }}%</div>
-			<div id="ppt_stats_statistics_2_letter" class="ppt_stats_statistics_letter">B</div>
+		<div id="ppt_stats_statistics_2" class="{% if not fix_stats or data_number_2 == 0 %}display_none{% endif %} {% if data_question_style == 4 and data_step == 'question' %}display_none{% endif %} ppt_stats_statistics_column">
+			<div id="ppt_stats_statistics_2_number" class="ppt_stats_statistics_number">{{ data_number_2 }}{% if data_question_style != 4%}%{% endif %}</div>
+			<div id="ppt_stats_statistics_2_letter" class="ppt_stats_statistics_letter {% if invert_color %}invert{% endif %}">B</div>
 		</div>
-		<div id="ppt_stats_statistics_3" class="{% if not fix_stats or data_number_3 == 0 %}display_none{% endif %} ppt_stats_statistics_column">
-			<div id="ppt_stats_statistics_3_number" class="ppt_stats_statistics_number">{{ data_number_3 }}%</div>
-			<div id="ppt_stats_statistics_3_letter" class="ppt_stats_statistics_letter">C</div>
+		<div id="ppt_stats_statistics_3" class="{% if not fix_stats or data_number_3 == 0 %}display_none{% endif %} {% if data_question_style == 4 and data_step == 'question' %}display_none{% endif %} ppt_stats_statistics_column">
+			<div id="ppt_stats_statistics_3_number" class="ppt_stats_statistics_number">{{ data_number_3 }}{% if data_question_style != 4%}%{% endif %}</div>
+			<div id="ppt_stats_statistics_3_letter" class="ppt_stats_statistics_letter {% if invert_color %}invert{% endif %}">C</div>
 		</div>
-		<div id="ppt_stats_statistics_4" class="{% if not fix_stats or data_number_4 == 0 %}display_none{% endif %} ppt_stats_statistics_column">
-			<div id="ppt_stats_statistics_4_number" class="ppt_stats_statistics_number">{{ data_number_4 }}%</div>
-			<div id="ppt_stats_statistics_4_letter" class="ppt_stats_statistics_letter">D</div>
+		<div id="ppt_stats_statistics_4" class="{% if not fix_stats or data_number_4 == 0 %}display_none{% endif %} {% if data_question_style == 4 and data_step == 'question' %}display_none{% endif %} ppt_stats_statistics_column">
+			<div id="ppt_stats_statistics_4_number" class="ppt_stats_statistics_number">{{ data_number_4 }}{% if data_question_style != 4%}%{% endif %}</div>
+			<div id="ppt_stats_statistics_4_letter" class="ppt_stats_statistics_letter {% if invert_color %}invert{% endif %}">D</div>
 		</div>
-		<div id="ppt_stats_statistics_5" class="{% if not fix_stats or data_number_5 == 0 %}display_none{% endif %} ppt_stats_statistics_column">
-			<div id="ppt_stats_statistics_5_number" class="ppt_stats_statistics_number">{{ data_number_5 }}%</div>
-			<div id="ppt_stats_statistics_5_letter" class="ppt_stats_statistics_letter">E</div>
+		<div id="ppt_stats_statistics_5" class="{% if not fix_stats or data_number_5 == 0 %}display_none{% endif %} {% if data_question_style == 4 and data_step == 'question' %}display_none{% endif %} ppt_stats_statistics_column">
+			<div id="ppt_stats_statistics_5_number" class="ppt_stats_statistics_number">{{ data_number_5 }}{% if data_question_style != 4%}%{% endif %}</div>
+			<div id="ppt_stats_statistics_5_letter" class="ppt_stats_statistics_letter {% if invert_color %}invert{% endif %}">E</div>
 		</div>
-		<div id="ppt_stats_statistics_6" class="{% if not fix_stats or data_number_6 == 0 %}display_none{% endif %} ppt_stats_statistics_column">
-			<div id="ppt_stats_statistics_6_number" class="ppt_stats_statistics_number">{{ data_number_6 }}%</div>
-			<div id="ppt_stats_statistics_6_letter" class="ppt_stats_statistics_letter">F</div>
+		<div id="ppt_stats_statistics_6" class="{% if not fix_stats or data_number_6 == 0 %}display_none{% endif %} {% if data_question_style == 4 and data_step == 'question' %}display_none{% endif %} ppt_stats_statistics_column">
+			<div id="ppt_stats_statistics_6_number" class="ppt_stats_statistics_number">{{ data_number_6 }}{% if data_question_style != 4%}%{% endif %}</div>
+			<div id="ppt_stats_statistics_6_letter" class="ppt_stats_statistics_letter {% if invert_color %}invert{% endif %}">F</div>
 		</div>
 	</div>
 

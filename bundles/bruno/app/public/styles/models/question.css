@@ -45,10 +45,13 @@
 	text-align: left;
 	vertical-align: top;
 }
-.models_question_top_title_textarea:hover {
+.models_question_top_title_textarea.readonly {
+	cursor: default;
+}
+.models_question_top_title_textarea:not(.readonly):hover {
 	background-color: rgba(0, 0, 0, 0.05);
 }
-.models_pquestion_top_title_textarea:focus {
+.models_question_top_title_textarea:not(.readonly):focus {
 	background-color: rgba(0, 0, 0, 0.08);
 }
 

@@ -191,7 +191,7 @@ Submenu.prototype.style['statistics_quiz_charts'] = function(submenu_wrapper, su
 	var that_id = subm.id;
 
 	//[plan]
-	if(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan') >= 3){
+	if(Bruno.storage.getPlan() >= 3){
 		Elem.find("[find=submenu_app_statistics_charts_csv]").removeClass("display_none").on("click", submenu_app_statistics_session_csv);
 	}
 

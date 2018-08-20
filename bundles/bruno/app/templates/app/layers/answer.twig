@@ -18,12 +18,14 @@
 	</div>
 
 	<div id="-app_layers_answer_style" class="app_layers_answer_style">
-		<select find="select_style" class="app_layers_answer_style_select" >
-			<option value="1" title="{{ _trans('app', 4, 11, 'html') }}{# Answers #}">{{ _trans('app', 4, 11, 'html') }}{# Answers #}</option>
-			<option value="2" title="{{ _trans('app', 4, 14, 'html') }}{# Pictures #}">{{ _trans('app', 4, 14, 'html') }}{# Pictures #}</option>
-			<option value="3" title="{{ _trans('app', 4, 15, 'html') }}{# Statistics #}">{{ _trans('app', 4, 15, 'html') }}{# Statistics #}</option>
-			<option value="4" title="{{ _trans('app', 4, 30, 'html') }}{# Survey #}">{{ _trans('app', 4, 30, 'html') }}{# Survey #}</option>
-		</select>
+		{%if not read_only %}
+			<select {%if read_only %}readonly{% endif %} find="select_style" class="app_layers_answer_style_select" >
+				<option value="1" title="{{ _trans('app', 4, 11, 'html') }}{# Answers #}">{{ _trans('app', 4, 11, 'html') }}{# Answers #}</option>
+				<option value="2" title="{{ _trans('app', 4, 14, 'html') }}{# Pictures #}">{{ _trans('app', 4, 14, 'html') }}{# Pictures #}</option>
+				<option value="3" title="{{ _trans('app', 4, 15, 'html') }}{# Statistics #}">{{ _trans('app', 4, 15, 'html') }}{# Statistics #}</option>
+				<option value="4" title="{{ _trans('app', 4, 30, 'html') }}{# Survey #}">{{ _trans('app', 4, 30, 'html') }}{# Survey #}</option>
+			</select>
+		{% endif %}
 	</div>
 
 	<div id="-app_layers_answer_question" class="app_layers_answer_question">
@@ -75,7 +77,7 @@
 					<div find="number" class="app_layers_answer_answers_number">
 					</div>
 				</div>
-				<textarea find="input_textarea" class="app_layers_answer_answers_answer_textarea font_sans_serif selectable" rows="1"></textarea>
+				<textarea {%if read_only %}readonly{% endif %} find="input_textarea" class="app_layers_answer_answers_answer_textarea font_sans_serif selectable {%if read_only %}readonly{% endif %}" rows="1"></textarea>
 			</div>
 			<div find="answer_preview" class="app_layers_answer_answers_picture app_layers_answer_answers_cell">
 				<img find="answer_image" class="app_layers_answer_answers_picture_image display_none" />

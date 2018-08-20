@@ -69,3 +69,6 @@ html, body {
 	text-align: center;
 	color: rgba(255, 255, 255, 0.65);
 }
+.ppt_stats_statistics_letter.invert {
+	color: rgba(80, 80, 80, 0.65);
+}

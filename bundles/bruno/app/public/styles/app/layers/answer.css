@@ -416,10 +416,13 @@
 	border-radius: 3px;
 	text-align: left;
 }
-.app_layers_answer_answers_answer_textarea:hover {
+.app_layers_answer_answers_answer_textarea.readonly {
+	cursor: default;
+}
+.app_layers_answer_answers_answer_textarea:not(.readonly):hover {
 	background-color: rgba(0, 0, 0, 0.02);
 }
-.app_layers_answer_answers_answer_textarea:focus {
+.app_layers_answer_answers_answer_textarea:not(.readonly):focus {
 	background-color: rgba(0, 0, 0, 0.05);
 }
 
