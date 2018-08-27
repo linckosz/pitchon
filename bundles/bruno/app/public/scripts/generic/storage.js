@@ -1082,6 +1082,14 @@ Bruno.storage.getProfile = function(user_id){
 	}
 }
 
+Bruno.storage.getPlan = function(){
+	if(wrapper_ready_only){
+		return false;
+	} else {
+		return Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan');
+	}
+}
+
 Bruno.storage.getPitchURL = function(pitch_id, question_id){
 	if(Bruno.storage.get('pitch', pitch_id)){
 		if(typeof question_id == "number"){

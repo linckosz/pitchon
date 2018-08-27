@@ -36,6 +36,7 @@ class User extends ModelBruno {
 		'username',
 		'tuto',
 		'plan',
+		'plan_duration',
 		'plan_at',
 		'_bank',
 		'_host',

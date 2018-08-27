@@ -400,7 +400,7 @@ var application_iscroll_text_selection = function(event){
 $("body").on("focus focusin blur focusout", ".selectable", application_iscroll_text_selection);
 /*
 	This re-enable the scrolling by the mouse wheel.
-	The disavantgae is that text is not seletctable anymore, must focusout and focusin again to re-enable it.
+	The disavantage is that text is not selectable anymore, must focusout and focusin again to re-enable it.
 */
 $("body").on("mousewheel", function(event) {
 	for(var iscroll_id in iscroll_disabled){

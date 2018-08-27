@@ -24,20 +24,4 @@ $app->group('/api/paypal', function() use ($app) {
 	)
 	->name('api_paypal_fail_post');
 
-	$app->post(
-		'/notify',
-		'\bundles\bruno\api\controllers\ControllerPaypal:notify_post'
-	)
-	->name('api_paypal_notify_post');
-
-	//toto => This is to test Paypal
-	$app->get(
-		'/:get',
-		'\bundles\bruno\api\controllers\ControllerPaypal:_get'
-	)
-	->conditions(array(
-		'get' => 'pay|fail|notify',
-	))
-	->name('api_paypal_get');
-
 });

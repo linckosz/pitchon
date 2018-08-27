@@ -151,7 +151,6 @@
 	white-space: nowrap;
 	overflow: visible;
 	transition: background-color 0.1s linear;
-	cursor: pointer;
 }
 .submenu_subscription_billing.selected {
 	color: #FFFFFF;
@@ -191,7 +190,52 @@
 }
 
 .submenu_subscription_billing_content {
-	padding: 10px 4px;
+	position: relative;
+	padding: 12px 4px;
+}
+
+.submenu_subscription_billing_discount {
+	position: absolute;
+	top: 3px;
+	right: 3px;
+	font-size: 28px;
+	padding: 24px;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	-webkit-transform: translate(50%, -50%) rotate(-9deg);
+	-moz-transform: translate(50%, -50%) rotate(-9deg);
+	-ms-transform: translate(50%, -50%) rotate(-9deg);
+	-o-transform: translate(50%, -50%) rotate(-9deg);
+	transform: translate(50%, -50%) rotate(-9deg);
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-ms-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+
+.submenu_subscription_billing_discount_value {
+	position: relative;
+	font-weight: 400;
+}
+.submenu_subscription_billing_discount_absolute {
+	position: absolute;
+}
+.submenu_subscription_billing_discount_value_hidden {
+	visibility: hidden;
+	font-weight: 400;
+}
+
+.submenu_subscription_billing_discount_pourcentage {
+	font-size: 13px;
+	vertical-align: super;
+	font-weight: 400;
+}
+
+.submenu_subscription_billing_discount_off {
+	font-size: 11px;
+	vertical-align: baseline;
 }
 
 .submenu_subscription_billing_amount {
@@ -203,6 +247,10 @@
 	opacity: 0.80;
 	-moz-opacity: 0.80;
 	-khtml-opacity: 0.80;
+	position: absolute;
+	bottom: 3px;
+	right: 3px;
+	text-decoration: line-through;
 }
 
 .submenu_subscription_price {
@@ -214,6 +262,98 @@
 	padding: 30px 0;
 	text-align: center;
 	width: 100%;
+}
+
+.submenu_subscription_slider {
+	width: 100%;
+	position: relative;
+	text-align: center;
+	margin: 60px auto;
+}
+
+.submenu_subscription_slider_bar {
+	width: 70%;
+	position: relative;
+	margin: 0 auto;
+	max-width: 300px;
+	height: 4px;
+	border-radius: 2px;
+	background-color: #0081BB;
+}
+
+.submenu_subscription_slider_index {
+	position: absolute;
+	left: 0%;
+	z-index: 3;
+	text-align: center;
+	vertical-align: middle;
+
+	-webkit-transition: left 0.4s ease-out;
+	-moz-transition: left 0.4s ease-out;
+	-ms-transition: left 0.4s ease-out;
+	-o-transition: left 0.4s ease-out;
+	transition: left 0.4s ease-out;
+}
+
+.submenu_subscription_slider_index.active {
+	-webkit-transition: none;
+	-moz-transition: none;
+	-ms-transition: none;
+	-o-transition: none;
+	transition: none;
+}
+
+.submenu_subscription_slider_cursor {
+	position: absolute;
+	z-index: 3;
+	background-color: #36B8F3;
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	vertical-align: middle;
+	border-radius: 15px;
+	color: #FFFFFF;
+	font-size: 12px;
+	cursor: pointer;
+	box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.35);
+	-moz-box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.35);
+	-webkit-box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.35);
+}
+
+.submenu_subscription_slider_cursor:hover, .submenu_subscription_slider_cursor:active {
+	background-color: #5CC5F5;
+}
+
+.submenu_subscription_slider_duration {
+	position: absolute;
+	z-index: 4;
+	top: 30px;
+}
+
+.submenu_subscription_slider_dot {
+	position: absolute;
+	z-index: 2;
+	width: 10px;
+	height: 10px;
+	border-radius: 5px;
+	background-color: #0081BB;
+	cursor: pointer;
+}
+.submenu_subscription_slider_dot.dot_1 {
+	left: 0%;
+}
+.submenu_subscription_slider_dot.dot_2 {
+	left: 25%;
+}
+.submenu_subscription_slider_dot.dot_3 {
+	left: 50%;
+}
+.submenu_subscription_slider_dot.dot_4 {
+	left: 75%;
+}
+.submenu_subscription_slider_dot.dot_5 {
+	left: 100%;
 }
 
 /* Maximum Mobile phone in Portrait */

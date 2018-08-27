@@ -4,7 +4,16 @@
 	var submenu_subscription_selection_plan = parseInt("{{ subscription_plan }}", 10);
 	var submenu_subscription_pricing = parseInt("{{ subscription_pricing }}", 10);
 	var submenu_subscription_price = parseInt("{{ subscription_standard }}", 10);
+	var submenu_subscription_currency = "EUR";
 	var submenu_subscription_total_price = 0;
+	var submenu_subscription_plan_duration = parseInt("{{ subscription_duration }}", 10);
+	var submenu_subscription_plans = { //plan_duration: [X months, Discount ratio]
+		1: [1, 1, "{{ _trans('app', 20, 26, 'html') }}{# 1 month #}"],
+		2: [3, 1, "{{ _trans('app', 20, 27, 'html') }}{# 3 months #}"],
+		3: [6, 0.95, "{{ _trans('app', 20, 28, 'html') }}{# 6 months #}"],
+		4: [12, 0.85, "{{ _trans('app', 20, 29, 'html') }}{# 1 year #}"],
+		5: [24, 0.70, "{{ _trans('app', 20, 30, 'html') }}{# 2 years #}"],
+	};
 
 	var submenu_subscription_paypal = function(Elem, subm_id){
 
@@ -39,21 +48,14 @@
 			// Wait for the PayPal button to be clicked
 
 			payment: function(data, actions) {
-				var total_price = (10*submenu_subscription_price)-1;
-				if(submenu_subscription_pricing == 1){ //Monthly
-					total_price = submenu_subscription_price;
-				}
-				var discount = ((100-submenu_subscription_discount_value)/100);
-				if(discount > 0 && discount < 1){
-					total_price = Math.floor(discount * total_price);
-				}
 				return actions.request.post('/api/paypal/billing', {
 						subscription_id: parseInt("{{ subscription_id }}", 10), //Price showed to the user
 						subscription_md5: "{{ subscription_md5 }}",
 						subscription_plan: submenu_subscription_selection_plan, //Subscription plan
-						subscription_pricing: submenu_subscription_pricing, //1:Montly , 2:Annual
+						subscription_plan_duration: submenu_subscription_plan_duration, //1:1M 2:3M 3:6M 4:1Y 5:2Y
 						subscription_promocode: submenu_subscription_discount_promocode,
-						total_price: total_price, //Is used only for comparing with server calculation
+						subscription_currency: submenu_subscription_currency,
+						subscription_total_price: submenu_subscription_total_price, //Is used only for comparing with server calculation
 					})
 					.then(function(data) {
 						if(data && typeof data.extra != "undefined" &&  typeof data.extra.id != "undefined"){
@@ -88,6 +90,12 @@
 		}, "#submenu_subscription_paypal_"+subm_id);
 	};
 </script>
+
+<style type="text/css">
+	.submenu_subscription_billing_discount {
+		background-image: url("{{ _filelatest('/bruno/app/images/submenu/subscription/discount2.png') }}");
+	}
+</style>
 
 <div id="-submenu_subscription" class="submenu_deco_read submenu_subscription">
 
@@ -133,28 +141,44 @@
 		</div>
 	</div>
 
+	{# https://www.smashingmagazine.com/2017/07/designing-perfect-slider/ #}
+	<div class="submenu_subscription_slider">
+		<div find="slider_bar" class="submenu_subscription_slider_bar">
+			<span find="slider_index" class="submenu_subscription_slider_index perfect_center">
+				<img find="slider_cursor" class="submenu_subscription_slider_cursor perfect_center" src="{{ _filelatest('/bruno/app/images/submenu/subscription/slider.png') }}" />
+				<span find="slider_duration" class="submenu_subscription_slider_duration perfect_center" >1 month</span>
+			</span>
+			{# 1 month #}
+			<div class="submenu_subscription_slider_dot dot_1 perfect_center" value="1"></div>
+			{# 3 months #}
+			<div class="submenu_subscription_slider_dot dot_2 perfect_center" value="2"></div>
+			{# 6 months #}
+			<div class="submenu_subscription_slider_dot dot_3 perfect_center" value="3"></div>
+			{# 1 year #}
+			<div class="submenu_subscription_slider_dot dot_4 perfect_center" value="4"></div>
+			{# 2 years #}
+			<div class="submenu_subscription_slider_dot dot_5 perfect_center" value="5"></div>
+		</div>
+	</div>
+
 	<div find="discount" class="submenu_subscription_discount display_none">
 		{{ _trans('app', 20, 24, 'html') }}{# DISCOUNT OFFER:  #}{{ subscription_promocode_discount }}%
 	</div>
 
-	<div class="submenu_subscription_billing" find="pricing_month" pricing="1">
+	<div class="submenu_subscription_billing selected" find="pricing_total">
 		<img class="submenu_subscription_billing_arrow" src="{{ _filelatest('/bruno/app/images/submenu/subscription/arrow.png') }}" />
+		<div find="pricing_total_discount" class="submenu_subscription_billing_discount">
+			<span class="submenu_subscription_billing_discount_absolute">
+				<span find="pricing_total_discount_value" class="submenu_subscription_billing_discount_value_hidden"></span><span class="submenu_subscription_billing_discount_off">off</span>
+			</span>
+			<span find="pricing_total_discount_value" class="submenu_subscription_billing_discount_value"></span><span class="submenu_subscription_billing_discount_pourcentage">%</span>
+		</div>
 		<div class="submenu_subscription_billing_title">
-			{{ _trans('app', 20, 22, 'html') }}{# Monthly #}
+			{{ _trans('app', 20, 25, 'html') }}{# Total #}
 		</div>
 		<div class="submenu_subscription_billing_content">
-			<div find="pricing_month_value" class="submenu_subscription_billing_amount"></div>
-			<div find="pricing_month_instead" class="submenu_subscription_billing_instead"></div>
-		</div>
-	</div>
-	<div class="submenu_subscription_billing" find="pricing_annual" pricing="2">
-		<img class="submenu_subscription_billing_arrow" src="{{ _filelatest('/bruno/app/images/submenu/subscription/arrow.png') }}" />
-		<div class="submenu_subscription_billing_title">
-			{{ _trans('app', 20, 23, 'html') }}{# Annual #}
-		</div>
-		<div class="submenu_subscription_billing_content">
-			<div find="pricing_annual_value" class="submenu_subscription_billing_amount"></div>
-			<div find="pricing_annual_instead" class="submenu_subscription_billing_instead"></div>
+			<div find="pricing_total_value" class="submenu_subscription_billing_amount"></div>
+			<div find="pricing_total_instead" class="submenu_subscription_billing_instead"></div>
 		</div>
 	</div>
 

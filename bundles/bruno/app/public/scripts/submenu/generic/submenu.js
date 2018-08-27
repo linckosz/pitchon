@@ -1,5 +1,4 @@
 var submenu_obj = {};
-var submenu_mouseenter = false;
 var submenu_show = {};
 
 function Submenu(menu, next, param, animate) {
@@ -44,12 +43,6 @@ function Submenu(menu, next, param, animate) {
 		submenu_wrapper.find("[find=submenu_wrapper_content]").addClass('overthrow').prop("id", "overthrow_"+subm.id);
 
 		submenu_wrapper.appendTo('#app_application_submenu_block');
-		submenu_wrapper.on('mouseenter', function(){
-			submenu_mouseenter['submenu'] = true;
-		});
-		submenu_wrapper.on('mouseleave', function(){
-			submenu_mouseenter['submenu'] = false;
-		});
 
 		//This is because we can only place 3 menus on Desktop mode, so after 3 layers we switch to full width mode
 		if (subm.layer > 3) { submenu_wrapper.addClass('submenu_wrapper_important'); }

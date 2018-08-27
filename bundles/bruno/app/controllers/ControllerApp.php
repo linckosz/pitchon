@@ -32,11 +32,11 @@ class ControllerApp extends Controller {
 			$app->bruno->data['subscription_starter'] = $subscription->starter;
 			$app->bruno->data['subscription_standard'] = $subscription->standard;
 			$app->bruno->data['subscription_premium'] = $subscription->premium;
-			$app->bruno->data['subscription_pricing'] = 1; //Default to Monthly
+			$app->bruno->data['subscription_duration'] = 2; //Default to 3 months
 			$app->bruno->data['subscription_plan'] = 1; //Default to Starter
 			if($user = User::getUser()){
-				$app->bruno->data['subscription_pricing'] = $user->pricing;
 				$app->bruno->data['subscription_plan'] = $user->plan;
+				$app->bruno->data['subscription_duration'] = $user->plan_duration;
 			}
 			$promocode = Promocode::getCurrent();
 			$app->bruno->data['subscription_promocode'] = $promocode[0];

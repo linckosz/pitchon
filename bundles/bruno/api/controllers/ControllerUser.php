@@ -98,7 +98,6 @@ class ControllerUser extends Controller {
 		$data = ModelBruno::getData();
 		$promocode = false;
 		$result = array(
-			'type' => 0,
 			'discount' => 0,
 			'msg' => '',
 		);
@@ -106,14 +105,9 @@ class ControllerUser extends Controller {
 			if($promocode = Promocode::getItem($data->promocode)){
 				if($promocode === -1){
 					$result['msg'] = 'Code already used';
-				} else if($promocode->type==1){ //Discount in %
-					$result['type'] = intval($promocode->type);
+				} else { //Discount in %
 					$result['discount'] = intval($promocode->discount);
 					$result['msg'] = $app->trans->getBRUT('api', 1, 4, array('discount' => intval($promocode->discount))); //Disoucnt: 30%
-				} else if($promocode->type==2){ //Disoucnt in Value
-					$result['type'] = intval($promocode->type);
-					$result['discount'] = intval($promocode->discount);
-					$result['msg'] = $app->trans->getBRUT('api', 1, 5, array('discount' => intval($promocode->discount))); //Disoucnt: 30€
 				}
 			}
 		}

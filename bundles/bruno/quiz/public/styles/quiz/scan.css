@@ -100,6 +100,7 @@ video {
 	z-index: 4;
 	-webkit-transition: background 0.2s;
 	-moz-transition: background 0.2s;
+	-ms-transition: background 0.2s;
 	-o-transition: background 0.2s;
 	transition: background 0.2s
 }
@@ -179,6 +180,7 @@ video {
 	transition:all 0.7s ease;
 	-webkit-transition-delay:all 0.7s ease;
 	-moz-transition-delay:all 0.7s ease;
+	-ms-transition-delay:all 0.7s ease;
 	-ms-transition-delay:all 0.7s ease;
 	-o-transition-delay:all 0.7s ease;
 }

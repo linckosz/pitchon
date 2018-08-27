@@ -7,148 +7,136 @@ namespace bundles\bruno\api\controllers;
 use \libs\Json;
 use \libs\Controller;
 use \bundles\bruno\data\models\ModelBruno;
+use \bundles\bruno\data\Subscription;
+use PayPal\Api\Payment;
+use PayPal\Api\Payer;
+use PayPal\Api\RedirectUrls;
+use PayPal\Api\ItemList;
+use PayPal\Api\Item;
+use PayPal\Api\Amount;
+use PayPal\Api\Detail;
+use PayPal\Api\Transaction;
+use PayPal\Api\PaymentExecution;
 use PayPal\Rest\ApiContext;
 use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Exception\PayPalConnectionException;
-
-use PayPal\Api\ChargeModel;
-use PayPal\Api\Currency;
-use PayPal\Api\MerchantPreferences;
-use PayPal\Api\PaymentDefinition;
-use PayPal\Api\Plan;
-use PayPal\Api\Patch;
-use PayPal\Api\PatchRequest;
-use PayPal\Common\PayPalModel;
-
-use PayPal\Api\Agreement;
-use PayPal\Api\Payer;
-use PayPal\Api\ShippingAddress;
 
 class ControllerPaypal extends Controller {
 
 	public function billing_post(){
 		$app = ModelBruno::getApp();
 		$data = ModelBruno::getData();
+\libs\Watch::php($data, '$var', __FILE__, __LINE__, false, false, true);
+
+		//Verify first the accuracy of the payment information given to avoid any hack
+		$gofail = true;
+		if(
+			   isset($data->subscription_id)
+			&& isset($data->subscription_md5)
+			&& isset($data->subscription_plan)
+			&& isset($data->subscription_plan_duration)
+			&& isset($data->subscription_promocode)
+			&& isset($data->subscription_currency)
+			&& isset($data->subscription_total_price)
+			&& $subscription = Subscription::Where('id', $data->subscription_id)->where('md5', $data->subscription_md5)->first()
+		){
+			//Default plan
+			$plan_title = $app->trans->getBRUT('api', 20, 1); //Starter
+			$data->subscription_plan = 1;
+			$plan_price = $subscription->starter;
+			if($data->subscription_plan == 2){
+				$plan_title = $app->trans->getBRUT('api', 20, 2); //Standard
+				$plan_price = $subscription->standrad;
+			} else if($data->subscription_plan == 2){
+				$plan_title = $app->trans->getBRUT('api', 20, 3); //Premium
+				$plan_price = $subscription->premium;
+			}
+
+			//Defaut duration in months
+			$plan_months = 1;
+			$plan_ratio = 1;
+			if($data->subscription_plan_duration == 2){
+				$plan_months = 3;
+				$plan_ratio = 1;
+			} else if($data->subscription_plan_duration == 3){
+				$plan_months = 6;
+				$plan_ratio = 0.95;
+			} else if($data->subscription_plan_duration == 4){
+				$plan_months = 12;
+				$plan_ratio = 0.85;
+			} else if($data->subscription_plan_duration == 5){
+				$plan_months = 24;
+				$plan_ratio = 0.70;
+			}
+
+			//This operation must be the same as subscription.js
+			$plan_price = floor($plan_months * intval($plan_price));
+			$plan_price = floor($plan_ratio * $plan_price);
+			//toto => promocode
+
+			if(strlen($data->subscription_promocode) > 0){
+				if($promocode = Promocode::getItem($data->subscription_promocode)){
+					if($promocode !== -1){
+						$plan_price = floor((100-intval($promocode->discount))/100 * $plan_price);
+					}
+				}
+			}
+
+
+			$gofail = false;
+		}
 		
+			
+
+		if($gofail){
+			goto failed;
+		}
+
+		$payment = new Payment;
 		$apiContext = new ApiContext(
 			new OAuthTokenCredential(
 				$app->bruno->data['paypal_client'],
 				$app->bruno->data['paypal_secret']
 			)
 		);
-		
-		// Create a new billing plan
-		$plan = new Plan();
-		$plan
-			->setName('T-Shirt of the Month Club Plan')
-			->setDescription('Template creation.')
-			->setType('fixed');
-
-		// Set billing plan definitions
-		$paymentDefinition = new PaymentDefinition();
-		$paymentDefinition
-			->setName('Regular Payments')
-			->setType('REGULAR')
-			->setFrequency('Month')
-			->setFrequencyInterval('2')
-			->setCycles('12')
-			->setAmount(new Currency(array('value' => 100, 'currency' => 'USD')));
-
-		// Set charge models
-		$chargeModel = new ChargeModel();
-		$chargeModel
-			->setType('SHIPPING')
-			->setAmount(new Currency(array('value' => 10, 'currency' => 'USD')));
-		$paymentDefinition->setChargeModels(array($chargeModel));
-
-//https://stackoverflow.com/questions/51424433/paypal-php-sdk-notifyurl-is-not-a-fully-qualified-url-error/51431104
-		// Set merchant preferences
-		$merchantPreferences = new MerchantPreferences();
-		$merchantPreferences
-			//->setReturnUrl('https://app.pitchon.net/api/paypal/pay')
-			//->setCancelUrl('https://app.pitchon.net/api/paypal/fail')
-			//->setNotifyUrl('https://app.pitchon.net/api/paypal/notify')
-			->setReturnUrl('https://app.lebonquiz.fr/api/paypal/pay')
-			->setCancelUrl('https://app.lebonquiz.fr/api/paypal/fail')
-			->setNotifyUrl('https://app.lebonquiz.fr/api/paypal/notify')
-			->setAutoBillAmount('yes')
-			->setInitialFailAmountAction('CONTINUE')
-			->setMaxFailAttempts('0')
-			->setSetupFee(new Currency(array('value' => 1, 'currency' => 'USD')));
-
-		$plan->setPaymentDefinitions(array($paymentDefinition));
-		$plan->setMerchantPreferences($merchantPreferences);
-
-		$plan->create($apiContext);
-		\libs\Watch::php($plan, '$plan', __FILE__, __LINE__, false, false, true);
-
-		//create plan
-		try {
-			$createdPlan = $plan->create($apiContext);
-			\libs\Watch::php($createdPlan, '$createdPlan', __FILE__, __LINE__, false, false, true);
-
-			try {
-				$patch = new Patch();
-				$value = new PayPalModel('{"state":"ACTIVE"}');
-				$patch
-					->setOp('replace')
-					->setPath('/')
-					->setValue($value);
-				$patchRequest = new PatchRequest();
-				$patchRequest->addPatch($patch);
-				$createdPlan->update($patchRequest, $apiContext);
-				$plan = Plan::get($createdPlan->getId(), $apiContext);
-
-				// Output plan id
-				$msg = array('id' => $plan->getId());
-				(new Json($msg))->render();
-				return exit(0);
-			} catch (PayPal\Exception\PayPalConnectionException $e) {
-				echo $ex->getCode();
-				echo $ex->getData();
-				\libs\Watch::php(\error\getTraceAsString($e, 10), 'PayPal Exception: '.$e->getLine().' / '.$e->getMessage()." /\n ".$e->getCode()." /\n ".$e->getData(), __FILE__, __LINE__, true);
-				goto failed;
-			} catch (Exception $e) {
-				\libs\Watch::php(\error\getTraceAsString($e, 10), 'PayPal Exception: '.$e->getLine().' / '.$e->getMessage()." /\n ".$e->getCode()." /\n ".$e->getData(), __FILE__, __LINE__, true);
-				goto failed;
-			}
-		} catch (PayPal\Exception\PayPalConnectionException $e) {
-			\libs\Watch::php(\error\getTraceAsString($e, 10), 'PayPal Exception: '.$e->getLine().' / '.$e->getMessage()." /\n ".$e->getCode()." /\n ".$e->getData(), __FILE__, __LINE__, true);
-			goto failed;
-		} catch (Exception $e) {
-			\libs\Watch::php(\error\getTraceAsString($e, 10), 'PayPal Exception: '.$e->getLine().' / '.$e->getMessage()." /\n ".$e->getCode()." /\n ".$e->getData(), __FILE__, __LINE__, true);
-			goto failed;
-		}
-
-		/*
-		// Create new agreement
-		$agreement = new Agreement();
-		$agreement
-			->setName('Base Agreement')
-			->setDescription('Basic Agreement')
-			->setStartDate('2019-06-17T9:45:04Z')
-			->setPlan($plan);
-
-		// Add payer type
-		$payer = new Payer();
+		$base_url = $_SERVER['REQUEST_SCHEME'].'://app.'.$app->bruno->domain.'/api/paypal/';
+		$payment->setIntent('sale');
+		$redirectUrls = new RedirectUrls;
+		$redirectUrls->setReturnUrl($base_url.'pay');
+		$redirectUrls->setCancelUrl($base_url.'fail');
+		$payment->setRedirectUrls($redirectUrls);
+		$payer = new Payer;
 		$payer->setPaymentMethod('paypal');
-		$agreement->setPayer($payer);
+		$payment->setPayer($payer);
+		$itemList = new ItemList;
+
+		$item = new Item;
+		$item->setQuantity(1);
+		$item->setCurrency($data->subscription_currency);
+
+		$item->setName($plan_title);
+		$item->setPrice($data->subscription_total_price);
+		$itemList->addItem($item);
+		
+		$amount = new Amount;
+		$amount->setTotal($data->subscription_total_price); //9.00
+		$amount->setCurrency($data->subscription_currency); //EUR
+		
+		$transaction = new Transaction;
+		$transaction->setItemList($itemList);
+		$transaction->setDescription($plan_title);
+		$transaction->setAmount($amount);
+		$transaction->setCustom(json_encode($data));
+		$payment->setTransactions([$transaction]);
 
 		try {
-			// Create agreement
-			$agreement = $agreement->create($apiContext);
-			// Output agreement id
-			$msg = array('id' => $agreement->getId());
+			$payment->create($apiContext);
+			$msg = array('id' => $payment->getId());
 			(new Json($msg))->render();
 			return exit(0);
-		} catch (PayPal\Exception\PayPalConnectionException $e) {
-			\libs\Watch::php(\error\getTraceAsString($e, 10), 'PayPal Exception: '.$e->getLine().' / '.$e->getMessage()." /\n ".$e->getCode()." /\n ".$e->getData(), __FILE__, __LINE__, true);
-			goto failed;
-		} catch (Exception $e) {
-			\libs\Watch::php(\error\getTraceAsString($e, 10), 'PayPal Exception: '.$e->getLine().' / '.$e->getMessage()." /\n ".$e->getCode()." /\n ".$e->getData(), __FILE__, __LINE__, true);
-			goto failed;
+		} catch(PayPalConnectionException $e){
+			\libs\Watch::php(\error\getTraceAsString($e, 10), 'PayPal Exception: '.$e->getLine().' / '.$e->getMessage().' / '.$e->getData(), __FILE__, __LINE__, true);
 		}
-		*/
 
 		failed:
 		$msg = array('msg' => 'Failed');
@@ -174,31 +162,22 @@ class ControllerPaypal extends Controller {
 
 		try {
 			$payment->execute($execution, $apiContext);
+			$msg = array('msg' => 'Paid');
+			(new Json($msg))->render();
+			return exit(0);
 		} catch(PayPalConnectionException $e){
 			\libs\Watch::php(\error\getTraceAsString($e, 10), 'PayPal Exception: '.$e->getLine().' / '.$e->getMessage()." /\n ".$e->getCode()." /\n ".$e->getData(), __FILE__, __LINE__, true);
 			goto failed;
 		}
 
 		failed:
-		$msg = array('msg' => 'Paid');
+		$msg = array('msg' => 'Failed');
 		(new Json($msg))->render();
 		return exit(0);
 	}
 
 	public function fail_post(){
 		$msg = array('msg' => 'Failed');
-		(new Json($msg))->render();
-		return exit(0);
-	}
-
-	public function notify_post(){
-		$msg = array('msg' => 'Notified');
-		(new Json($msg))->render();
-		return exit(0);
-	}
-
-	public function _get(){
-		$msg = array('msg' => 'ok');
 		(new Json($msg))->render();
 		return exit(0);
 	}
