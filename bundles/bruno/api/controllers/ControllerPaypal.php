@@ -29,6 +29,7 @@ class ControllerPaypal extends Controller {
 \libs\Watch::php($data, '$var', __FILE__, __LINE__, false, false, true);
 
 		//Verify first the accuracy of the payment information given to avoid any hack
+		$json = new \stdClass;
 		$gofail = true;
 		if(
 			   isset($data->subscription_id)
@@ -54,41 +55,52 @@ class ControllerPaypal extends Controller {
 
 			//Defaut duration in months
 			$plan_months = 1;
-			$plan_ratio = 1;
+			$plan_discount = 1;
 			if($data->subscription_plan_duration == 2){
 				$plan_months = 3;
-				$plan_ratio = 1;
+				$plan_discount = 1;
 			} else if($data->subscription_plan_duration == 3){
 				$plan_months = 6;
-				$plan_ratio = 0.95;
+				$plan_discount = 0.95;
 			} else if($data->subscription_plan_duration == 4){
 				$plan_months = 12;
-				$plan_ratio = 0.85;
+				$plan_discount = 0.85;
 			} else if($data->subscription_plan_duration == 5){
 				$plan_months = 24;
-				$plan_ratio = 0.70;
+				$plan_discount = 0.70;
 			}
 
-			//This operation must be the same as subscription.js
-			$plan_price = floor($plan_months * intval($plan_price));
-			$plan_price = floor($plan_ratio * $plan_price);
-			//toto => promocode
-
+			$json->host_id = null;
 			if(strlen($data->subscription_promocode) > 0){
 				if($promocode = Promocode::getItem($data->subscription_promocode)){
-					if($promocode !== -1){
-						$plan_price = floor((100-intval($promocode->discount))/100 * $plan_price);
+					if(is_object($promocode) && $promocode->discount > 0 && $promocode->discount <= 100){
+						$plan_discount = $plan_discount * (100-intval($promocode->discount))/100;
+						$json->host_id = $promocode->user_id;
 					}
 				}
 			}
 
+			//This operation must be the same as subscription.js
+			$plan_price = floor($plan_months * intval($plan_price) * $plan_discount);
 
-			$gofail = false;
+			if($plan_price > 0){
+				//Give a gap of 5% for security, but the result should be very acccurate
+				$gap = abs(1 - (intval($data->subscription_total_price) / $plan_price));
+				if($gap <= 0.05){
+					$gofail = false;
+					$json->user_id = $app->bruno->data['user_id'];
+					$json->plan = $data->subscription_plan;
+					$json->plan_duration = $data->subscription_plan_duration;
+					$json->plan_at = null; //toto => to calculate with what's left
+				}
+			}
+
 		}
 		
 			
 
 		if($gofail){
+			$json = new \stdClass;
 			goto failed;
 		}
 
@@ -126,7 +138,7 @@ class ControllerPaypal extends Controller {
 		$transaction->setItemList($itemList);
 		$transaction->setDescription($plan_title);
 		$transaction->setAmount($amount);
-		$transaction->setCustom(json_encode($data));
+		$transaction->setCustom(json_encode($json));
 		$payment->setTransactions([$transaction]);
 
 		try {

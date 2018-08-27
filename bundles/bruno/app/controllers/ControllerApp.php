@@ -38,9 +38,12 @@ class ControllerApp extends Controller {
 				$app->bruno->data['subscription_plan'] = $user->plan;
 				$app->bruno->data['subscription_duration'] = $user->plan_duration;
 			}
-			$promocode = Promocode::getCurrent();
-			$app->bruno->data['subscription_promocode'] = $promocode[0];
-			$app->bruno->data['subscription_promocode_discount'] = $promocode[1];
+			$app->bruno->data['subscription_promocode'] = false;
+			$app->bruno->data['subscription_promocode_discount'] = 0;
+			if($promocode = Promocode::getCurrent()){
+				$app->bruno->data['subscription_promocode'] = $promocode[0];
+				$app->bruno->data['subscription_promocode_discount'] = $promocode[1];
+			}
 			$app->render('/bundles/bruno/app/templates/app/application.twig');
 		} else {
 			if(Vanquish::get('remember')){

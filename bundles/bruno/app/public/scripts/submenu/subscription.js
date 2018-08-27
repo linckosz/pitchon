@@ -208,20 +208,22 @@ var submenu_subscription_pricing_fn = function(Elem, price, fake_plan_duration){
 		plan_duration = submenu_subscription_plans.length - 1;
 	}
 	//This operation must be the same as the Backend
-	var total_price = Math.floor(price * submenu_subscription_plans[plan_duration][0]);
+	var total_price = price * submenu_subscription_plans[plan_duration][0];
 
+	//Promocode
 	var discount = submenu_subscription_plans[plan_duration][1] * ((100-submenu_subscription_discount_value)/100);
 	
 	if(discount<1){
 		Elem.find("[find=pricing_total_discount]").removeClass("display_none");
 		Elem.find("[find=pricing_total_discount_value]").html(Math.floor(100*(1-discount)));
-		Elem.find("[find=pricing_total_instead]").removeClass("display_none").html(total_price+"€");
-		total_price = Math.floor(discount * total_price);
+		Elem.find("[find=pricing_total_instead]").removeClass("display_none").html(Math.floor(total_price)+"€");
+		total_price = discount * total_price;
 	} else {
 		Elem.find("[find=pricing_total_discount]").addClass("display_none");
 		Elem.find("[find=pricing_total_discount_value]").html(0);
 		Elem.find("[find=pricing_total_instead]").addClass("display_none").html("");
 	}
+	total_price = Math.floor(total_price);
 	Elem.find("[find=pricing_total_value]").html(total_price+"€");
 	Elem.find("[find=slider_duration]").html(submenu_subscription_plans[plan_duration][2]);
 

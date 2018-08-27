@@ -8,7 +8,7 @@ $app->get(
 	'/',
 	'\bundles\bruno\app\controllers\ControllerApp:_get'
 )
-->name('_get');
+->name('app_get');
 
 $app->get(
 	'/username',
@@ -34,6 +34,15 @@ $app->group('/sample', function() use ($app) {
 	->name('app_sample_pitch_get');
 
 });
+
+$app->get('/promocode/:code', function ($code) use ($app) {
+	$_SESSION['promocode'] = $code;
+	$app->router->getNamedRoute('app_get')->dispatch();
+})
+->conditions(array(
+	'code' => '[a-zA-Z\d]+',
+))
+->name('app_promocode_get');
 
 /*
 $app->get('/login', function() use ($app) {

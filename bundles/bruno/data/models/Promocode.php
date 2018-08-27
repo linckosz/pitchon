@@ -44,8 +44,12 @@ class Promocode extends Model {
 		}
 
 		$result = array('', 0);
-		if($item = self::getItem($promocode)){
-			$result = array($item->title, $item->discount);
+		if(strlen($promocode)>0){
+			if($item = self::getItem($promocode)){
+				$result = array($item->title, $item->discount);
+			} else {
+				unset($_SESSION['promocode']);
+			}
 		}
 		
 		return $result;
@@ -54,14 +58,19 @@ class Promocode extends Model {
 	public static function getItem($title){
 		$app = ModelBruno::getApp();
 		if(empty($title)){
-			return false;
+			return false; //false = cannot find
 		}
 		$used = Subscribed::Where('user_id', $app->bruno->data['user_id'])->where('promocode', $title)->first(array('id'));
 		if($used){
-			return -1; //-1 = code already usedd
+			return 0; //0 = code already usedd
 		}
 
-		return Promocode::Where('title', $title)->first();
+		if($promocode = Promocode::Where('title', $title)->first()){
+			if($promocode->expired_at == null || $promocode->expired_at > ModelBruno::getMStime()){
+				return $promocode;
+			}
+		}
+		return false; //false = cannot find
 	}
 
 }
