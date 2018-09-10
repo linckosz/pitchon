@@ -8,5 +8,12 @@ NC='\e[0m' # No Color
 # Return where the bash script is located
 DIRDEV="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd ..
-sh deploy
+if [ -z $1 ]
+then
+	# not forced
+	sh deploy
+else
+	# forced
+	sh deploy force
+fi
 cd $DIR
