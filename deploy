@@ -1,0 +1,12 @@
+#!/bin/bash
+
+RED='\e[91m'
+BRED='\e[41m'
+GREEN='\e[32m'
+NC='\e[0m' # No Color
+
+# Return where the bash script is located
+DIRDEV="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd ..
+sh deploy
+cd $DIR

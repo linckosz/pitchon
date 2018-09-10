@@ -1016,7 +1016,7 @@ class ControllerScreen extends Controller {
 	public function session_get($questionid_enc=false, $fixcode=false){
 		$app = ModelBruno::getApp();
 		$get = ModelBruno::getData();
-		$base_url = 'http://'.$app->bruno->shortlink;
+		$base_url = $_SERVER['REQUEST_SCHEME'].'://'.$app->bruno->shortlink;
 		$url = false;
 		
 		$header_id = 0;
