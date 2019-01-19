@@ -7,12 +7,17 @@
 	var submenu_subscription_currency = "EUR";
 	var submenu_subscription_total_price = 0;
 	var submenu_subscription_plan_duration = parseInt("{{ subscription_duration }}", 10);
-	var submenu_subscription_plans = { //plan_duration: [X months, Discount ratio]
-		1: [1, 1, "{{ _trans('app', 20, 26, 'html') }}{# 1 month #}"],
-		2: [3, 1, "{{ _trans('app', 20, 27, 'html') }}{# 3 months #}"],
-		3: [6, 0.95, "{{ _trans('app', 20, 28, 'html') }}{# 6 months #}"],
-		4: [12, 0.85, "{{ _trans('app', 20, 29, 'html') }}{# 1 year #}"],
-		5: [24, 0.70, "{{ _trans('app', 20, 30, 'html') }}{# 2 years #}"],
+	var submenu_subscription_plans = { //plan_duration: [+X months, Discount ratio]
+		1: [1, 1, "+{{ _trans('app', 20, 26, 'html') }}{# 1 month #}"],
+		2: [3, 1, "+{{ _trans('app', 20, 27, 'html') }}{# 3 months #}"],
+		3: [6, 0.95, "+{{ _trans('app', 20, 28, 'html') }}{# 6 months #}"],
+		4: [12, 0.85, "+{{ _trans('app', 20, 29, 'html') }}{# 1 year #}"],
+		5: [24, 0.70, "+{{ _trans('app', 20, 30, 'html') }}{# 2 years #}"],
+	};
+	var submenu_subscription_prices = {
+		1: parseInt("{{ subscription_starter }}", 10), //Starter
+		2: parseInt("{{ subscription_standard }}", 10), //Standard
+		3: parseInt("{{ subscription_premium }}", 10), //Premium
 	};
 
 	var submenu_subscription_paypal = function(Elem, subm_id){
@@ -76,10 +81,14 @@
 						payerID:   data.payerID
 					})
 					.then(function(data) {
-						base_show_error(Bruno.Translation.get('app', 1101, 'js'), false); //Payment succeeded. The application will restart.
-						setTimeout(function(){
-							window.location.href = wrapper_link['root'];
-						}, 2000);
+						if(data.error){
+							base_show_error(Bruno.Translation.get('app', 1102, 'js')); //The payment failed. Please retry.
+						} else {
+							base_show_error(Bruno.Translation.get('app', 1101, 'js'), false); //Payment succeeded. The application will restart.
+							setTimeout(function(){
+								window.location.href = wrapper_link['root'];
+							}, 2000);
+						}
 					})
 					.catch(function(err) {
 						console.log(err);
@@ -94,6 +103,9 @@
 <style type="text/css">
 	.submenu_subscription_billing_discount {
 		background-image: url("{{ _filelatest('/bruno/app/images/submenu/subscription/discount2.png') }}");
+	}
+	.submenu_subscription_slider_cursor {
+		background-image: url("{{ _filelatest('/bruno/app/images/submenu/subscription/slider.png') }}");
 	}
 </style>
 
@@ -145,8 +157,8 @@
 	<div class="submenu_subscription_slider">
 		<div find="slider_bar" class="submenu_subscription_slider_bar">
 			<span find="slider_index" class="submenu_subscription_slider_index perfect_center">
-				<img find="slider_cursor" class="submenu_subscription_slider_cursor perfect_center" src="{{ _filelatest('/bruno/app/images/submenu/subscription/slider.png') }}" />
-				<span find="slider_duration" class="submenu_subscription_slider_duration perfect_center" >1 month</span>
+				<span find="slider_cursor" class="submenu_subscription_slider_cursor perfect_center" src="{{ _filelatest('/bruno/app/images/submenu/subscription/slider.png') }}" /></span>
+				<span find="slider_duration" class="submenu_subscription_slider_duration perfect_center">{{ _trans('app', 20, 26, 'html') }}{# 1 month #}</span>
 			</span>
 			{# 1 month #}
 			<div class="submenu_subscription_slider_dot dot_1 perfect_center" value="1"></div>
@@ -165,22 +177,27 @@
 		{{ _trans('app', 20, 24, 'html') }}{# DISCOUNT OFFER:  #}{{ subscription_promocode_discount }}%
 	</div>
 
-	<div class="submenu_subscription_billing selected" find="pricing_total">
-		<img class="submenu_subscription_billing_arrow" src="{{ _filelatest('/bruno/app/images/submenu/subscription/arrow.png') }}" />
-		<div find="pricing_total_discount" class="submenu_subscription_billing_discount">
-			<span class="submenu_subscription_billing_discount_absolute">
-				<span find="pricing_total_discount_value" class="submenu_subscription_billing_discount_value_hidden"></span><span class="submenu_subscription_billing_discount_off">off</span>
-			</span>
-			<span find="pricing_total_discount_value" class="submenu_subscription_billing_discount_value"></span><span class="submenu_subscription_billing_discount_pourcentage">%</span>
-		</div>
-		<div class="submenu_subscription_billing_title">
-			{{ _trans('app', 20, 25, 'html') }}{# Total #}
-		</div>
-		<div class="submenu_subscription_billing_content">
-			<div find="pricing_total_value" class="submenu_subscription_billing_amount"></div>
-			<div find="pricing_total_instead" class="submenu_subscription_billing_instead"></div>
+	<div class="submenu_subscription_billing">
+		<div class="submenu_subscription_billing_box selected" find="pricing_total">
+			<img class="submenu_subscription_billing_arrow" src="{{ _filelatest('/bruno/app/images/submenu/subscription/arrow.png') }}" />
+			<div find="pricing_total_discount" class="submenu_subscription_billing_discount">
+				<span class="submenu_subscription_billing_discount_absolute">
+					<span find="pricing_total_discount_value" class="submenu_subscription_billing_discount_value_hidden"></span><span class="submenu_subscription_billing_discount_off">off</span>
+				</span>
+				<span find="pricing_total_discount_value" class="submenu_subscription_billing_discount_value"></span><span class="submenu_subscription_billing_discount_pourcentage">%</span>
+			</div>
+			<div class="submenu_subscription_billing_title">
+				{{ _trans('app', 20, 25, 'html') }}{# Total #}
+			</div>
+			<div class="submenu_subscription_billing_content">
+				<div find="pricing_total_value" class="submenu_subscription_billing_amount"></div>
+				<div find="pricing_total_instead" class="submenu_subscription_billing_instead"></div>
+			</div>
+			<div find="pricing_expiration" class="submenu_subscription_billing_expiration"></div>
 		</div>
 	</div>
+
+	
 
 	<div find="paypal_buy" class="submenu_subscription_buy"></div>
 

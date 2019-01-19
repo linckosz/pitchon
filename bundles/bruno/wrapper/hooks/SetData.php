@@ -94,7 +94,7 @@ function SetLogin(){
 	$app->bruno->data['user_id'] = false;
 	if($user_id && $user_md5 && $user_language && $user_email){
 		//Simple verification of the user
-		if($user = User::Where('id', $user_id)->where('md5', $user_md5)->first(array('id', 'email'))){
+		if($user = User::Where('id', $user_id)->where('md5', $user_md5)->first(array('id', 'email', 'plan_at'))){
 			//Set ready only if expired
 			//We check if the user has his subscription expired
 			if(!is_null($user->plan_at) && $user->plan_at < ModelBruno::getMStime()){
@@ -102,7 +102,7 @@ function SetLogin(){
 			}
 			$app->bruno->data['user_id'] = $user_id;
 			//This is a dirty fix: When I switch account, I do not understand why Vanquish::get('user_email') keep the old account.
-			if($user_email  != $user->email){
+			if($user_email != $user->email){
 				$user_email = $user->email;
 				Vanquish::set(array('user_email' => $user_email,));
 			}

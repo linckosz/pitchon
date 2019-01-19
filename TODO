@@ -1,8 +1,2 @@
 \libs\Watch::php(true, '$var', __FILE__, __LINE__, false, false, true);
-* Gamification => joueur voie son classement a la fin (surnom) + screen classement a la page thank you
-* Gamification cannot work in jpg / powerpoint (=fixcode), it needs dynamic session
-* One shot pay => 1 month to 2 years => Read only if expired
-* Show expiration date calulation on submenu according to the money amount left
-* read_only FRONT
-* Message Trial mode?
-* missing promocode in submenu_subscription_pricing_fn
+

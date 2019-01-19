@@ -44,119 +44,122 @@ var app_layers_pitch_feedPage = function(param){
 		.addClass('display_none')
 		.off('click');
 
-	Elem = $('#-app_layers_pitch_add_icon').clone();
-	Elem.prop('id', 'app_layers_pitch_add_icon');
-	Elem.click(param, function(event){
-		event.stopPropagation();
-		if(!$(this).find("[find=add]").hasClass("display_none")){
-			$(this).addClass("app_layers_pitch_add_icon_fixed");
-			$(this).find("[find=add]").addClass("display_none");
-			$(this).find("[find=input]").removeClass("display_none");
-			$(this).css('cursor', 'default');
-			$('#app_layers_pitch_add_corner').addClass('app_layers_pitch_add_corner_display_none');
-			var items = Bruno.storage.list('pitch');
-			var param = {
-				number: items.length+1,
-			};
-			$(this).find("[find=input_textarea]")
-				.val(Bruno.Translation.get('app', 2103, 'html', param)) //Pitch #[{number]}
-				.focus()
-				.select()
-				.textareaRows();
-			wrapper_IScroll();
-		}
-	});
-	//Create new item
-	Elem.find("[find=input_textarea]").on('keyup', function(event){
-		if(event.which == 13){
-			app_layers_pitch_icon_create();
-			event.preventDefault();
-		}
-		return false;
-	});
-	//Disable New Line
-	Elem.find("[find=input_textarea]").on('keydown keypress change copy paste cut input', function(event){
-		if(event.type=="copy" || event.type=="paste" || event.type=="cut"){
-			setTimeout(function(that){
-				var str = that.val();
+	if(!wrapper_read_only){
+		Elem = $('#-app_layers_pitch_add_icon').clone();
+		Elem.prop('id', 'app_layers_pitch_add_icon');
+		Elem.click(param, function(event){
+			event.stopPropagation();
+			if(!$(this).find("[find=add]").hasClass("display_none")){
+				$(this).addClass("app_layers_pitch_add_icon_fixed");
+				$(this).find("[find=add]").addClass("display_none");
+				$(this).find("[find=input]").removeClass("display_none");
+				$(this).css('cursor', 'default');
+				$('#app_layers_pitch_add_corner').addClass('app_layers_pitch_add_corner_display_none');
+				var items = Bruno.storage.list('pitch');
+				var param = {
+					number: items.length+1,
+				};
+				$(this).find("[find=input_textarea]")
+					.val(Bruno.Translation.get('app', 2103, 'html', param)) //Pitch #[{number}]
+					.focus()
+					.select()
+					.textareaRows();
+				wrapper_IScroll();
+			}
+		});
+		//Create new item
+		Elem.find("[find=input_textarea]").on('keyup', function(event){
+			if(event.which == 13){
+				app_layers_pitch_icon_create();
+				event.preventDefault();
+			}
+			return false;
+		});
+		//Disable New Line
+		Elem.find("[find=input_textarea]").on('keydown keypress change copy paste cut input', function(event){
+			if(event.type=="copy" || event.type=="paste" || event.type=="cut"){
+				setTimeout(function(that){
+					var str = that.val();
+					if(str.match(/(\r\n|\n|\r)/gm)){
+						str = str.replace(/(\r\n|\n|\r)/gm, " ");
+						that.val(str);
+					}
+					var rows_prev = parseInt(that.attr('rows'), 10);
+					that.textareaRows();
+					if(rows_prev != parseInt(that.attr('rows'), 10)){
+						wrapper_IScroll();
+					}
+				}, 0, $(this));
+			} else {
+				var str = $(this).val();
 				if(str.match(/(\r\n|\n|\r)/gm)){
 					str = str.replace(/(\r\n|\n|\r)/gm, " ");
-					that.val(str);
+					$(this).val(str);
 				}
-				var rows_prev = parseInt(that.attr('rows'), 10);
-				that.textareaRows();
-				if(rows_prev != parseInt(that.attr('rows'), 10)){
-					wrapper_IScroll();
-				}
-			}, 0, $(this));
-		} else {
-			var str = $(this).val();
-			if(str.match(/(\r\n|\n|\r)/gm)){
-				str = str.replace(/(\r\n|\n|\r)/gm, " ");
-				$(this).val(str);
 			}
-		}
-		if(event.which == 13){
-			event.preventDefault();
-		} else if(event.which == 27){
+			if(event.which == 13){
+				event.preventDefault();
+			} else if(event.which == 27){
+				app_layers_pitch_icon_back();
+			}
+			var rows_prev = parseInt($(this).attr('rows'), 10);
+			$(this).textareaRows();
+			if(rows_prev != parseInt($(this).attr('rows'), 10)){
+				wrapper_IScroll();
+			}
+		});
+
+		//All the focus/blur trick is to solve an issue than when the focus is on the textarea we have to click twice on OK (or CANCEL) because the first click does only a blur on textarea
+		//This still be a qdirty fix because the problem still exits with any other area of the screen, but it's less obvious and annoying for the user
+		Elem.find("[find=input_textarea]").data('focus', false);
+		Elem.find("[find=input_textarea]").on('focus', function(event){
+			$(this).textarea.data('focus', true);
+		});
+		Elem.find("[find=input_textarea]").on('blur', function(event){
+			$(this).textarea.data('focus', false);
+		});
+		Elem.find("[find=input_create], [find=input_cancel]").hover(
+			//MouseIn
+			function(){
+				var textarea = $("#app_layers_pitch_add_icon").find("[find=input_textarea]");
+				if(textarea.is( ":focus" )){
+					textarea.data('focus', true);
+					textarea.blur();
+				} else {
+					textarea.data('focus', false);
+				}
+			},
+			//MouseOut
+			function(){
+				var textarea = $("#app_layers_pitch_add_icon").find("[find=input_textarea]");
+				if(textarea.data('focus')){
+					textarea.focus();
+				}
+			}
+		);
+
+		Elem.find("[find=input_cancel]").on('click', function(event){
 			app_layers_pitch_icon_back();
-		}
-		var rows_prev = parseInt($(this).attr('rows'), 10);
-		$(this).textareaRows();
-		if(rows_prev != parseInt($(this).attr('rows'), 10)){
-			wrapper_IScroll();
-		}
-	});
+			event.preventDefault();
+			return false;
+		});
+		Elem.find("[find=input_create]").on('click', function(event){
+			app_layers_pitch_icon_create();
+			event.preventDefault();
+			return false;
+		});
+		Elem.appendTo(position_wrapper);
 
-	//All the focus/blur trick is to solve an issue than when the focus is on the textarea we have to click twice on OK (or CANCEL) because the first click does only a blur on textarea
-	//This still be a qdirty fix because the problem still exits with any other area of the screen, but it's less obvious and annoying for the user
-	Elem.find("[find=input_textarea]").data('focus', false);
-	Elem.find("[find=input_textarea]").on('focus', function(event){
-		$(this).textarea.data('focus', true);
-	});
-	Elem.find("[find=input_textarea]").on('blur', function(event){
-		$(this).textarea.data('focus', false);
-	});
-	Elem.find("[find=input_create], [find=input_cancel]").hover(
-		//MouseIn
-		function(){
-			var textarea = $("#app_layers_pitch_add_icon").find("[find=input_textarea]");
-			if(textarea.is( ":focus" )){
-				textarea.data('focus', true);
-				textarea.blur();
-			} else {
-				textarea.data('focus', false);
-			}
-		},
-		//MouseOut
-		function(){
-			var textarea = $("#app_layers_pitch_add_icon").find("[find=input_textarea]");
-			if(textarea.data('focus')){
-				textarea.focus();
-			}
-		}
-	);
-
-	Elem.find("[find=input_cancel]").on('click', function(event){
-		app_layers_pitch_icon_back();
-		event.preventDefault();
-		return false;
-	});
-	Elem.find("[find=input_create]").on('click', function(event){
-		app_layers_pitch_icon_create();
-		event.preventDefault();
-		return false;
-	});
-	Elem.appendTo(position_wrapper);
-
-	var layer = $('#app_layers_content');
-	Elem = $('#-app_layers_pitch_add_corner').clone();
-	Elem.prop('id', 'app_layers_pitch_add_corner');
-	Elem.click(param, function(event){
-		event.stopPropagation();
-		$('#app_layers_pitch_add_icon').click();
-	});
-	Elem.appendTo(layer);
+		//The + button
+		var layer = $('#app_layers_content');
+		Elem = $('#-app_layers_pitch_add_corner').clone();
+		Elem.prop('id', 'app_layers_pitch_add_corner');
+		Elem.click(param, function(event){
+			event.stopPropagation();
+			$('#app_layers_pitch_add_icon').click();
+		});
+		Elem.appendTo(layer);
+	}
 
 	app_layers_pitch_refresh(0);
 
@@ -206,34 +209,38 @@ var app_layers_pitch_feedPage = function(param){
 				Elem.attr('c_at', item['c_at']);
 				Elem.attr('pitch_id', item['id']);
 				Elem.find("[find=title]").html( wrapper_to_html(item['title']) );
-				Elem.find("[find=delete]").click(
-					item['id'],
-					function(event){
-						event.stopPropagation();
-						app_layers_content_move.reset();
-						if(confirm(Bruno.Translation.get('app', 26, 'js'))){ //Are you sure you want to delete this item?
-							var data = {};
-							data.delete = {};
-							data.delete.pitch = {};
-							var item = Bruno.storage.get('pitch', event.data);
-							data.delete.pitch[item['id']] = {
-								id: item['id'],
-								md5: item['md5'],
-							};
-							var action_cb_success = function(msg, error, status, extra){
-								storage_cb_success(msg, error, status, extra);
-								app_content_menu.selection("pitch");
-							}
-							var action_cb_complete = function(){
-								storage_cb_complete();
-								app_application_bruno.prepare("pitch", true);
-							};
-							if(storage_offline(data)){
-								wrapper_sendAction(data, 'post', 'api/data/set', action_cb_success, storage_cb_error, storage_cb_begin, action_cb_complete);
+				if(wrapper_read_only){
+					Elem.find("[find=delete]").addClass("display_none");
+				} else {
+					Elem.find("[find=delete]").click(
+						item['id'],
+						function(event){
+							event.stopPropagation();
+							app_layers_content_move.reset();
+							if(confirm(Bruno.Translation.get('app', 26, 'js'))){ //Are you sure you want to delete this item?
+								var data = {};
+								data.delete = {};
+								data.delete.pitch = {};
+								var item = Bruno.storage.get('pitch', event.data);
+								data.delete.pitch[item['id']] = {
+									id: item['id'],
+									md5: item['md5'],
+								};
+								var action_cb_success = function(msg, error, status, extra){
+									storage_cb_success(msg, error, status, extra);
+									app_content_menu.selection("pitch");
+								}
+								var action_cb_complete = function(){
+									storage_cb_complete();
+									app_application_bruno.prepare("pitch", true);
+								};
+								if(storage_offline(data)){
+									wrapper_sendAction(data, 'post', 'api/data/set', action_cb_success, storage_cb_error, storage_cb_begin, action_cb_complete);
+								}
 							}
 						}
-					}
-				);
+					);
+				}
 				Elem.find("[find=preview]").click(
 					item['id'],
 					function(event){
@@ -260,123 +267,125 @@ var app_layers_pitch_feedPage = function(param){
 						app_content_menu.selection("question", event.data);
 					}
 				);
-				Elem.on('mousedown touchdown touchstart', function(event){
-					app_layers_content_move.mousedown(
-						event,
-						$(this),
-						function(){ //cb_begin
-							app_layers_pitch_list_position.build();
-						},
-						function(){ //cb_success
-							if(!app_layers_pitch_list_position.list){
-								return false;
-							}
-							//Order from big to small
-							var order_id = [];
-							var keysY = Object.keys(app_layers_pitch_list_position.list).sort(function(a, b) { return b - a; });
-							for(var y in keysY){
-								var keyY = keysY[y];
-								if(typeof app_layers_pitch_list_position.list[keyY] == 'undefined'){
-									continue;
+				if(!wrapper_read_only){
+					Elem.on('mousedown touchdown touchstart', function(event){
+						app_layers_content_move.mousedown(
+							event,
+							$(this),
+							function(){ //cb_begin
+								app_layers_pitch_list_position.build();
+							},
+							function(){ //cb_success
+								if(!app_layers_pitch_list_position.list){
+									return false;
 								}
-								var keysX = Object.keys(app_layers_pitch_list_position.list[keyY]).sort(function(a, b) { return b - a; });
-								for(var x in keysX){
-									var keyX = keysX[x];
-									if(typeof app_layers_pitch_list_position.list[keyY][keyX] == 'undefined'){
+								//Order from big to small
+								var order_id = [];
+								var keysY = Object.keys(app_layers_pitch_list_position.list).sort(function(a, b) { return b - a; });
+								for(var y in keysY){
+									var keyY = keysY[y];
+									if(typeof app_layers_pitch_list_position.list[keyY] == 'undefined'){
 										continue;
 									}
-									if($("#"+app_layers_pitch_list_position.list[keyY][keyX]).length>0){
-										order_id.push(parseInt($("#"+app_layers_pitch_list_position.list[keyY][keyX]).attr("pitch_id"), 10));
-									}
-								}
-							}
-							var data = {};
-							data.set = {};
-							data.set.pitch = {};
-							for(var i in order_id){
-								var order = parseInt(i, 10)+1;
-								var item = Bruno.storage.get("pitch", order_id[i]);
-								if(item){
-									data.set.pitch[item['id']] = {
-										id: item['id'],
-										md5: item['md5'],
-										sort: order,
-									};
-								}
-							}
-							app_layers_pitch_list_position.list = false;
-							app_layers_pitch_list_position.current.x = false;
-							app_layers_pitch_list_position.current.y = false;
-							var action_cb_complete = function(){
-								storage_cb_complete();
-								app_application_bruno.prepare("pitch", true);
-							};
-							if(storage_offline(data)){
-								app_application_bruno.prepare("pitch", true);
-								wrapper_sendAction(data, 'post', 'api/data/set', storage_cb_success, storage_cb_error, storage_cb_begin, action_cb_complete);
-							}
-						},
-						function(){ //cb_progress
-							if(app_layers_pitch_list_position.list && app_layers_content_move.clone && app_layers_content_move.clone.length>0){
-								var posY = false;
-								var keysY = Object.keys(app_layers_pitch_list_position.list).sort(function(a, b) { return a - b; });
-								for(var i in keysY){
-									var y = keysY[i];
-									if(!posY){
-										posY = y;
-									}
-									if(wrapper_mouse.y > y){
-										posY = y;
-									}
-								}
-								if(posY){
-									if(typeof app_layers_pitch_list_position.list[posY] == 'undefined'){
-										return false;
-									}
-									var posX = false;
-									var keysX = Object.keys(app_layers_pitch_list_position.list[posY]).sort(function(a, b) { return a - b; });
-									for(var i in keysX){
-										var x = keysX[i];
-										if(!posX){
-											posX = x;
+									var keysX = Object.keys(app_layers_pitch_list_position.list[keyY]).sort(function(a, b) { return b - a; });
+									for(var x in keysX){
+										var keyX = keysX[x];
+										if(typeof app_layers_pitch_list_position.list[keyY][keyX] == 'undefined'){
+											continue;
 										}
-										if(wrapper_mouse.x > x){
-											posX = x;
+										if($("#"+app_layers_pitch_list_position.list[keyY][keyX]).length>0){
+											order_id.push(parseInt($("#"+app_layers_pitch_list_position.list[keyY][keyX]).attr("pitch_id"), 10));
 										}
 									}
 								}
-								if(posY && posX){
-									if(
-										   (posY != app_layers_pitch_list_position.current.y
-										|| posX != app_layers_pitch_list_position.current.x)
-										&& app_layers_content_move.elem
-										&& app_layers_content_move.elem.length>0
-										&& typeof app_layers_pitch_list_position.list[posY] != 'undefined'
-										&& typeof app_layers_pitch_list_position.list[posY][posX] != 'undefined'
-										&& $('#'+app_layers_pitch_list_position.list[posY][posX]).length>0
-									){
-										var direction = 'before';
-										if(posY > app_layers_pitch_list_position.current.y){
-											direction = 'after';
-										} else if(posY == app_layers_pitch_list_position.current.y){
-											if(posX > app_layers_pitch_list_position.current.x){
-												direction = 'after';
+								var data = {};
+								data.set = {};
+								data.set.pitch = {};
+								for(var i in order_id){
+									var order = parseInt(i, 10)+1;
+									var item = Bruno.storage.get("pitch", order_id[i]);
+									if(item){
+										data.set.pitch[item['id']] = {
+											id: item['id'],
+											md5: item['md5'],
+											sort: order,
+										};
+									}
+								}
+								app_layers_pitch_list_position.list = false;
+								app_layers_pitch_list_position.current.x = false;
+								app_layers_pitch_list_position.current.y = false;
+								var action_cb_complete = function(){
+									storage_cb_complete();
+									app_application_bruno.prepare("pitch", true);
+								};
+								if(storage_offline(data)){
+									app_application_bruno.prepare("pitch", true);
+									wrapper_sendAction(data, 'post', 'api/data/set', storage_cb_success, storage_cb_error, storage_cb_begin, action_cb_complete);
+								}
+							},
+							function(){ //cb_progress
+								if(app_layers_pitch_list_position.list && app_layers_content_move.clone && app_layers_content_move.clone.length>0){
+									var posY = false;
+									var keysY = Object.keys(app_layers_pitch_list_position.list).sort(function(a, b) { return a - b; });
+									for(var i in keysY){
+										var y = keysY[i];
+										if(!posY){
+											posY = y;
+										}
+										if(wrapper_mouse.y > y){
+											posY = y;
+										}
+									}
+									if(posY){
+										if(typeof app_layers_pitch_list_position.list[posY] == 'undefined'){
+											return false;
+										}
+										var posX = false;
+										var keysX = Object.keys(app_layers_pitch_list_position.list[posY]).sort(function(a, b) { return a - b; });
+										for(var i in keysX){
+											var x = keysX[i];
+											if(!posX){
+												posX = x;
+											}
+											if(wrapper_mouse.x > x){
+												posX = x;
 											}
 										}
-										if(direction=='before'){
-											app_layers_content_move.elem.insertBefore($('#'+app_layers_pitch_list_position.list[posY][posX]));
-										} else {
-											app_layers_content_move.elem.insertAfter($('#'+app_layers_pitch_list_position.list[posY][posX]));
-										}
-										app_layers_pitch_list_position.build();
-										app_layers_pitch_refresh();
 									}
-									
+									if(posY && posX){
+										if(
+											   (posY != app_layers_pitch_list_position.current.y
+											|| posX != app_layers_pitch_list_position.current.x)
+											&& app_layers_content_move.elem
+											&& app_layers_content_move.elem.length>0
+											&& typeof app_layers_pitch_list_position.list[posY] != 'undefined'
+											&& typeof app_layers_pitch_list_position.list[posY][posX] != 'undefined'
+											&& $('#'+app_layers_pitch_list_position.list[posY][posX]).length>0
+										){
+											var direction = 'before';
+											if(posY > app_layers_pitch_list_position.current.y){
+												direction = 'after';
+											} else if(posY == app_layers_pitch_list_position.current.y){
+												if(posX > app_layers_pitch_list_position.current.x){
+													direction = 'after';
+												}
+											}
+											if(direction=='before'){
+												app_layers_content_move.elem.insertBefore($('#'+app_layers_pitch_list_position.list[posY][posX]));
+											} else {
+												app_layers_content_move.elem.insertAfter($('#'+app_layers_pitch_list_position.list[posY][posX]));
+											}
+											app_layers_pitch_list_position.build();
+											app_layers_pitch_refresh();
+										}
+										
+									}
 								}
 							}
-						}
-					);
-				});
+						);
+					});
+				}
 					
 				if($("#app_layers_pitch_add_icon").length>0){
 					Elem.insertBefore($("#app_layers_pitch_add_icon"));

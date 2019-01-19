@@ -20,6 +20,10 @@ $.extend(wrapper_date.prototype, {
 		return this.time;
 	},
 
+	getTimestamp: function(){
+		return this.timestamp_ms;
+	},
+
 	//Timezone Offset in minutes
 	getTimeOffset: function(){
 		return this.timezone_offset_ms;
@@ -154,16 +158,6 @@ $.extend(wrapper_date.prototype, {
 		return ordinal;
 	},
 
-	display: function(format){
-		if(typeof format === 'string' && this.format[format]){
-			format = this.format[format];
-		} else {
-			format = this.format['date_short']; //date_short [Jul 8th]
-		}
-		format = this.regex(format);
-		return format;
-	},
-
 	happensToday: function() {
 		var dateStampToday = new Date().setHours(0, 0, 0, 0); //timestamp_ms of beginning of the day taking in account the timezone
 		var dateStampTomorrow = dateStampToday + (86400*1000);
@@ -204,6 +198,23 @@ $.extend(wrapper_date.prototype, {
 		now.setSeconds(0);
 		now.setMilliseconds(0);
 		return now; //timestamp_ms of the day taking in account the timezone
+	},
+
+	//This feature requires the library https://github.com/datejs/Datejs
+	addMonths: function(months){
+		this.time.addMonths(months);
+		this.timestamp_ms = this.time.getTime();
+	},
+
+
+	display: function(format){
+		if(typeof format === 'string' && this.format[format]){
+			format = this.format[format];
+		} else {
+			format = this.format['date_short']; //date_short [Jul 8th]
+		}
+		format = this.regex(format);
+		return format;
 	},
 
 	//Transform the format sentence into a readable date

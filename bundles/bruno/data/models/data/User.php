@@ -238,7 +238,7 @@ class User extends ModelBruno {
 				$this->host_id = $host_id;
 			}
 			$this->plan = 2; //Open Standard mode for trial
-			$this->plan_at = ModelBruno::getMStime() + (30*24*3600*100); //30 days free trial
+			$this->plan_at = ModelBruno::getMStime() + (30*24*3600*1000); //30 days free trial
 			//Set tuto list
 			$this->tuto = json_encode((object) array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
 			$new = true;

@@ -140,19 +140,25 @@
 }
 
 .submenu_subscription_billing {
+	margin: 20px 0 10px 0;
+	text-align: center;
+}
+
+.submenu_subscription_billing_box {
 	display: inline-block;
 	position: relative;
 	font-size: 16px;
-	color: #AAAAAA;
-	background-color: #E9E9E9;
 	text-align: center;
-	margin: 20px 6px 10px 6px;
+	margin: 0 6px;
 	width: 240px;
 	white-space: nowrap;
 	overflow: visible;
 	transition: background-color 0.1s linear;
+	color: #AAAAAA;
+	background-color: #E9E9E9;
+	border: none;
 }
-.submenu_subscription_billing.selected {
+.submenu_subscription_billing_box.selected {
 	color: #FFFFFF;
 	background-color: #0081BB;
 	border: 2px solid #1A69A6;
@@ -174,7 +180,7 @@
 	height: 6px;
 	width: 12px;
 }
-.submenu_subscription_billing.selected .submenu_subscription_billing_arrow {
+.submenu_subscription_billing_box.selected .submenu_subscription_billing_arrow {
 	display: block;
 }
 
@@ -184,7 +190,7 @@
 	padding: 10px 4px;
 	transition: background-color 0.1s linear;
 }
-.submenu_subscription_billing.selected .submenu_subscription_billing_title {
+.submenu_subscription_billing_box.selected .submenu_subscription_billing_title {
 	background-color: #1A69A6;
 	color: #A3D3F5;
 }
@@ -253,6 +259,14 @@
 	text-decoration: line-through;
 }
 
+.submenu_subscription_billing_expiration {
+	position: absolute;
+	text-align: left;
+	font-size: 12px;
+	color: #6F7377;
+	margin: 2px;
+}
+
 .submenu_subscription_price {
 	padding: 30px 6px;
 	font-size: 24px;
@@ -307,6 +321,9 @@
 	position: absolute;
 	z-index: 3;
 	background-color: #36B8F3;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
 	width: 30px;
 	height: 30px;
 	line-height: 30px;
@@ -329,6 +346,11 @@
 	position: absolute;
 	z-index: 4;
 	top: 30px;
+	border-radius: 4px;
+	background-color: rgba(255, 255, 255, 0.80);
+	box-shadow: 0px 0px 3px 3px rgba(255, 255, 255, 0.80);
+	-moz-box-shadow: 0px 0px 3px 3px rgba(255, 255, 255, 0.80);
+	-webkit-box-shadow: 0px 0px 3px 3px rgba(255, 255, 255, 0.80);
 }
 
 .submenu_subscription_slider_dot {
@@ -358,7 +380,7 @@
 
 /* Maximum Mobile phone in Portrait */
 @media only screen and (max-width: 479px) {
-	.submenu_subscription_billing {
+	.submenu_subscription_billing_box {
 		font-size: 14px;
 		margin: 24px 6px;
 		width: 140px;

@@ -48,6 +48,10 @@
 	visibility: visible !important;
 }
 
+.app_application_read_only {
+	pointer-events: none
+}
+
 .app_application_block {
 	display: none;
 	position: absolute;

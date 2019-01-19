@@ -50,7 +50,7 @@ function Submenu(menu, next, param, animate) {
 		//Launch Pre action
 		for (var att in subm.obj) {
 			subm.attribute = subm.obj[att];
-			if ("style" in subm.attribute && subm.attribute.style == "preAction" && "action" in subm.attribute) {
+			if ("style" in subm.attribute && subm.attribute.style == "preAction" && "action" in subm.attribute) { //Minimum requirement
 				if (typeof subm.attribute.action == "function") {
 					subm.attribute.action(submenu_wrapper, subm);
 				}
@@ -59,16 +59,18 @@ function Submenu(menu, next, param, animate) {
 		//Build the page
 		for (var att in subm.obj) {
 			subm.attribute = subm.obj[att];
-			if ("style" in subm.attribute && "title" in subm.attribute) {
-				if (typeof subm.style[subm.attribute.style] == "function") {
-					subm.style[subm.attribute.style](submenu_wrapper, subm);
+			if ("style" in subm.attribute && "title" in subm.attribute) { //Minimum requirement
+				//Check if we need to skip
+				if ("skip" in subm.attribute){
+					if(typeof subm.attribute.skip == "function"){
+						if(subm.attribute.skip(submenu_wrapper, subm)){
+							continue;
+						}
+					} else if(subm.attribute.skip){
+						continue;
+					}
 				}
-			}
-		}
-
-		for (var att in subm.obj) {
-			subm.attribute = subm.obj[att];
-			if ("style" in subm.attribute && "items" in subm.attribute) {
+				//Build the tab
 				if (typeof subm.style[subm.attribute.style] == "function") {
 					subm.style[subm.attribute.style](submenu_wrapper, subm);
 				}
@@ -78,7 +80,7 @@ function Submenu(menu, next, param, animate) {
 		//Launch Post action
 		for (var att in subm.obj) {
 			subm.attribute = subm.obj[att];
-			if ("style" in subm.attribute && subm.attribute.style == "postAction" && "action" in subm.attribute) {
+			if ("style" in subm.attribute && subm.attribute.style == "postAction" && "action" in subm.attribute) { //Minimum requirement
 				if (typeof subm.attribute.action == "function") {
 					subm.attribute.action(submenu_wrapper, subm);
 				}

@@ -16,7 +16,7 @@ submenu_list['reward'] = {
 			} else if(hosts && hosts == 1){
 				text = Bruno.Translation.get('app', 146, 'html'); //A user created an account after playing one of your Quizzes. If he upgrades to a paid subscription, you will be rewarded!
 			} else {
-				text = Bruno.Translation.get('app', 148, 'html'); //Play your Quizzes in front of as many as you can of users, if they create a account and upgrade to a paid subscription, you will be rewarded!
+				text = Bruno.Translation.get('app', 148, 'html'); //Play your Quizzes with your audience, if someone pays for any subscription, you will be rewarded!
 			}
 
 			var user = Bruno.storage.get("user", wrapper_localstorage.user_id);

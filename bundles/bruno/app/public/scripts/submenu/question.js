@@ -13,7 +13,7 @@ submenu_list['app_question_new'] = {
 			var param = {
 				number: items.length+1,
 			};
-			return Bruno.Translation.get('app', 2106, 'html', param); //Question #[{number]}
+			return Bruno.Translation.get('app', 2106, 'html', param); //Question #[{number}]
 		},
 		"class": "submenu_input_text",
 		"now": function(Elem, subm){

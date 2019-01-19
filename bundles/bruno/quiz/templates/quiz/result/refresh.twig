@@ -4,7 +4,7 @@
 		<script src="{{ _filelatest('/scripts/libs/autobahn.js') }}" type="text/javascript"></script>
 		<script type="text/javascript">
 			var quiz_result_refresh_conn;
-			var quiz_result_refresh_loop = 60; //Allow only 60 restart (1min offline), after that the user must refresh manuall
+			var quiz_result_refresh_loop = 60; //Allow only 60 restart (1min offline), after that the user must refresh manually
 			//Force deconnection after 3H of listening
 			setTimeout(function(){
 				quiz_result_refresh_loop = false;
@@ -32,6 +32,13 @@
 											&& data['data'] != "{{ data_question_id }}"
 										){
 											window.location.href = '/c/'+quiz_result_refresh_code;
+										} else if(
+											   typeof data == 'object'
+											&& typeof data['data'] != "undefined"
+											&& data['data'] == false
+										){
+											//"Thank you" page
+											window.location.href = '/t/'+quiz_result_refresh_code;
 										}
 									}
 								);

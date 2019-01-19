@@ -65,6 +65,34 @@ submenu_list['settings'] = {
 		"next": "language",
 		"value": submenu_language_full,
 	},
+	//Change the language
+	"subscription": {
+		"style": "next",
+		"keep_title": true,
+		"title": Bruno.Translation.get('app', 158, 'html'), //Subscription plan
+		"next": "subscription",
+		"value": function(){
+			var result = Bruno.Translation.get('app', 163, 'html'); //Subscribe to unlock
+			if(responsive.test("maxMobile")){
+				result = Bruno.Translation.get('app', 165, 'html'); //Subscribe
+			}
+			if(!wrapper_read_only){
+				var user_plan = Bruno.storage.getPlan();
+				var user_plan_at = Bruno.storage.getPlanAt();
+				if(user_plan == 1){
+					result = Bruno.Translation.get('app', 160, 'html'); //Starter
+				} else if(user_plan == 2){
+					result = Bruno.Translation.get('app', 161, 'html'); //Standard
+				} else if(user_plan == 3){
+					result = Bruno.Translation.get('app', 162, 'html'); //Premium
+				}
+				if(user_plan_at){
+					result += " ("+new wrapper_date(user_plan_at).display('date_medium_slim')+")";
+				}
+			}
+			return result;
+		},
+	},
 	"reward": {
 		"style": "next",
 		"keep_title": true,

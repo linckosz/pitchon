@@ -324,6 +324,7 @@ class ControllerScreen extends Controller {
 				}
 				if($question = $pitch->question_offset($list['nbr']-1, array('id', 'u_at', 'parent_id', 'number', 'file_id', 'title', 'style'))){
 					$session = false;
+					$data_pitch_code = false;
 					$app->bruno->data['data_pitch_code'] = false;
 					$app->bruno->data['data_pitch_code_length'] = 4;
 					if(!$preview && !self::$fixcode){
@@ -336,6 +337,7 @@ class ControllerScreen extends Controller {
 							$length = mb_strlen($session->code);
 							$app->bruno->data['data_pitch_code_length'] = $length;
 							$app->bruno->data['data_pitch_code'] = $session->code;
+							$data_pitch_code = $session->code;
 							if($length==6){
 								$app->bruno->data['data_pitch_code'] = substr($session->code, 0, 3).' '.substr($session->code, 3, 3);
 							} else if($length==8){
@@ -346,6 +348,7 @@ class ControllerScreen extends Controller {
 						$length = mb_strlen($hashid);
 						$app->bruno->data['data_pitch_code_length'] = $length;
 						$app->bruno->data['data_pitch_code'] = $hashid;
+						$data_pitch_code = $hashid;
 						if($length==6){
 							$app->bruno->data['data_pitch_code'] = substr($hashid, 0, 3).' '.substr($hashid, 3, 3);
 						} else if($length==8){
@@ -354,10 +357,11 @@ class ControllerScreen extends Controller {
 					}
 
 					//Start WAMP room
-					if(!$preview && !self::$fixcode && $list['style']=='question'){
-						if($app->bruno->data['data_pitch_code'] && $app->bruno->data['data_pitch_code'] > 0){
+					//if(!$preview && !self::$fixcode && $list['style']=='question'){
+					if(!$preview && !self::$fixcode){
+						if($data_pitch_code && $data_pitch_code > 0){
 							$entryData = array(
-								'topicid'	=> 'quiz_'.$app->bruno->data['data_pitch_code'],
+								'topicid'	=> 'quiz_'.$data_pitch_code,
 								'data'		=> $question->id,
 								'when'		=> time(),
 							);
@@ -519,7 +523,25 @@ class ControllerScreen extends Controller {
 				$app->render('/bundles/bruno/screen/templates/screen/info/pitch.twig');
 				return true;
 			} else { // END
+
 				$session = $this->set_session(null, 0);
+				//Bring the user to the "thank you" page
+				//Start WAMP room
+				if(!$preview && !self::$fixcode){
+					if($session->code && $session->code > 0){
+						$entryData = array(
+							'topicid'	=> 'quiz_'.$session->code,
+							'data'		=> false, //False means the end of the quiz
+							'when'		=> time(),
+						);
+						$context = new \ZMQContext();
+						$socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'api_websocket_session'); //$persistent_id is the same as the route in config/websocket.php
+						$socket->connect("tcp://127.0.0.1:5555");
+						$socket->send(json_encode($entryData));
+					}
+				}
+
+				
 				$app->bruno->data['show_hand'] = false;
 				$app->bruno->data['data_pitch_title'] = strtoupper($app->trans->getBRUT('screen', 0, 6)); //Thank you
 				$app->bruno->data['data_pitch_by'] = '';

@@ -34,6 +34,15 @@ $app->get(
 ->name('quiz_code_get');
 
 $app->get(
+	'/t/:code',
+	'\bundles\bruno\quiz\controllers\ControllerQuiz:conclusion_get'
+)
+->conditions(array(
+	'code' => '[a-zA-Z0-9]+', //"only numeric" are real session, "with alphabet" are fix question code
+))
+->name('quiz_conclusion_get');
+
+$app->get(
 	'/p/:questionid',
 	'\bundles\bruno\quiz\controllers\ControllerQuiz:question_get'
 )

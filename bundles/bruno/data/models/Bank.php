@@ -69,7 +69,7 @@ class Bank extends Model {
 		if($amount_eur<=0){
 			return false;
 		}
-		//We the host_id is available, we attach the first time of any subscription
+		//We check if the host_id is available, we attach the first time of any subscription
 		$user = User::getUser();
 		if($user->host_id){
 			$bank = Bank::Where('host_user_id', $user->host_id)->where('guest_user_id', $user->id)->first();

@@ -284,15 +284,17 @@ var app_layers_answer_feedPage = function(param){
 	//Question image
 	Elem = $('#-app_layers_answer_question').clone();
 	Elem.prop('id', 'app_layers_answer_question');
-	Elem.find("[find=add]").on('click', app_layers_answer_question['id'], function(event){
-		var item = Bruno.storage.get('question', event.data);
-		var temp_id = app_upload_open_photo_single('question', item['id'], item['md5'], 'file_id', null, false, true);	
-		app_layers_answer_upload_status($(this), temp_id, true);
-	});
-	Elem.find("[find=image]").on('click', app_layers_answer_question['id'], function(event){
-		var item = Bruno.storage.get('question', event.data);
-		previewer(item['file_id']);
-	});
+	if(!wrapper_read_only){
+		Elem.find("[find=add]").on('click', app_layers_answer_question['id'], function(event){
+			var item = Bruno.storage.get('question', event.data);
+			var temp_id = app_upload_open_photo_single('question', item['id'], item['md5'], 'file_id', null, false, true);	
+			app_layers_answer_upload_status($(this), temp_id, true);
+		});
+		Elem.find("[find=image]").on('click', app_layers_answer_question['id'], function(event){
+			var item = Bruno.storage.get('question', event.data);
+			previewer(item['file_id']);
+		});
+	}
 	Elem.appendTo(position_wrapper);
 	app_layers_answer_answers_question_image();
 	app_application_bruno.add("app_layers_answer_question", "question_"+app_layers_answer_question['id'], function(){
@@ -326,11 +328,13 @@ var app_layers_answer_feedPage = function(param){
 		Elem.addClass('number_'+i);
 		Elem.find("[find=number]").html(i);
 		//Change correct answer
-		Elem.find("[find=answer_select]").on('click', i, function(event){
-			event.stopPropagation();
-			var number = event.data;
-			app_layers_answer_answers_correct(number, true);
-		});
+		if(!wrapper_read_only){
+			Elem.find("[find=answer_select]").on('click', i, function(event){
+				event.stopPropagation();
+				var number = event.data;
+				app_layers_answer_answers_correct(number, true);
+			});
+		}
 		Elem.find("[find=input_textarea]").val('');
 		if(item){
 			Elem.find("[find=input_textarea]").val(item['title']);
@@ -341,7 +345,15 @@ var app_layers_answer_feedPage = function(param){
 		//Create new item
 		answer_timer[i] = null;
 		answer_creating[i] = false;
+		if(wrapper_read_only){
+			Elem.find("[find=input_textarea]").on('focus', i, function(event){
+				$(this).blur();
+			});
+		}
 		Elem.find("[find=input_textarea]").on('blur keyup input', i, function(event){
+			if(wrapper_read_only){
+				return false;
+			}
 			var timer = 2000;
 			if(event.type=="blur"){
 				timer = 0;
@@ -429,6 +441,9 @@ var app_layers_answer_feedPage = function(param){
 		});
 		//Disable New Line
 		Elem.find("[find=input_textarea]").on('keydown keypress change copy paste cut input', function(event){
+			if(wrapper_read_only){
+				return false;
+			}
 			if(event.type=="copy" || event.type=="paste" || event.type=="cut"){
 				setTimeout(function(that){
 					var str = that.val();
@@ -459,71 +474,73 @@ var app_layers_answer_feedPage = function(param){
 			}
 		});
 
-		Elem.find("[find=answer_add]").on('click', i, function(event){
-			event.stopPropagation();
-			var answer = false;
-			var answers = Bruno.storage.list('answer', 1, { number: event.data, }, 'question', app_layers_answer_question['id']);
-			if(answers.length>0){
-				answer = answers[0];
-				var temp_id = app_upload_open_photo_single('answer', answer['id'], answer['md5'], 'file_id', null, false, true);
-				app_layers_answer_upload_status($(this), temp_id, true);
-			} else {
-				var answer_data = {
-					parent_id: app_layers_answer_question['id'],
-					parent_md5: app_layers_answer_question['md5'],
-					number: event.data,
-					title: '',
-				}
-				var temp_id = app_upload_open_photo_single('answer', false, false, false, answer_data, false, true);
-				app_layers_answer_upload_status($(this), temp_id, true);
-			}
-		});
-		Elem.find("[find=answer_image]")
-			.on('click', i, function(event){
+		if(!wrapper_read_only){
+			Elem.find("[find=answer_add]").on('click', i, function(event){
 				event.stopPropagation();
 				var answer = false;
 				var answers = Bruno.storage.list('answer', 1, { number: event.data, }, 'question', app_layers_answer_question['id']);
 				if(answers.length>0){
 					answer = answers[0];
-					previewer(answer['file_id']);
-				}
-			})
-			.on('error', function(){
-				$(this).addClass("app_layers_answer_answers_picture_image");
-			})
-			.on('load', function(){
-				if(this.complete){
-					$(this).addClass("app_layers_answer_answers_picture_image");
-				} else {
-					$(this).addClass("app_layers_answer_answers_picture_image");
-				}
-			});
-
-		Elem.on('click', [app_layers_answer_question['id'], i], function(event){
-			if(Bruno.storage.get('question', event.data[0], 'style')==2){ //Only only for picture style
-				event.stopPropagation();
-				var answer = false;
-				var answers = Bruno.storage.list('answer', 1, { number: event.data[1], }, 'question', app_layers_answer_question['id']);
-				if(answers.length>0){
-					answer = answers[0];
-					if(answer['file_id'] && Bruno.storage.get('file', answer['file_id'])){
-						previewer(answer['file_id']);
-					} else {
-						var temp_id = app_upload_open_photo_single('answer', answer['id'], answer['md5'], 'file_id', null, false, true);
-						app_layers_answer_upload_status($(this), temp_id, true);
-					}
+					var temp_id = app_upload_open_photo_single('answer', answer['id'], answer['md5'], 'file_id', null, false, true);
+					app_layers_answer_upload_status($(this), temp_id, true);
 				} else {
 					var answer_data = {
 						parent_id: app_layers_answer_question['id'],
 						parent_md5: app_layers_answer_question['md5'],
-						number: event.data[1],
+						number: event.data,
 						title: '',
 					}
 					var temp_id = app_upload_open_photo_single('answer', false, false, false, answer_data, false, true);
 					app_layers_answer_upload_status($(this), temp_id, true);
 				}
-			}
-		});
+			});
+			Elem.find("[find=answer_image]")
+				.on('click', i, function(event){
+					event.stopPropagation();
+					var answer = false;
+					var answers = Bruno.storage.list('answer', 1, { number: event.data, }, 'question', app_layers_answer_question['id']);
+					if(answers.length>0){
+						answer = answers[0];
+						previewer(answer['file_id']);
+					}
+				})
+				.on('error', function(){
+					$(this).addClass("app_layers_answer_answers_picture_image");
+				})
+				.on('load', function(){
+					if(this.complete){
+						$(this).addClass("app_layers_answer_answers_picture_image");
+					} else {
+						$(this).addClass("app_layers_answer_answers_picture_image");
+					}
+				});
+
+			Elem.on('click', [app_layers_answer_question['id'], i], function(event){
+				if(Bruno.storage.get('question', event.data[0], 'style')==2){ //Only for picture style
+					event.stopPropagation();
+					var answer = false;
+					var answers = Bruno.storage.list('answer', 1, { number: event.data[1], }, 'question', app_layers_answer_question['id']);
+					if(answers.length>0){
+						answer = answers[0];
+						if(answer['file_id'] && Bruno.storage.get('file', answer['file_id'])){
+							previewer(answer['file_id']);
+						} else {
+							var temp_id = app_upload_open_photo_single('answer', answer['id'], answer['md5'], 'file_id', null, false, true);
+							app_layers_answer_upload_status($(this), temp_id, true);
+						}
+					} else {
+						var answer_data = {
+							parent_id: app_layers_answer_question['id'],
+							parent_md5: app_layers_answer_question['md5'],
+							number: event.data[1],
+							title: '',
+						}
+						var temp_id = app_upload_open_photo_single('answer', false, false, false, answer_data, false, true);
+						app_layers_answer_upload_status($(this), temp_id, true);
+					}
+				}
+			});
+		}
 
 		Elem.appendTo(answers_wrapper);
 	}
@@ -617,77 +634,91 @@ var app_layers_answer_feedPage = function(param){
 };
 
 var app_layers_answer_grumble_1 = function(){
-	$("#app_layers_answer").find("[find=answer_select]:first").grumble(
-		{
-			text: Bruno.Translation.get('app', 153, 'html'), //Preselect the correct answer
-			size: 150,
-			sizeRange: [150],
-			angle: 45,
-			distance: 30,
-			showAfter: 400,
-			hideOnClick: true,
-			type: 'alt-',
-			useRelativePositioning: true,
-			onShow: function(){
-				Bruno.storage.onboarding_opened = true;
-				app_application_mask_show();
-			},
-			onBeginHide: function(){
-				Bruno.storage.onboarding_opened = false;
-				app_layers_answer_grumble_2();
-			},
-		}
-	);
+	if($("#app_layers_answer").find("[find=answer_select]:first").length > 0){
+		$("#app_layers_answer").find("[find=answer_select]:first").grumble(
+			{
+				text: Bruno.Translation.get('app', 153, 'html'), //Preselect the correct answer
+				size: 150,
+				sizeRange: [150],
+				angle: 45,
+				distance: 30,
+				showAfter: 400,
+				hideOnClick: true,
+				type: 'alt-',
+				useRelativePositioning: true,
+				onShow: function(){
+					Bruno.storage.onboarding_opened = true;
+					app_application_mask_show();
+				},
+				onBeginHide: function(){
+					Bruno.storage.onboarding_opened = false;
+					app_layers_answer_grumble_2();
+				},
+			}
+		);
+	} else {
+		app_layers_answer_grumble_2();
+	}
 };
 
 var app_layers_answer_grumble_2 = function(){
-	$('#app_layers_answer').find("[find=select_style]").grumble(
-		{
-			text: Bruno.Translation.get('app', 132, 'html'), //You can switch to different display modes like "pictures" or "statistics"
-			size: 200,
-			sizeRange: [200],
-			angle: 220,
-			distance: 4,
-			showAfter: 400,
-			hideOnClick: true,
-			type: 'alt-',
-			useRelativePositioning: true,
-			onShow: function(){
-				Bruno.storage.onboarding_opened = true;
-				app_application_mask_show();
-			},
-			onBeginHide: function(){
-				Bruno.storage.onboarding_opened = false;
-				app_layers_answer_grumble_3();
-			},
-		}
-	);
+	if($('#app_layers_answer').find("[find=select_style]").length > 0){
+		$('#app_layers_answer').find("[find=select_style]").grumble(
+			{
+				text: Bruno.Translation.get('app', 132, 'html'), //You can switch to different display modes like "pictures" or "statistics"
+				size: 200,
+				sizeRange: [200],
+				angle: 220,
+				distance: 4,
+				showAfter: 400,
+				hideOnClick: true,
+				type: 'alt-',
+				useRelativePositioning: true,
+				onShow: function(){
+					Bruno.storage.onboarding_opened = true;
+					app_application_mask_show();
+				},
+				onBeginHide: function(){
+					Bruno.storage.onboarding_opened = false;
+					app_layers_answer_grumble_3();
+				},
+			}
+		);
+	} else {
+		app_layers_answer_grumble_3();
+	}
 };
 
 var app_layers_answer_grumble_3 = function(){
-	$('#app_layers_answer_settings').grumble(
-		{
-			text: Bruno.Translation.get('app', 127, 'html'), //Let's get your presentaton here
-			size: 150,
-			sizeRange: [150],
-			angle: 200,
-			distance: 8,
-			showAfter: 400,
-			hideOnClick: true,
-			type: 'alt-',
-			useRelativePositioning: true,
-			onShow: function(){
-				Bruno.storage.onboarding_opened = true;
-				app_application_mask_show();
-				wrapper_handclick_create($("#app_layers_answer_settings"));
-			},
-			onBeginHide: function(){
-				Bruno.storage.onboarding_opened = false;
-				app_application_mask_hide();
-				Bruno.storage.clearTuto(1);
-			},
-		}
-	);
+	if($('#app_layers_answer_settings').length > 0){
+		$('#app_layers_answer_settings').grumble(
+			{
+				text: Bruno.Translation.get('app', 127, 'html'), //Let's get your presentaton here
+				size: 150,
+				sizeRange: [150],
+				angle: 200,
+				distance: 8,
+				showAfter: 400,
+				hideOnClick: true,
+				type: 'alt-',
+				useRelativePositioning: true,
+				onShow: function(){
+					Bruno.storage.onboarding_opened = true;
+					app_application_mask_show();
+					wrapper_handclick_create($("#app_layers_answer_settings"));
+				},
+				onBeginHide: function(){
+					Bruno.storage.onboarding_opened = false;
+					app_application_mask_hide();
+					Bruno.storage.clearTuto(1);
+				},
+			}
+		);
+	} else {
+		Bruno.storage.onboarding_opened = false;
+		app_application_mask_hide();
+		Bruno.storage.clearTuto(1);
+	}
 };
 
 app_application_bruno.add(function(){
@@ -814,9 +845,11 @@ var app_layers_answer_answers_correct = function(number, force_update){
 			}
 			if(unavailable){
 				$(this).data('unavailable', true);
+				$(this).addClass('unavailable');
 				$(this).find("[find=answer_tickbox], [find=answer_select]").addClass('unavailable');
 			} else {
 				$(this).data('unavailable', false);
+				$(this).removeClass('unavailable');
 				$(this).find("[find=answer_tickbox], [find=answer_select]").removeClass('unavailable');
 			}
 		});
@@ -855,6 +888,9 @@ var app_layers_answer_answers_question_image = function(){
 	}
 	$('#app_layers_answer_question').find("[find=add]").removeClass('display_none');
 	$('#app_layers_answer_question').find("[find=image]").addClass('display_none');
+	if(wrapper_read_only){
+		$('#app_layers_answer_question').find("[find=add]").addClass('display_none');
+	}
 };
 
 var app_layers_answer_answers_picture_image = function(number){

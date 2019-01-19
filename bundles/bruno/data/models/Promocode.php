@@ -5,6 +5,7 @@ namespace bundles\bruno\data\models;
 use Illuminate\Database\Eloquent\Model;
 use \bundles\bruno\data\models\ModelBruno;
 use \bundles\bruno\data\models\Subscribed;
+use \bundles\bruno\data\models\data\User;
 
 class Promocode extends Model {
 
@@ -46,7 +47,11 @@ class Promocode extends Model {
 		$result = array('', 0);
 		if(strlen($promocode)>0){
 			if($item = self::getItem($promocode)){
+				//Check from promotion list
 				$result = array($item->title, $item->discount);
+			} else if($sales = User::Where('promocode', $promocode)->first()){
+				//Check from user and set a 10% by default
+				$result = array($promocode, 10);
 			} else {
 				unset($_SESSION['promocode']);
 			}

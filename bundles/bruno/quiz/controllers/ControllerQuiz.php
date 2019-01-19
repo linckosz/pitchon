@@ -175,6 +175,20 @@ class ControllerQuiz extends Controller {
 		return true;
 	}
 
+	public function wait_get(){
+		$app = ModelBruno::getApp();
+		$this->prepare();
+		$app->render('/bundles/bruno/quiz/templates/quiz/result/wait.twig');
+		return true;
+	}
+
+	public function conclusion_get(){
+		$app = ModelBruno::getApp();
+		$this->prepare();
+		$app->render('/bundles/bruno/quiz/templates/quiz/result/conclusion.twig');
+		return true;
+	}
+
 	public function code_get($code){
 		$app = ModelBruno::getApp();
 		$this->prepare();

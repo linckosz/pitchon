@@ -16,4 +16,4 @@ else
 	# forced
 	sh deploy force
 fi
-cd $DIR
+cd $DIRDEV

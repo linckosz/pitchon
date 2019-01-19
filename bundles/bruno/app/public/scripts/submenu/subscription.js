@@ -2,7 +2,12 @@ submenu_list['subscription'] = {
 	
 	"_title": {
 		"style": "title",
-		"title": Bruno.Translation.get('app', 155, 'html'), //Upgrade your subscription plan
+		"title": function(){
+			if(responsive.test("maxMobile")){
+				return Bruno.Translation.get('app', 158, 'html'); //Subscription plan
+			}
+			return Bruno.Translation.get('app', 155, 'html'); //Upgrade your subscription plan
+		},
 	},
 
 	"selection": {
@@ -16,19 +21,19 @@ submenu_list['subscription'] = {
 					event.data.find(".submenu_subscription_option").removeClass("selected");
 					$(this).addClass("selected");
 					submenu_subscription_selection_plan = parseInt($(this).attr("plan"), 10);
-					submenu_subscription_pricing_fn(event.data, parseInt($(this).find("[find=amount]").html(), 10));
+					submenu_subscription_pricing_fn(event.data, submenu_subscription_prices[submenu_subscription_selection_plan]);
 					submenu_subscription_features(event.data.find("[find=features]"));
 				}
 			});
 
 			//Preselection the current user plan
-			var plan = Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan'); //Must get the real plan value regardless it's read_only
+			var plan = Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan'); //Must get the real plan value regardless it's read_only (don't use getPlan() which can return null)
 			submenu_subscription_plan_duration = parseInt(Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan_duration'), 10);
 			if(plan){
 				var Elem_plan = Elem.find("[plan="+plan+"]:first");
 				Elem_plan.addClass("selected");
 				submenu_subscription_selection_plan = parseInt(plan, 10);
-				submenu_subscription_pricing_fn(Elem, parseInt(Elem_plan.find("[find=amount]").html(), 10));
+				submenu_subscription_pricing_fn(Elem, submenu_subscription_prices[submenu_subscription_selection_plan]);
 				submenu_subscription_features(Elem.find("[find=features]"));
 			}
 			Elem.find(".submenu_subscription_option").each(function(){
@@ -38,7 +43,7 @@ submenu_list['subscription'] = {
 			});
 
 			if(submenu_subscription_discount_value > 0){
-				Elem.find("[find=discount]").removeClass("display_none");
+				//Elem.find("[find=discount]").removeClass("display_none");
 			}
 
 			submenu_subscription_slider_cursor_focus = false;
@@ -208,14 +213,14 @@ var submenu_subscription_pricing_fn = function(Elem, price, fake_plan_duration){
 		plan_duration = submenu_subscription_plans.length - 1;
 	}
 	//This operation must be the same as the Backend
-	var total_price = price * submenu_subscription_plans[plan_duration][0];
+	var total_price = price * submenu_subscription_plans[plan_duration][0]; //Price * Months
 
 	//Promocode
 	var discount = submenu_subscription_plans[plan_duration][1] * ((100-submenu_subscription_discount_value)/100);
 	
 	if(discount<1){
 		Elem.find("[find=pricing_total_discount]").removeClass("display_none");
-		Elem.find("[find=pricing_total_discount_value]").html(Math.floor(100*(1-discount)));
+		Elem.find("[find=pricing_total_discount_value]").html(Math.round(100*(1-discount)));
 		Elem.find("[find=pricing_total_instead]").removeClass("display_none").html(Math.floor(total_price)+"€");
 		total_price = discount * total_price;
 	} else {
@@ -227,8 +232,37 @@ var submenu_subscription_pricing_fn = function(Elem, price, fake_plan_duration){
 	Elem.find("[find=pricing_total_value]").html(total_price+"€");
 	Elem.find("[find=slider_duration]").html(submenu_subscription_plans[plan_duration][2]);
 
-	//PROMOCODE
+	//PROMOCODE (PHP)
 	//$plan_price = floor((100-intval($promocode->discount))/100 * $plan_price);
+
+
+	//EXPIRATION DATE CALULATION
+	//It takes in consideration the remaining time and its convertion if the user change the plan
+	var plan = Bruno.storage.getPlan();
+	var plan_expire = Bruno.storage.getPlanAt();
+	var now = new wrapper_date().getTimestamp();
+	var expiration = new wrapper_date();
+	if(plan_expire > now && Bruno.storage.getPlan()){
+		//If currently active we postpone the plan
+		var new_plan_expire = now;
+		if(plan != submenu_subscription_selection_plan){
+			//If the plan is different, we need to extrapolate an updated expiration date based on remaining days and plan price
+			var ms_diff = plan_expire - now; //Time difference in ms
+			if(submenu_subscription_prices[plan] > 0){
+				//Ratio of diff
+				ms_diff = Math.floor(ms_diff * submenu_subscription_prices[plan] / submenu_subscription_prices[submenu_subscription_selection_plan]);
+				new_plan_expire = now + ms_diff;
+			}
+		} else {
+			new_plan_expire = plan_expire;
+		}
+		expiration = new wrapper_date(new_plan_expire);
+	}
+	//We add the duration of the plan selected
+	expiration.addMonths(submenu_subscription_plans[plan_duration][0]);
+	
+	Elem.find("[find=pricing_expiration]").html(Bruno.Translation.get('app', 157, 'html', {expiration: expiration.display('date_medium_slim')})); //Expiration date: [{expiration}]
+	
 
 	if(!fake){
 		submenu_subscription_total_price = total_price;

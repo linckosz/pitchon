@@ -16,7 +16,7 @@ submenu_list['app_answer_new'] = {
 			var param = {
 				number: items.length+1,
 			};
-			return Bruno.Translation.get('app', 2109, 'html', param); //Answer #[{number]}
+			return Bruno.Translation.get('app', 2109, 'html', param); //Answer #[{number}]
 		},
 		"class": "submenu_input_text",
 		"now": function(Elem, subm){
@@ -202,18 +202,25 @@ submenu_list['app_answer_get_presentation'] = {
 		"style": "button",
 		"class": "display_none submenu_app_answer_get_presentation_methods",
 		"title": "<span class='fa fa-download'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2118, 'html'), //Download PPT
-		"now": function(Elem, subm){
-			//[plan]
+		"value": function(Elem, subm){
 			if(Bruno.storage.getPlan() < 2){
-				//Elem.find("[find=submenu_button_value]").addClass("submenu_button_paypal");
+				Elem.find("[find=submenu_button_title]").addClass("submenu_button_paypal_title");
+				if(responsive.test("maxMobile")){
+					return "<span class='fa fa-lock'></span> "
+				} else {
+					return "<span class='fa fa-lock'></span> "+Bruno.Translation.get('app', 163, 'html'); //Subscribe to unlock
+				}
 			}
+			return false;
+		},
+		"now": function(Elem, subm){
 			if(Bruno.storage.get('pitch', subm.param)){
 				Elem.removeClass('display_none');
 			}
 		},
 		"action": function(Elem, subm){
-			if(false && Bruno.storage.getPlan() < 2){
-				//submenu_Build_return('subscription', true, true, null, false); //toto
+			if(Bruno.storage.getPlan() < 2){
+				submenu_Build_return('subscription', true, true);
 			} else if(Bruno.storage.get('pitch', subm.param)){
 				Bruno.storage.downloadPPT(subm.param);
 				$(window).focus();
@@ -229,18 +236,25 @@ submenu_list['app_answer_get_presentation'] = {
 		"style": "button",
 		"class": "display_none submenu_app_answer_get_presentation_methods",
 		"title": "<span class='fa fa-download'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2120, 'html'), //Download PowerPoint Add-In
-		"now": function(Elem, subm){
-			//[plan]
+		"value": function(Elem, subm){
 			if(Bruno.storage.getPlan() < 2){
-				//Elem.find("[find=submenu_button_value]").addClass("submenu_button_paypal");
+				Elem.find("[find=submenu_button_title]").addClass("submenu_button_paypal_title");
+				if(responsive.test("maxMobile")){
+					return "<span class='fa fa-lock'></span> "
+				} else {
+					return "<span class='fa fa-lock'></span> "+Bruno.Translation.get('app', 163, 'html'); //Subscribe to unlock
+				}
 			}
+			return false;
+		},
+		"now": function(Elem, subm){
 			if(Bruno.storage.get('pitch', subm.param)){
 				Elem.removeClass('display_none');
 			}
 		},
 		"action": function(Elem, subm){
-			if(false && Bruno.storage.getPlan() < 2){
-				//submenu_Build_return('subscription', true, true, null, false); //toto
+			if(Bruno.storage.getPlan() < 2){
+				submenu_Build_return('subscription', true, true);
 			} else if(Bruno.storage.get('pitch', subm.param)){
 				device_download(app_application_add_in);
 			}
@@ -250,11 +264,18 @@ submenu_list['app_answer_get_presentation'] = {
 	"jpeg": {
 		"style": "button",
 		"title": "<span class='fa fa-download'>&nbsp;&nbsp;&nbsp;</span>"+Bruno.Translation.get('app', 2121, 'html'), //Download JPEG
-		"now": function(Elem, subm){
-			//[plan]
+		"value": function(Elem, subm){
 			if(Bruno.storage.getPlan() < 2){
-				//Elem.find("[find=submenu_button_value]").addClass("submenu_button_paypal");
+				Elem.find("[find=submenu_button_title]").addClass("submenu_button_paypal_title");
+				if(responsive.test("maxMobile")){
+					return "<span class='fa fa-lock'></span> "
+				} else {
+					return "<span class='fa fa-lock'></span> "+Bruno.Translation.get('app', 163, 'html'); //Subscribe to unlock
+				}
 			}
+			return false;
+		},
+		"now": function(Elem, subm){
 			if(Bruno.storage.get('pitch', subm.param)){
 				Elem.removeClass('display_none');
 			}
@@ -268,8 +289,8 @@ submenu_list['app_answer_get_presentation'] = {
 					pitch_id = Bruno.storage.get("question", question_id, "parent_id");
 				}
 			}
-			if(false && Bruno.storage.getPlan() < 2){
-				//submenu_Build_return('subscription', true, true, null, false); //toto
+			if(Bruno.storage.getPlan() < 2){
+				submenu_Build_return('subscription', true, true);
 			} else if(Bruno.storage.get('pitch', subm.param)){
 				var index = 0;
 				var pitch_enc = wrapper_integer_map(subm.param);
@@ -296,11 +317,12 @@ submenu_list['app_answer_get_presentation'] = {
 		"style": "space",
 		"title": "space",
 		"value": 20,
-		"now": function(Elem, subm){
+		"skip": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.getPlan() < 2){
-				Elem.addClass("display_none");
+			if(wrapper_read_only || Bruno.storage.getPlan() < 2){
+				return true;
 			}
+			return false;
 		},
 	},
 
@@ -313,11 +335,12 @@ submenu_list['app_answer_get_presentation'] = {
 		"action_param": function(Elem, subm){
 			return subm.param; //Pitch ID
 		},
-		"now": function(Elem, subm){
+		"skip": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.getPlan() < 2){
-				Elem.addClass("display_none");
+			if(wrapper_read_only || Bruno.storage.getPlan() < 2){
+				return true;
 			}
+			return false;
 		},
 	},
 
@@ -329,11 +352,14 @@ submenu_list['app_answer_get_presentation'] = {
 		"action_param": function(Elem, subm){
 			return subm.param; //Pitch ID
 		},
-		"now": function(Elem, subm){
+		"skip": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.getPlan() < 3){
-				Elem.addClass("display_none");
+			if(wrapper_read_only || Bruno.storage.getPlan() < 3){
+				return true;
 			}
+			return false;
+		},
+		"now": function(Elem, subm){
 			var value = this.value;
 			Elem.prop('id', subm.id+"_share");
 			app_application_bruno.add(subm.id+"_share", "pitch_"+subm.param, function(){
@@ -360,22 +386,26 @@ submenu_list['app_answer_get_presentation'] = {
 		"style": "space",
 		"title": "space",
 		"value": 20,
-		"now": function(Elem, subm){
+		"skip": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.getPlan() < 3){
-				Elem.addClass("display_none");
+			if(wrapper_read_only || Bruno.storage.getPlan() < 3){
+				return true;
 			}
+			return false;
 		},
 	},
 
 	"brand_name": {
 		"style": "input_text_flat",
 		"title": Bruno.Translation.get('app', 98, 'html'), //Brand name or Link
-		"now": function(Elem, subm){
+		"skip": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.getPlan() < 3){
-				Elem.addClass("display_none");
+			if(wrapper_read_only || Bruno.storage.getPlan() < 3){
+				return true;
 			}
+			return false;
+		},
+		"now": function(Elem, subm){
 			Elem.find("[find=submenu_value]").addClass("no_focus");
 		},
 		"value": function(Elem, subm){
@@ -429,11 +459,14 @@ submenu_list['app_answer_get_presentation'] = {
 			Elem.find("[find=submenu_value]").css("background-image", "url('"+thumbnail+"')");
 			return wrapper_neutral.src;
 		},
-		"now": function(Elem, subm){
+		"skip": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.getPlan() < 3){
-				Elem.addClass("display_none");
+			if(wrapper_read_only || Bruno.storage.getPlan() < 3){
+				return true;
 			}
+			return false;
+		},
+		"now": function(Elem, subm){
 			var item = Bruno.storage.get("pitch", subm.param);
 			Elem.find("[find=submenu_value]")
 				.prop('id', subm.id+'_brand_pic')
@@ -458,11 +491,14 @@ submenu_list['app_answer_get_presentation'] = {
 	"advertising_link": {
 		"style": "input_text_flat",
 		"title": Bruno.Translation.get('app', 100, 'html'), //Advertising name or link
-		"now": function(Elem, subm){
+		"skip": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.getPlan() < 3){
-				Elem.addClass("display_none");
+			if(wrapper_read_only || Bruno.storage.getPlan() < 3){
+				return true;
 			}
+			return false;
+		},
+		"now": function(Elem, subm){
 			Elem.find("[find=submenu_value]").addClass("no_focus");
 		},
 		"value": function(Elem, subm){
@@ -514,11 +550,14 @@ submenu_list['app_answer_get_presentation'] = {
 			}
 			return app_application_logo_bruno.src;
 		},
-		"now": function(Elem, subm){
+		"skip": function(Elem, subm){
 			//[plan]
-			if(Bruno.storage.getPlan() < 3){
-				Elem.addClass("display_none");
+			if(wrapper_read_only || Bruno.storage.getPlan() < 3){
+				return true;
 			}
+			return false;
+		},
+		"now": function(Elem, subm){
 			var item = Bruno.storage.get("pitch", subm.param);
 			Elem.find("[find=submenu_value]")
 				.prop('id', subm.id+'_ad_pic')
@@ -542,6 +581,13 @@ submenu_list['app_answer_get_presentation'] = {
 		"style": "space",
 		"title": "space",
 		"value": 40,
+		"skip": function(Elem, subm){
+			//[plan]
+			if(wrapper_read_only){
+				return true;
+			}
+			return false;
+		},
 		"now": function(Elem, subm){
 			var pitch_c_by = Bruno.storage.get('pitch', subm.param, 'c_by');
 			if(pitch_c_by != wrapper_localstorage.user_id){
@@ -583,6 +629,13 @@ submenu_list['app_answer_get_presentation'] = {
 				subm_bis.Hide();
 			}
 		},
+		"skip": function(Elem, subm){
+			//[plan]
+			if(wrapper_read_only){
+				return true;
+			}
+			return false;
+		},
 		"now": function(Elem, subm){
 			var pitch_c_by = Bruno.storage.get('pitch', subm.param, 'c_by');
 			if(pitch_c_by != wrapper_localstorage.user_id){
@@ -616,50 +669,60 @@ submenu_list['app_answer_get_presentation'] = {
 };
 
 var app_submenu_answer_grumble_1 = function(subm_id){
-	$("#app_submenu_answer_get_presentation_preview_"+subm_id).grumble(
-		{
-			text: Bruno.Translation.get('app', 130, 'html'), //Preview it
-			size: 150,
-			sizeRange: [150],
-			angle: 160,
-			distance: -20,
-			showAfter: 400,
-			hideOnClick: true,
-			type: 'alt-',
-			useRelativePositioning: false,
-			onShow: function(){
-				Bruno.storage.onboarding_opened = true;
-				app_application_mask_show();
-			},
-			onBeginHide: function(){
-				Bruno.storage.onboarding_opened = false;
-				app_submenu_answer_grumble_2(subm_id);
-			},
-		}
-	);
+	if($("#app_submenu_answer_get_presentation_preview_"+subm_id).length > 0){
+		$("#app_submenu_answer_get_presentation_preview_"+subm_id).grumble(
+			{
+				text: Bruno.Translation.get('app', 130, 'html'), //Preview it
+				size: 150,
+				sizeRange: [150],
+				angle: 160,
+				distance: -20,
+				showAfter: 400,
+				hideOnClick: true,
+				type: 'alt-',
+				useRelativePositioning: false,
+				onShow: function(){
+					Bruno.storage.onboarding_opened = true;
+					app_application_mask_show();
+				},
+				onBeginHide: function(){
+					Bruno.storage.onboarding_opened = false;
+					app_submenu_answer_grumble_2(subm_id);
+				},
+			}
+		);
+	} else {
+		app_submenu_answer_grumble_2(subm_id);
+	}
 };
 
 var app_submenu_answer_grumble_2 = function(subm_id){
-	$("#app_submenu_answer_get_presentation_url_"+subm_id).grumble(
-		{
-			text: Bruno.Translation.get('app', 154, 'html'), //Or copy the URL for a public presentation
-			size: 150,
-			sizeRange: [150],
-			angle: 130,
-			distance: -20,
-			showAfter: 400,
-			hideOnClick: true,
-			type: 'alt-',
-			useRelativePositioning: false,
-			onShow: function(){
-				Bruno.storage.onboarding_opened = true;
-				app_application_mask_show();
-			},
-			onBeginHide: function(){
-				Bruno.storage.onboarding_opened = false;
-				app_application_mask_hide();
-				Bruno.storage.clearTuto(2);
-			},
-		}
-	);
+	if($("#app_submenu_answer_get_presentation_url_"+subm_id).length > 0){
+		$("#app_submenu_answer_get_presentation_url_"+subm_id).grumble(
+			{
+				text: Bruno.Translation.get('app', 154, 'html'), //Or copy the URL for a public presentation
+				size: 150,
+				sizeRange: [150],
+				angle: 130,
+				distance: -20,
+				showAfter: 400,
+				hideOnClick: true,
+				type: 'alt-',
+				useRelativePositioning: false,
+				onShow: function(){
+					Bruno.storage.onboarding_opened = true;
+					app_application_mask_show();
+				},
+				onBeginHide: function(){
+					Bruno.storage.onboarding_opened = false;
+					app_application_mask_hide();
+					Bruno.storage.clearTuto(2);
+				},
+			}
+		);
+	} else {
+		Bruno.storage.onboarding_opened = false;
+		app_application_mask_hide();
+		Bruno.storage.clearTuto(2);
+	}
 };

@@ -343,9 +343,9 @@
 						{% if data_question_style == 4 %}
 							if(statsjs_data_answers_count>0){
 								for (var i = 0; i < statsjs_data_answers_count; i++) {
-									statsjs_data_average += 10*data_array[i]; //We need to be based on 100points
+									statsjs_data_average += 10*data_array[i]; //We need to be based on 100 points
 								}
-								statsjs_data_average = Math.floor(statsjs_data_average/statsjs_data_answers_count);
+								statsjs_data_average = Math.floor(statsjs_data_average/statsjs_data_answers_count)/10;
 							}
 						{% endif %}
 					{% endif %}

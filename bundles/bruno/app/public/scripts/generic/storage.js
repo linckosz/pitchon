@@ -1083,10 +1083,18 @@ Bruno.storage.getProfile = function(user_id){
 }
 
 Bruno.storage.getPlan = function(){
-	if(wrapper_ready_only){
+	if(wrapper_read_only){
 		return false;
 	} else {
 		return Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan');
+	}
+}
+
+Bruno.storage.getPlanAt = function(){
+	if(wrapper_read_only){
+		return null;
+	} else {
+		return Bruno.storage.get('user', wrapper_localstorage.user_id, 'plan_at');
 	}
 }
 

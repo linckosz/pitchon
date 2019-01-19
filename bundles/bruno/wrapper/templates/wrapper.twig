@@ -56,6 +56,7 @@
 	'/scripts/libs/enquire.min.js',
 	'/bruno/wrapper/scripts/php.js',
 	'/scripts/libs/base64.js',
+	'/scripts/libs/date.js',
 	'/scripts/libs/object-keys-polyfill.js',
 	'/scripts/libs/iscroll.js',
 	'/scripts/libs/jquery.selection.js',
@@ -115,9 +116,9 @@ var wrapper_show_error = {{ bruno_show_dev }};
 var wrapper_title = "";
 var wrapper_main_title = "{{ title }}";
 
-var wrapper_ready_only = false;
-{% if not ready_only %}
-	wrapper_ready_only = true;
+var wrapper_read_only = false;
+{% if read_only %}
+	wrapper_read_only = true;
 {% endif %}
 
 //In IE console is undefined if the dev tool is closed

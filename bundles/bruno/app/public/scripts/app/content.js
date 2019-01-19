@@ -107,7 +107,6 @@ $("#app_content_top_title_select_answers").on('click', function(){
 	app_content_menu.selection("answer",app_content_top_title.question);
 });
 
-
 var app_layers_content_move = {
 
 	moving: false,
@@ -462,6 +461,40 @@ JSfiles.finish(function(){
 		}
 		app_layers_content_move.mouse_status_leave = event.buttons;
 	});
+
+
+
+	if($("#app_content_subscribe").length > 0 && typeof $("#app_content_subscribe").data("display") == "undefined"){
+		$("#app_content_subscribe").data("display", true);
+		if(wrapper_read_only){
+			$("#app_content_subscribe").find("[find=text]").html(Bruno.Translation.get('app', 166, 'brut')); //Your account has expired. <span find="subscribe">Subscribe</span> to unlock features.
+		} else if((new wrapper_date()).getTimestamp() - Bruno.storage.getPlanAt() < 30*24*3600*1000){
+			$("#app_content_subscribe").find("[find=paypal]").addClass(("display_none"));
+			var remain_days = Math.abs(Math.floor(((new wrapper_date()).getTimestamp() - Bruno.storage.getPlanAt()) / (24*3600*100)));
+			$("#app_content_subscribe").find("[find=text]").html(Bruno.Translation.get('app', 167, 'brut', {days: remain_days})); //Your account expires in [{days}] days. You can <span find="subscribe">update</span> your subscription plan.
+		}
+		if($("#app_content_subscribe").find("[find=subscribe]").length > 0){
+			$("#app_content_subscribe").find("[find=subscribe]")
+				.addClass("app_content_subscribe_link")
+				.on('click', function(){
+					submenu_Build_return('subscription', true, true);
+				});
+		}
+
+		$("#app_content_subscribe").find("[find=paypal]").on('click', function(){
+			submenu_Build_return('subscription', true, true);
+		});
+		
+		//Slide from right side
+		$("#app_content_subscribe").velocity("transition.slideRightBigIn", {
+			mobileHA: hasGood3Dsupport,
+			duration: 1300,
+			delay: 600,
+			begin: function(){
+				$("#app_content_subscribe").removeClass("display_none");
+			},
+		});
+	}
 
 });
 

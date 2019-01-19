@@ -537,9 +537,8 @@
 	height: 97px;
 }
 
-.submenu_button_paypal {
-	font-size: 24px;
-	color: #3B7BBF;
+.submenu_button_paypal_title {
+	overflow: visible;
 }
 
 /* Minimum Desktop */
