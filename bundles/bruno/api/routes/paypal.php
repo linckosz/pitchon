@@ -24,4 +24,10 @@ $app->group('/api/paypal', function() use ($app) {
 	)
 	->name('api_paypal_fail_post');
 
+	$app->post(
+		'/listener',
+		'\bundles\bruno\api\controllers\ControllerPaypal:listener_post'
+	)
+	->name('api_paypal_listener_post');
+
 });

@@ -10,6 +10,7 @@ use \bundles\bruno\data\models\ModelBruno;
 use \bundles\bruno\data\models\Subscription;
 use \bundles\bruno\data\models\Subscribed;
 use \bundles\bruno\data\models\Bank;
+use \bundles\bruno\data\models\Paypal;
 use \bundles\bruno\data\models\data\User;
 use PayPal\Api\Payment;
 use PayPal\Api\Payer;
@@ -230,8 +231,6 @@ class ControllerPaypal extends Controller {
 		try {
 			$payment->execute($execution, $apiContext);
 			$json = json_decode($payment->getTransactions()[0]->getCustom());
-
-			\libs\Watch::php($json, '$json', __FILE__, __LINE__, false, false, true);
 			
 			$db = Capsule::connection('data');
 			$db->beginTransaction();
@@ -273,9 +272,10 @@ class ControllerPaypal extends Controller {
 							//Check if it's a sales OR Check if already recorded once
 							if($host->promocode || !Bank::Where('host_user_id', $host->id)->where('guest_user_id', $user->id)->first()){
 								$bank->host_user_id = $json->host_id;
+								//Save only if a host has to be rewarded
+								$bank->save();
 							}
 						}
-						$bank->save();
 					}
 				}
 				$db->commit();
@@ -302,6 +302,19 @@ class ControllerPaypal extends Controller {
 
 	public function fail_post(){
 		$msg = array('msg' => 'Failed', true);
+		(new Json($msg))->render();
+		return exit(0);
+	}
+
+	public function listener_post(){
+		$app = ModelBruno::getApp();
+		$data = ModelBruno::getData();
+
+		$paypal = new Paypal;
+		$paypal->event = json_encode($data);
+		$paypal->save();
+
+		$msg = array('msg' => 'Listened');
 		(new Json($msg))->render();
 		return exit(0);
 	}
