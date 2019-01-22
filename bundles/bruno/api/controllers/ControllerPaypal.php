@@ -160,6 +160,11 @@ class ControllerPaypal extends Controller {
 			goto failed;
 		}
 
+		//Only for production test
+		if(isset($app->bruno->data['paypal_test_amount'])){
+			$data->subscription_total_price = $app->bruno->data['paypal_test_amount'];
+		}
+
 		$payment = new Payment;
 		$apiContext = new ApiContext(
 			new OAuthTokenCredential(

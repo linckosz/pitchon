@@ -52,6 +52,20 @@
 
 			// Wait for the PayPal button to be clicked
 
+			/*
+			payment: function(data, actions) {
+				return actions.payment.create({
+					payment: {
+						transactions: [
+							{
+								amount: { total: '0.01', currency: 'EUR' }
+							}
+						]
+					}
+				});
+			},
+			*/
+
 			payment: function(data, actions) {
 				return actions.request.post('/api/paypal/billing', {
 						subscription_id: parseInt("{{ subscription_id }}", 10), //Price showed to the user
