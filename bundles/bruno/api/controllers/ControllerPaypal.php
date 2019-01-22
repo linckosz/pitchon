@@ -172,6 +172,11 @@ class ControllerPaypal extends Controller {
 				$app->bruno->data['paypal_secret']
 			)
 		);
+		$apiContext->setConfig(
+			array(
+				'mode' => $app->bruno->data['paypal_env'],
+			)
+		);
 		$base_url = $_SERVER['REQUEST_SCHEME'].'://app.'.$app->bruno->domain.'/api/paypal/';
 		$payment->setIntent('sale');
 		$redirectUrls = new RedirectUrls;
