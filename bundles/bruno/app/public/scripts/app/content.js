@@ -417,6 +417,47 @@ var app_layers_content_move = {
 
 };
 
+
+var app_content_user_data = app_application_garbage.add();
+app_application_bruno.add(app_content_user_data, 'first_launch', function() {
+	if(Bruno.storage.getPlanAt() && $("#app_content_subscribe").length > 0){
+		var appear = false;
+		if(wrapper_read_only){
+			appear = true;
+			$("#app_content_subscribe").find("[find=text]").html(Bruno.Translation.get('app', 166, 'brut')); //Your account has expired. <span find="subscribe">Subscribe</span> to unlock features.
+		} else if(Bruno.storage.getPlanAt() - (new wrapper_date()).getTimestamp() < 30*24*3600*1000){
+			appear = true;
+			$("#app_content_subscribe").find("[find=paypal]").addClass(("display_none"));
+			var remain_days = Math.abs(Math.floor((Bruno.storage.getPlanAt() - (new wrapper_date()).getTimestamp()) / (24*3600*1000)));
+			$("#app_content_subscribe").find("[find=text]").html(Bruno.Translation.get('app', 167, 'brut', {days: remain_days})); //Your account expires in [{days}] days. You can <span find="subscribe">update</span> your subscription plan.
+		}
+		if(appear){
+			if($("#app_content_subscribe").find("[find=subscribe]").length > 0){
+				$("#app_content_subscribe").find("[find=subscribe]")
+					.addClass("app_content_subscribe_link")
+					.on('click', function(){
+						submenu_Build_return('subscription', true, true);
+					});
+			}
+
+			$("#app_content_subscribe").find("[find=paypal]").on('click', function(){
+				submenu_Build_return('subscription', true, true);
+			});
+			
+			//Slide from right side
+			$("#app_content_subscribe").velocity("transition.slideRightBigIn", {
+				mobileHA: hasGood3Dsupport,
+				duration: 1300,
+				delay: 600,
+				begin: function(){
+					$("#app_content_subscribe").removeClass("display_none");
+				},
+			});
+		}
+		app_application_garbage.remove(app_content_user_data);
+	}
+});
+
 JSfiles.finish(function(){
 	
 	app_content_menu.selection("pitch");
@@ -461,45 +502,6 @@ JSfiles.finish(function(){
 		}
 		app_layers_content_move.mouse_status_leave = event.buttons;
 	});
-
-
-
-	if($("#app_content_subscribe").length > 0){
-
-		var appear = false;
-		if(wrapper_read_only){
-			appear = true;
-			$("#app_content_subscribe").find("[find=text]").html(Bruno.Translation.get('app', 166, 'brut')); //Your account has expired. <span find="subscribe">Subscribe</span> to unlock features.
-		} else if((new wrapper_date()).getTimestamp() - Bruno.storage.getPlanAt() < 30*24*3600*1000){
-			appear = true;
-			$("#app_content_subscribe").find("[find=paypal]").addClass(("display_none"));
-			var remain_days = Math.abs(Math.floor(((new wrapper_date()).getTimestamp() - Bruno.storage.getPlanAt()) / (24*3600*100)));
-			$("#app_content_subscribe").find("[find=text]").html(Bruno.Translation.get('app', 167, 'brut', {days: remain_days})); //Your account expires in [{days}] days. You can <span find="subscribe">update</span> your subscription plan.
-		}
-		if(appear){
-			if($("#app_content_subscribe").find("[find=subscribe]").length > 0){
-				$("#app_content_subscribe").find("[find=subscribe]")
-					.addClass("app_content_subscribe_link")
-					.on('click', function(){
-						submenu_Build_return('subscription', true, true);
-					});
-			}
-
-			$("#app_content_subscribe").find("[find=paypal]").on('click', function(){
-				submenu_Build_return('subscription', true, true);
-			});
-			
-			//Slide from right side
-			$("#app_content_subscribe").velocity("transition.slideRightBigIn", {
-				mobileHA: hasGood3Dsupport,
-				duration: 1300,
-				delay: 600,
-				begin: function(){
-					$("#app_content_subscribe").removeClass("display_none");
-				},
-			});
-		}
-	}
 
 });
 
