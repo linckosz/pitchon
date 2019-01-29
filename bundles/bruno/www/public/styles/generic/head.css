@@ -1,0 +1,221 @@
+.head_nav {
+	z-index: 999;
+	width: 100%;
+	text-align: center;
+	background-color: #313335;
+	background-image: url('/bruno/www/images/generic/head/head_nav.png');
+	background-repeat: repeat-x;
+	position: fixed;
+	overflow: hidden;
+	box-shadow: 0px 0px 4px 0px #3F84B0;
+	-moz-box-shadow: 0px 0px 4px 0px #3F84B0;
+	-webkit-box-shadow: 0px 0px 4px 0px #3F84B0;
+}
+
+.head_ul {
+	display: table;
+	height: 100%;
+	list-style: none;
+	white-space: nowrap;
+	width: 100%;
+	max-width: 1280px;
+	font-size: 14px;
+}
+
+.table_cell_center {
+	display: table-cell;
+	padding: 0 16px 0 16px;
+	color: #F8F8F8;
+	white-space: nowrap;
+	height: 100%;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.table_cell_center > span {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+
+#head_lincko {
+	color: #FBA026;
+	font-size: 30px;
+	font-family: Roboto;
+	font-weight: 200;
+}
+
+#head_beta {
+	padding-left: 0px;
+	padding-top: 10px;
+	color: #FBA026;
+	font-size: 14px;
+	font-family: Roboto;
+	font-weight: 200;
+}
+
+.head_div {
+	display: table;
+	height: 48px;
+}
+
+/*
+ * MY ACCOUNT
+ */
+
+#head_account {
+	cursor: default;
+}
+
+#head_account > span {
+	border-bottom: 2px solid transparent;
+	padding-top: 2px;
+	cursor: pointer; cursor: hand;
+}
+#head_account > span:hover {
+	border-color: currentColor;
+}
+
+
+/*
+ * SIGN OUT
+ */
+
+#head_signout {
+	cursor: default;
+	font-weight: normal;
+	font-size: 13px;
+	color: #E0BC8D;
+}
+
+#head_signout > span {
+	border-bottom: 1px solid transparent;
+	padding-top: 1px;
+	cursor: pointer; cursor: hand;
+}
+#head_signout > span:hover {
+	border-color: currentColor;
+}
+
+
+/*
+ * SIGN IN
+ */
+
+#head_signin {
+	cursor: default;
+}
+
+#head_signin > span {
+	border-bottom: 2px solid transparent;
+	padding-top: 2px;
+	cursor: pointer; cursor: hand;
+}
+#head_signin > span:hover {
+	border-color: currentColor;
+}
+
+
+/*
+ * JOIN US
+ */
+
+#head_joinus {
+	cursor: default;
+}
+
+#head_joinus > span {
+	border-bottom: 2px solid transparent;
+	padding-top: 2px;
+	cursor: pointer; cursor: hand;
+}
+#head_joinus > span:hover {
+	border-color: currentColor;
+}
+
+/*
+ * BLOG
+ */
+
+#head_blog {
+	cursor: default;
+}
+
+#head_blog > span {
+	border-bottom: 2px solid transparent;
+	padding-top: 2px;
+	cursor: pointer; cursor: hand;
+}
+#head_blog > span:hover {
+	border-color: currentColor;
+}
+
+
+#head_language_image {
+	z-index: 0;
+	height: 24px;
+	width: 24px;
+	margin-left: 4px;
+	margin-top: 4px;
+	position: absolute;
+}
+
+.head_language_select {
+	padding: 4px 8px 4px 8px;
+	height: 32px;
+	min-height: 32px;
+	background-color: transparent;
+	color: #FFFFFF;
+	border-color: #FFFFFF;
+	border-width: 1px;
+	background: transparent;
+	max-width: 160px;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow: ellipsis;
+}
+
+.head_language_select option {
+	color: #696F79;
+}
+
+.head_language_select:hover {
+	color: #D4D4D4;
+	border-color: #D4D4D4;
+}
+
+/* Mobile phone in Portrait */
+@media only screen and (max-width: 479px){
+	.head_language_select {
+		width: 32px;
+		height: 32px;
+		padding: 4px;
+		cursor: pointer; cursor: hand;
+		color: transparent !important;
+		border-color: transparent !important;
+	}
+	.table_cell_center {
+		padding: 0 8px 0 8px;
+	}
+	.head_lincko_div {
+		position: absolute;
+	}
+}
+
+/* Mobile phone in Landscape and Tablet in Portrait */
+@media only screen and (min-width: 480px) and (max-width: 900px){
+	#head_language_image {
+		display: none;
+	}
+	.head_language_select {
+		padding-left: 4px;
+		max-width: 140px;
+	}
+}
+
+/* Tablet in Landscape */
+@media only screen and (min-width: 901px) and (max-width: 1279px){
+	.head_language_select {
+		max-width: 160px;
+	}
+}

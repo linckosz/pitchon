@@ -1,0 +1,54 @@
+{# category 4 #}
+{% extends '/bundles/bruno/www/templates/generic/base.twig' %}
+
+{% block content %}
+<div id="begin_home" class="visibility_hidden">
+	<script>
+		JSfiles.later("{{ _filelatest('/bruno/www/scripts/launch/home.js') }}");
+	</script>
+	<link rel="stylesheet" href="{{ _filelatest('/bruno/www/styles/launch/home.css') }}" type="text/css" />
+</div>
+<div id="home_main_image"></div>
+<div class="home_table_center">
+	<span id="home_sentences">
+		<img class="home_chinese" src="{{ _filelatest('/bruno/www/images/launch/chinese_text.png') }}" />
+		<span>
+			<div>The way of <span class="home_collaboration">collaboration</span></div>
+			<div>The way of <span class="home_communication">communication</span></div>
+			<div>The way of <span class="home_projects">projects</span></div>
+		</span>
+	</span>
+</div>
+<div class="home_footer">
+	<img class="icons_diamond maxMobile" src="{{ _filelatest('/bruno/www/images/launch/icons_diamond_02.png') }}" />
+	<img class="icons_horizontal minMobileL" src="{{ _filelatest('/bruno/www/images/launch/icons_horizontal_05.png') }}" />
+	<div class="home_all_projects">
+		{# All great projects start with a single task. #}
+		<span>{{ _trans('web', 4, 22, 'html') }}</span>
+	</div>
+	{% if not invitation_code %}
+		<div class="home_news">
+			<label class="home_label_inside" for="home_news_email">
+				<span>{{ _trans('web', 4, 21, 'html') }}{# e-mail #}</span>
+				<input type="email" id="home_news_email" name="email" value="" class="selectable" />
+				<img class="submit_progress_bar" id="home_news_submit_progress" src="{{ _filelatest('/bruno/www/images/generic/base/generic/loading_bar.gif') }}"/>
+			</label>
+			<label class="minTablet" for="home_news_submit">
+				<span id="home_news_submit" >{{ _trans('web', 4, 18, 'input') }}{# Register #}</span>
+			</label>
+		</div>
+		<div id="home_error" class="display_none"></div>
+		<div class="home_accomplish">
+			<div class="minDesktop">
+				{{ _trans('web', 4, 19, 'html') }}{# Lincko helps you accomplish great things by connecting your team in new ways. #}
+			</div>
+			<div>
+				{{ _trans('web', 4, 20, 'html') }}{# Register now to receive news and early access. #}
+			</div>
+		</div>
+	{% endif %}
+</div>
+<div id="end_home" class="visibility_hidden">
+	{% include '/bundles/bruno/www/templates/launch/scripts/home.js.twig' %}
+</div>
+{% endblock %}

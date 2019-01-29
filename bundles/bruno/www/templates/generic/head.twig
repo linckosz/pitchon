@@ -1,0 +1,47 @@
+{# category 1 #}
+{% set route = _route_name() %}
+<div id="begin_head" class="visibility_hidden">
+<script>
+	JSfiles.later("{{ _filelatest('/bruno/www/scripts/generic/head.js') }}");
+	var head_link = [];
+	head_link['root'] = "{{ urlFor('www_root') }}";
+	head_link['home'] = "{{ urlFor('www_home') }}";
+	head_link['blog'] = "https://blog.lincko.com/";
+	{% set language = _language() %}
+	{% if language == 'zh-chs' %}
+		head_link['blog'] = "https://blog.lincko.com/zh/";
+	{% endif %}
+</script>
+<link rel="stylesheet" href="{{ _filelatest('/bruno/www/styles/generic/head.css') }}" type="text/css" />
+</div>
+<nav class="base_menu head_nav">
+	
+	<div class="DIVcenter head_ul">
+		<div class="head_div floatleft head_lincko_div"><span class="table_cell_center" id="head_lincko"><span>Lincko</span></span></div>
+		<div class="head_div floatleft minMobileL"><span class="table_cell_center" id="head_beta"><span>{{ _trans('web', 1, 11, 'html') }}{# Beta #}</span></span></div>
+		{% if logged %}
+			<div class="head_div floatright minTablet"><span class="table_cell_center" id="head_signout"><span>{{ _trans('web', 1, 6, 'html') }}{# Sign out #}</span></span></div>
+			<div class="head_div floatright"><span class="table_cell_center" id="head_account"><span>{{ _trans('web', 1, 7, 'html') }}{# My account #}</span></span></div>
+		{% else %}
+			<div class="head_div floatright"><span class="table_cell_center" id="head_signin"><span>{{ _trans('web', 1, 9, 'html') }}{# Sign in #}</span></span></div>
+		{% endif %}
+		<div class="head_div floatright"><span class="table_cell_center" id="head_blog"><span>{{ _trans('web', 1, 12, 'html') }}{# Blog #}</span></span></div>
+		<div class="head_div floatright">
+			<span class="table_cell_center" id="head_language">
+				<form id="head_translation" action="{{ _language_uri() }}" method="post">
+					<img id="head_language_image" class="maxMobile" src="{{ _filelatest('/bruno/www/images/generic/head/earth16.png') }}" />
+					<select id="head_language_select" name="translation_language" class="head_language_select" onchange="$('#head_translation').submit();" >
+						{% set language = _language() %}
+						{% set languages = _languages('web') %}
+						{% for key, value in languages %}
+							<option value="{{ key }}" title="{{ value }}" {% if key == language %}selected="selected"{% endif %} >{{ value }}</option>
+						{% endfor %}
+					</select>
+				</form>
+			</span>
+		</div>
+	</div>
+
+</nav>
+
+<div id="end_head" class="visibility_hidden"></div>

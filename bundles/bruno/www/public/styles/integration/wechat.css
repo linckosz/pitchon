@@ -1,0 +1,19 @@
+html, body {
+	width: 222px;
+	padding: 0;
+	margin: 0;
+	font-size: 0 !important;
+	color: transparent;
+	text-align: center;
+}
+
+.impowerBox .title, .impowerBox .info {
+	display: none;
+}
+
+.impowerBox .qrcode {
+	width: 220px;
+	height: 220px;
+	margin: 0;
+	padding: 0;
+}

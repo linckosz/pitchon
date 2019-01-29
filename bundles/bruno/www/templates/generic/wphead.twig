@@ -1,0 +1,138 @@
+{# category 1 #}
+{% set route = _route_name() %}
+<div id="begin_wphead" class="visibility_hidden">
+<script>
+	JSfiles.later("{{ _filelatest('/bruno/www/scripts/generic/wphead.js') }}");
+
+	{% set language = _language() %}
+
+	{% if language == 'zh-chs' or language == 'zh-cht' %}
+		{% set blog_prefix = 'https://blog.lincko.com/zh-chs' %}
+		{% set blog_suffix = '-2' %}
+	{% else %}
+		{% set blog_prefix = 'https://blog.lincko.com/en' %}
+		{% set blog_suffix = '' %}
+	{% endif %}
+
+	var wphead_link = [];
+	wphead_link['root'] = "{{ urlFor('www_root') }}";
+	wphead_link['home'] = "{{ urlFor('www_home') }}";
+	wphead_link['blog_prefix'] = "{{ blog_prefix }}";
+	wphead_link['blog_suffix'] = "{{ blog_suffix }}";
+
+	var dropmenu_list = [];
+	var dropmenu_language_full = "{{ _language_full() }}";
+	{% set languages = _languages('web') %}
+	dropmenu_list['language'] = {
+		{% for key, value in languages %}
+			"{{ key }}": {
+				"style": "radio",
+				"title": "{{ value }}",
+				"selected": {% if key == language %}true{% else %}false{% endif %},
+				"action": function(){
+					ChangeLanguage("{{ key }}");
+				},
+				"class": "wphead_dropmenu_second",
+			},
+		{% endfor %}
+	};
+
+	dropmenu_list['settings'] = {
+		{% if logged %}
+			"myaccount": {
+				"style": "button",
+				"title": "{{ _trans('web', 1, 7, 'js') }}", //My account
+				"action": function(){
+					window.location.href = wphead_link['root'];
+				},
+				"class": "wphead_dropmenu_first",
+			},
+			"signout": {
+				"style": "button",
+				"title": "{{ _trans('web', 1, 6, 'js') }}", //Sign out
+				"action": function(){
+					wrapper_sendAction('', 'post', 'user/signout', null, null, wrapper_signout_cb_begin, wrapper_signout_cb_complete);
+				},
+				"class": "wphead_dropmenu_first",
+			},
+		{% else %}
+			"joinus": {
+				"style": "button",
+				"title": "{{ _trans('web', 1, 8, 'js') }}", //Join us
+				"action": function(){
+					if(typeof account_show != 'undefined') { account_show('joinus'); }
+				},
+				"class": "wphead_dropmenu_first",
+			},
+			"signin": {
+				"style": "button",
+				"title": "{{ _trans('web', 1, 9, 'js') }}", //Sign in
+				"action": function(){
+					if(typeof account_show != 'undefined') { account_show('signin'); }
+				},
+				"class": "wphead_dropmenu_first",
+			},
+		{% endif %}
+	}
+
+	var dropmenu_selected_img = new Image();
+	dropmenu_selected_img.src = "{{ _filelatest('/bruno/www/images/generic/wphead/selected.png') }}";
+
+	var wphead_page_redirect = "{{ page_redirect }}";
+
+	JSfiles.finish(function(){
+		if(!isMobileApp(true)){
+			if(!wphead_page_redirect){
+				$('#base_iframe_message')
+					.prop('src', wphead_link['blog_prefix']+'/product'+wphead_link['blog_suffix']+'/')
+					.prop('data', wphead_link['blog_prefix']+'/product'+wphead_link['blog_suffix']+'/');
+				wphead_active_menu('overview');
+			} else {
+				$('#base_iframe_message')
+					.prop('src', wphead_link['blog_prefix']+'/'+wphead_page_redirect)
+					.prop('data', wphead_link['blog_prefix']+'/'+wphead_page_redirect);
+				wphead_active_menu('wphead_page_redirect');
+			}
+			$(window).resize();
+		}
+	});
+
+</script>
+<link rel="stylesheet" href="{{ _filelatest('/bruno/www/styles/generic/wphead.css') }}" type="text/css" />
+</div>
+<nav class="base_menu wphead_nav">
+	
+	<div class="DIVcenter wphead_ul">
+
+		<img id="wphead_menu" class="base_pointer maxTablet" src="{{ _filelatest('/bruno/www/images/generic/wphead/menu.png') }}" alt="{{ _trans('web', 2, 10, 'html') }}{# Menu #}" title="{{ _trans('web', 2, 10, 'html') }}{# Menu #}" />
+		<div class="wphead_div floatleft wphead_logo_div"><span class="table_cell_center" id="wphead_logo"><img id="wphead_logo_img" src="{{ _filelatest('/bruno/www/images/generic/wphead/lincko128.png') }}" /></span></div>
+		<div class="wphead_div floatleft wphead_lincko_div"><span class="table_cell_center" id="wphead_lincko"><span>Lincko</span></span></div>
+		<div class="wphead_div floatleft minMobileL display_none"><span class="table_cell_center" id="wphead_beta"><span>{{ _trans('web', 1, 11, 'html') }}{# Beta #}</span></span></div>
+		{% if logged %}
+			<div class="wphead_div floatright"><span class="table_cell_center" id="wphead_account"><span>{{ _trans('web', 1, 7, 'html') }}{# My account #}</span></span></div>
+		{% elseif invitation_code or not youjian %}
+			<div class="wphead_div floatright"><span class="table_cell_center" id="wphead_signin"><span>{{ _trans('web', 1, 9, 'html') }}{# Sign in #}</span></span></div>
+		{% else %}
+			<div class="wphead_div floatright"><span class="table_cell_center" id="wphead_signin"><span>{{ _trans('web', 1, 9, 'html') }}{# Sign in #}</span></span></div>
+		{% endif %}
+		<div class="wphead_div floatright minDesktop">
+			<span class="table_cell_center" id="wphead_language">
+				<form id="wphead_translation" action="{{ _language_uri() }}" method="post">
+					<img id="wphead_language_image" class="maxMobile" src="{{ _filelatest('/bruno/www/images/generic/wphead/earth16.png') }}" />
+					<select id="wphead_language_select" name="translation_language" class="wphead_language_select" onchange="$('#wphead_translation').submit();" >
+						{% set language = _language() %}
+						{% set languages = _languages('web') %}
+						{% for key, value in languages %}
+							<option value="{{ key }}" title="{{ value }}" {% if key == language %}selected="selected"{% endif %} >{{ value }}</option>
+						{% endfor %}
+					</select>
+				</form>
+			</span>
+		</div>
+		<div class="wphead_div floatright"><span class="table_cell_center table_cell_center_link minDesktop" id="wphead_bar_blog"><span>{{ _trans('web', 1, 12, 'html') }}{# Blog #}</span></span></div>
+		<div class="wphead_div floatright"><span class="table_cell_center table_cell_center_link minDesktop" id="wphead_bar_features"><span>{{ _trans('web', 1, 2, 'html') }}{# Features #}</span></span></div>
+		<div class="wphead_div floatright"><span class="table_cell_center table_cell_center_link minDesktop" id="wphead_bar_overview"><span>{{ _trans('web', 1, 13, 'html') }}{# Overview #}</span></span></div>
+	</div>
+</nav>
+<div class="DIVcenter maxTablet overthrow" id="wphead_dropmenu"></div>
+<div id="end_wphead" class="visibility_hidden"></div>
