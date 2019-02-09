@@ -50,17 +50,17 @@
 
 .table_cell_center_link:hover > span {
 	/*border-bottom: dotted 1px #FFFFFF;*/
-	color: #FBA026;
+	color: #FFBF5D;
 }
 
 .table_cell_center_link_active > span {
 	/*border-bottom: solid 1px #FFFFFF !important;*/
-	color: #FBA026 !important;
+	color: #FFBF5D !important;
 	cursor: default;
 }
 
-#wphead_lincko {
-	color: #FBA026;
+#wphead_title {
+	color: #FFFFFF;
 	font-size: 30px;
 	font-family: Roboto;
 	font-weight: 200;
@@ -69,7 +69,7 @@
 }
 
 #wphead_logo {
-	color: #FBA026;
+	color: #4081EC;
 	font-size: 0;
 	font-family: Roboto;
 	font-weight: 200;
@@ -86,7 +86,7 @@
 #wphead_beta {
 	padding-left: 0px;
 	padding-top: 10px;
-	color: #FBA026;
+	color: #4081EC;
 	font-size: 14px;
 	font-family: Roboto;
 	font-weight: 200;
@@ -146,13 +146,13 @@
 
 #wphead_signin > span {
 	cursor: pointer; cursor: hand;
-	border: 2px solid #FBA026;
+	border: 2px solid #4081EC;
 	border-radius: 3px;
 	padding: 3px 16px;
-	background-color: rgba(251, 160, 38, 0);
+	background-color: transparent;
 }
 #wphead_signin > span:hover, #wphead_signin > span:active {
-	background-color: rgba(251, 160, 38, 1);
+	background-color: #4081EC;
 }
 
 
@@ -302,7 +302,7 @@
 	.table_cell_center {
 		padding: 0 8px 0 0px;
 	}
-	.wphead_lincko_div {
+	.wphead_title_div {
 		/*position: absolute;*/
 	}
 }

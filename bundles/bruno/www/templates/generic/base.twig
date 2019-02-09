@@ -1,16 +1,19 @@
 {% extends '/bundles/bruno/wrapper/templates/wrapper.twig' %}
 {% block base %}
-	<script>
-		var base_input_field = {};
-		JSfiles.later("{{ _filelatest('/bruno/www/scripts/generic/base.js') }}");
-		JSfiles.later("{{ _filelatest('/bruno/www/scripts/input/_base.js') }}", 40);
-	</script>
-	<link rel="stylesheet" href="{{ _filelatest('/bruno/www/styles/generic/base.css') }}" type="text/css" />
-	{% include '/bundles/bruno/www/templates/generic/styles/base.css.twig' %}
+
+	<div id="begin_wphead" class="visibility_hidden">
+		<script type="text/javascript">
+			JSfiles.later("{{ _filelatest('/bruno/www/scripts/generic/base.js') }}");
+		</script>
+
+		<link rel="stylesheet" href="{{ _filelatest('/bruno/www/styles/generic/base.css') }}" type="text/css" />
+	</div>
 	
-	<div id="base_error"></div>
-	<div class="base_wrapper display_none" id="base_wrapper">
+	<div class="base_wrapper" id="base_wrapper">
 		{% include '/bundles/bruno/www/templates/generic/wphead.twig' %}
-		<object class="base_iframe_message" id="base_iframe_message" data="" type="text/html"></object>
+		<div id="base_content">
+			{% block content %}
+			{% endblock %}
+		</div>
 	</div>
 {% endblock %}

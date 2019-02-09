@@ -109,7 +109,7 @@ var wrapper_href = window.location.href;
 //Delete URI
 window.history.replaceState(null, null, document.location.pathname);
 
-window.name = 'pitchon';
+window.name = 'lebonquiz';
 document.domainRoot = '{{ domain }}';
 document.brunoDev = '{{ bruno_dev }}';
 var wrapper_show_error = {{ bruno_show_dev }};
@@ -132,6 +132,8 @@ if(!window.console){
 
 var wrapper_link = [];
 wrapper_link['root'] = location.protocol+'//'+document.domain;
+wrapper_link['www_root'] = location.protocol+'//'+document.domainRoot;
+wrapper_link['app_root'] = location.protocol+'//app.'+document.domainRoot;
 wrapper_link['support'] = "{{ support }}";
 wrapper_link['reward'] = "{{ reward }}";
 

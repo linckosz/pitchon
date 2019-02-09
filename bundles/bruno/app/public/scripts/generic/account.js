@@ -54,7 +54,7 @@ var account_signin_cb_success = function(msg, err, status, data){
 		$("#account_captcha").prop("src", $("#account_captcha").prop("src"));
 		account_error_hide_timer();
 	} else {
-		window.location.href = wrapper_link['root'];
+		window.location.href = wrapper_link['app_root'];
 	}
 };
 

@@ -7,6 +7,7 @@ use \libs\STR;
 use \libs\Folders;
 use \libs\Json;
 use \libs\Vanquish;
+use \bundles\bruno\app\models\Terms;
 use \bundles\bruno\data\models\ModelBruno;
 use \bundles\bruno\data\models\Subscription;
 use \bundles\bruno\data\models\Promocode;
@@ -52,6 +53,7 @@ class ControllerApp extends Controller {
 			} else {
 				Vanquish::unsetAll(array('user_language', 'remember', 'host_id'));
 			}
+			$app->bruno->data['terms'] = Terms::getTerm();
 			$app->render('/bundles/bruno/app/templates/login.twig');
 		}
 	}

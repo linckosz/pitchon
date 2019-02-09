@@ -1,5 +1,9 @@
 <?php
 
+/*
+	NOTE: unused file because we use per time payment, not a recursie payment
+*/
+
 //https://www.onlinequizcreator.com/pricing/item7640
 
 namespace bundles\bruno\api\controllers;
@@ -65,12 +69,9 @@ class ControllerPaypal extends Controller {
 		// Set merchant preferences
 		$merchantPreferences = new MerchantPreferences();
 		$merchantPreferences
-			//->setReturnUrl('https://app.pitchon.net/api/paypal/pay')
-			//->setCancelUrl('https://app.pitchon.net/api/paypal/fail')
-			//->setNotifyUrl('https://app.pitchon.net/api/paypal/notify')
-			->setReturnUrl('https://app.lebonquiz.fr/api/paypal/pay')
-			->setCancelUrl('https://app.lebonquiz.fr/api/paypal/fail')
-			->setNotifyUrl('https://app.lebonquiz.fr/api/paypal/notify')
+			->setReturnUrl('https://app.'.$app->bruno->domain.'/api/paypal/pay')
+			->setCancelUrl('https://app.'.$app->bruno->domain.'/api/paypal/fail')
+			->setNotifyUrl('https://app.'.$app->bruno->domain.'/api/paypal/notify')
 			->setAutoBillAmount('yes')
 			->setInitialFailAmountAction('CONTINUE')
 			->setMaxFailAttempts('0')

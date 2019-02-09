@@ -291,6 +291,14 @@ submenu_list['app_answer_get_presentation'] = {
 			}
 			if(Bruno.storage.getPlan() < 2){
 				submenu_Build_return('subscription', true, true);
+			} else if(app_layers_menu=="answer" && app_layers_answer_question ){
+				var pitch_enc = wrapper_integer_map(subm.param);
+				var index = app_layers_answer_question["number"];
+				device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/'+index+'a.jpg?download=1', index+'a', index+'a.jpg');
+				device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'/'+index+'b.jpg?download=1', index+'b', index+'b.jpg');
+				var time = 10;
+				var msg = Bruno.Translation.get('app', 2119, 'js', { time: time }); //Operation in process The download will start in approximately [{time}] seconds.
+				app_application_alert(msg);
 			} else if(Bruno.storage.get('pitch', subm.param)){
 				var index = 0;
 				var pitch_enc = wrapper_integer_map(subm.param);

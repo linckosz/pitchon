@@ -1,0 +1,17 @@
+{# category 4 #}
+{% extends '/bundles/bruno/www/templates/generic/base.twig' %}
+
+{% block content %}
+<div id="begin_overview" class="visibility_hidden">
+	<script>
+		JSfiles.later("{{ _filelatest('/bruno/www/scripts/content/overview.js') }}");
+	</script>
+	<link rel="stylesheet" href="{{ _filelatest('/bruno/www/styles/content/overview.css') }}" type="text/css" />
+</div>
+<div id="overview_main" class="overthrow">
+	<div>
+		<img id="overview_intro_img" src="{{ _filelatest('/bruno/www/images/content/question_' ~ random(['1a', '2a', '3a']) ~ '.jpg') }}"></div>
+	</div>
+</div>
+<div id="end_overview" class="visibility_hidden"></div>
+{% endblock %}

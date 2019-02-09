@@ -37,8 +37,8 @@ goto failed;
 		
 		$payment->setIntent('sale');
 		$redirectUrls = new RedirectUrls;
-		$redirectUrls->setReturnUrl('https://app.pitchon.net/api/paypal/pay');
-		$redirectUrls->setCancelUrl('https://app.pitchon.net/api/paypal/fail');
+		$redirectUrls->setReturnUrl('https://app.'.$app->bruno->domain.'/api/paypal/pay');
+		$redirectUrls->setCancelUrl('https://app.'.$app->bruno->domain.'/api/paypal/fail');
 		$payment->setRedirectUrls($redirectUrls);
 		$payer = new Payer;
 		$payer->setPaymentMethod('paypal');

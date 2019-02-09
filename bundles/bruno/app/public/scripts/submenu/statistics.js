@@ -90,9 +90,9 @@ submenu_list['statistics_quiz'] = {
 
 var submenu_app_statistics_session_csv = function(){
 	if(Bruno.statistics.pitch){
-		device_download('https://app.pitchon.net/api/stats/session/'+Bruno.statistics.pitch['md5']+'/'+Bruno.statistics.pitch['id']+'/session.csv', '_blank', 'session.csv');
-		device_download('https://app.pitchon.net/api/stats/session/'+Bruno.statistics.pitch['md5']+'/'+Bruno.statistics.pitch['id']+'/statistics.csv', '_blank', 'statistics.csv');
-		device_download('https://app.pitchon.net/api/stats/session/'+Bruno.statistics.pitch['md5']+'/'+Bruno.statistics.pitch['id']+'/answered.csv', '_blank', 'answered.csv');
+		device_download('https://app.'+document.domainRoot+'/api/stats/session/'+Bruno.statistics.pitch['md5']+'/'+Bruno.statistics.pitch['id']+'/session.csv', '_blank', 'session.csv');
+		device_download('https://app.'+document.domainRoot+'/api/stats/session/'+Bruno.statistics.pitch['md5']+'/'+Bruno.statistics.pitch['id']+'/statistics.csv', '_blank', 'statistics.csv');
+		device_download('https://app.'+document.domainRoot+'/api/stats/session/'+Bruno.statistics.pitch['md5']+'/'+Bruno.statistics.pitch['id']+'/answered.csv', '_blank', 'answered.csv');
 	}
 };
 
