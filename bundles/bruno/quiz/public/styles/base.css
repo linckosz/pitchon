@@ -102,15 +102,14 @@ html, .font_sans_serif {
 }
 
 #base_website_logo {
-	height: 5.4vw;
-	height: 5.4vmin;
-	line-height: 5.4vmin;
-	width: 5.4vw;
-	width: 5.4vmin;
+	height: 5.0vw;
+	height: 5.0vmin;
+	line-height: 5.0vmin;
+	width: 5.0vw;
+	width: 5.0vmin;
 	border: 0 solid;
 	border-radius: 0.6vw;
 	border-radius: 0.6vmin;
-	background-color: #FFFFFF;
 	color: #023762;
 	display: inline-block;
 	font-size: 5.2vw;
@@ -118,7 +117,10 @@ html, .font_sans_serif {
 	padding: 0.1vw;
 	padding: 0.1vmin;
 	box-sizing: border-box;
-	vertical-align: middle;
+	vertical-align: bottom;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
 }
 
 #base_website_link {

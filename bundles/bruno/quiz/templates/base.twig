@@ -32,6 +32,9 @@
 	.base_color_bg_main_gradient {
 		background-image: url("{{ _filelatest('/bruno/quiz/images/bg02.png') }}"), linear-gradient(140deg, #023762, #00719C) !important;
 	}
+	#base_website_logo {
+		background-image: url("{{ _filelatest('/bruno/quiz/images/logo_white.png') }}");
+	}
 
 	{% if html_zoom %}
 		html {
@@ -121,7 +124,7 @@ var base_home = function(){
 	{% endblock %}
 
 	<div id="base_website">
-		<span id="base_website_logo" class="icon-projectBlack display_none"></span><span id="base_website_link">{{ domain }}</span>{# toto => change the logo #}
+		<span id="base_website_logo"></span><span id="base_website_link">{{ domain }}</span>
 	</div>
 
 </body>

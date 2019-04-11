@@ -5,8 +5,8 @@
 	</script>
 	<link rel="stylesheet" href="{{ _filelatest('/bruno/app/styles/app/content.css') }}" type="text/css" />
 	<style type="text/css">
-		#app_content_submenu_preview {
-			background-image: url("{{ _filelatest('/bruno/app/images/submenu/background_01.jpg') }}");
+		#app_content_copyright_icon {
+			background-image: url("{{ _filelatest('/bruno/app/images/generic/base/logo/logo_white.png') }}");
 		}
 	</style>
 </div>
@@ -48,7 +48,7 @@
 	</div>
 </div>
 
-<span id="app_content_powered"><span class="icon-projectBlack display_none"></span> &copy; Copyright</span>{# toto => change the logo #}
+<span id="app_content_copyright"><span id="app_content_copyright_icon"></span> &copy; Copyright</span>
 
 <span id="app_content_pc" class="display_none">{{ _trans('app', 4, 23, 'html') }}{# PC version: #}<br />https://{{ http_host }}</span>
 

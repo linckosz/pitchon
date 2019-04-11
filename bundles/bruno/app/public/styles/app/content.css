@@ -155,13 +155,21 @@
 	font-weight: 200;
 }
 
-#app_content_powered {
+#app_content_copyright {
 	position: fixed;
 	z-index: 2;
 	font-size: 12px;
 	font-weight: 100;
 	bottom: 4px;
 	left: 4px;
+}
+
+#app_content_copyright_icon {
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	display: inline-block;
+	vertical-align: bottom;
 }
 
 #app_content_pc {
@@ -232,7 +240,7 @@
 	.app_content_top_title_next {
 		padding: 0 2px;
 	}
-	#app_content_powered, #app_content_pc, #app_content_subscribe {
+	#app_content_copyright, #app_content_pc, #app_content_subscribe {
 		font-size: 10px;
 	}
 	.app_content_subscribe_paypal {
