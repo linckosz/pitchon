@@ -3,6 +3,7 @@
 namespace bundles\bruno\www\controllers;
 
 use \libs\Controller;
+use \libs\Folders;
 
 class ControllerWeb extends Controller {
 
@@ -22,6 +23,14 @@ class ControllerWeb extends Controller {
 		}
 
 		$app->bruno->data['content'] = $content;
+		if($content == 'overview'){
+			//Random picture
+			$folder = new Folders($app->bruno->path.'/public/bruno/www/images/content/overview/question');
+			$files = $folder->loopFolder(true);
+			$app->bruno->data['question'] = pathinfo($files[array_rand($files)])['filename'];
+			//https://quiz.lebonquiz.fr/p/9mq?preview=1&zoom=0.94
+			$app->bruno->data['mobile_quiz'] = $base_url = 'https://quiz.lebonquiz.fr/p/'.$app->bruno->data['question'].'?preview=1&zoom=0.94'; //toto => Must adapt the domain name if we use another customed website like pitchenhancer.com
+		}
 		$app->render($twig);
 	}
 

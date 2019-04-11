@@ -1,3 +1,69 @@
+
+#overview_main {
+	position: relative;
+}
+
+#overview_title {
+	position: absolute;
+	color: #00335F;
+	top: 10px;
+	left: 10px;
+	padding: 8px;
+	border-radius: 5px;
+	background-color: #ffffffbd;
+	font-size: 24px;
+}
+
 #overview_intro_img {
 	width: 100%;
+}
+
+#overview_intro_div {
+	max-width: 320px;
+	width: 70%;
+	position: absolute;
+	z-index: 3;
+	right: 5%;
+	margin-top: -20%;
+}
+
+#overview_intro_huawei {
+	width: 100%;
+	position: relative;
+	z-index: 2;
+	right: 0;
+}
+
+#overview_intro_huawei_iframe {
+	width: 79.3%;
+	position: absolute;
+	z-index: 3;
+	border: none;
+	margin: 0;
+	padding: 0;
+	margin-left: 10%;
+	margin-top: 19.7%;
+	height: 76.4%;
+	background-color: #000000;
+}
+
+#overview_intro_title {
+	position: relative;
+	height: 500px;
+	color: #00335F;
+}
+
+
+/* Tablet in Portrait and below */
+@media only screen and (max-width: 900px){
+	#overview_title {
+		position: relative;
+		background: none;
+		width: 90%;
+		padding: 3% 5%;
+		text-align: center;
+		top: auto;
+		left: auto;
+		font-size: 22px;
+	}
 }
