@@ -2,14 +2,16 @@
 	z-index: 999;
 	width: 100%;
 	text-align: center;
-	background-color: #313335;
-	background-image: url('/bruno/www/images/generic/wphead/wphead_nav.png');
+	background-color: #3EA9F5;
+	/*background-image: url('/bruno/www/images/generic/wphead/wphead_nav.png');*/
 	background-repeat: repeat-x;
 	position: fixed;
 	overflow: hidden;
+	/*
 	box-shadow: 0px 0px 4px 0px #3F84B0;
 	-moz-box-shadow: 0px 0px 4px 0px #3F84B0;
 	-webkit-box-shadow: 0px 0px 4px 0px #3F84B0;
+	*/
 }
 
 .wphead_ul {
@@ -39,24 +41,18 @@
 }
 
 .table_cell_center_link {
-	font-weight: 200;
+	font-weight: 400;
 	padding: 0 32px 0 32px;
 	cursor: pointer;
 }
 
-.table_cell_center_link > span {
-	/*border-bottom: solid 1px transparent;*/
+.table_cell_center_link:hover {
+	background-color: rgba(255, 255, 255, 0.30);
 }
 
-.table_cell_center_link:hover > span {
-	/*border-bottom: dotted 1px #FFFFFF;*/
-	color: #FFBF5D;
-}
-
-.table_cell_center_link_active > span {
-	/*border-bottom: solid 1px #FFFFFF !important;*/
-	color: #FFBF5D !important;
+.table_cell_center_link_active {
 	cursor: default;
+	background-color: rgba(255, 255, 255, 0.20) !important;
 }
 
 #wphead_title {
@@ -221,7 +217,7 @@
 #wphead_dropmenu {
 	display: none;
 	position: fixed;
-	top: 49px;
+	top: 48px;
 	z-index: 1000;
 	text-align: center;
 	font-size: 12px;
@@ -322,5 +318,28 @@
 @media only screen and (min-width: 901px) and (max-width: 1279px){
 	.wphead_language_select {
 		max-width: 160px;
+	}
+}
+
+/* Notebook and PC */
+@media only screen and (min-width: 1280px){
+	.wphead_nav:hover {
+		background-color: #FFFFFF;
+	}
+	.wphead_nav:hover .table_cell_center,
+	.wphead_nav:hover #wphead_title
+	{
+		color: #00335F;
+	}
+	.wphead_nav:hover .wphead_language_select
+	{
+		color: #00335F;
+		border-color: #00335F;
+	}
+	.wphead_nav:hover .table_cell_center_link:hover {
+		background-color: rgba(62, 169, 245, 0.30);
+	}
+	.wphead_nav:hover .table_cell_center_link_active {
+		background-color: rgba(62, 169, 245, 0.20) !important;
 	}
 }

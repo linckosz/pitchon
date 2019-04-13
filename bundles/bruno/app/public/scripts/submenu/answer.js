@@ -291,6 +291,18 @@ submenu_list['app_answer_get_presentation'] = {
 			}
 			if(Bruno.storage.getPlan() < 2){
 				submenu_Build_return('subscription', true, true);
+			} else if(true){ //We download the whole presentation, even if we are in answer page
+				var index = 0;
+				var pitch_enc = wrapper_integer_map(subm.param);
+				var items = Bruno.storage.list('question', -1, null, 'pitch', subm.param);
+				for(var i in items){
+					index++;
+				}
+				device_download(location.protocol+'//screen.'+document.domainRoot+'/'+pitch_enc+'.zip', pitch_enc, pitch_enc+'.zip');
+				index++;
+				var time = 5 + 5*items.length;
+				var msg = Bruno.Translation.get('app', 2119, 'js', { time: time }); //Operation in process The download will start in approximately [{time}] seconds.
+				app_application_alert(msg);
 			} else if(app_layers_menu=="answer" && app_layers_answer_question ){
 				var pitch_enc = wrapper_integer_map(subm.param);
 				var index = app_layers_answer_question["number"];

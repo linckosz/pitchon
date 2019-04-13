@@ -21,7 +21,7 @@ $app->configureMode('production', function() use ($app) {
 
 // Only invoked if mode is "development"
 $app->configureMode('development', function() use ($app) {
-	//usleep(500000); //To simulate a slw connection, use 500ms delay
+	//usleep(500000); //To simulate a slow connection, use 500ms delay
 	$app->config(array(
 		'log.enable' => false,
 		'cookies.secure' => false, //Allow non-SSL record

@@ -111,22 +111,24 @@ class Folders {
 
 	public function createZip($pathzip){
 		$zip = new \ZipArchive();
-		if($this->folder && is_dir($this->folder) && $zip->open($pathzip, \ZipArchive::CREATE) === TRUE) {
+		if($this->folder && is_dir($this->folder)) {
 			if(is_file($pathzip)){
 				@unlink($pathzip);
 			}
-			$filelist = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->folder), \RecursiveIteratorIterator::SELF_FIRST);
-			foreach ($filelist as $key => $file) {
-				if(!in_array($file->getFilename(), array('.', '..'))){
-					$basename = str_replace($this->folder, '', $key);
-					if(is_dir($key)){
-						$zip->addEmptyDir($basename);
-					} else if(is_file($key)){
-						$zip->addFile($key, $basename);
+			if($zip->open($pathzip, \ZipArchive::CREATE) === TRUE){
+				$filelist = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->folder), \RecursiveIteratorIterator::SELF_FIRST);
+				foreach ($filelist as $key => $file) {
+					$basename = $file->getFilename();
+					if(!in_array($basename, array('.', '..'))){
+						if(is_dir($key)){
+							$zip->addEmptyDir($basename);
+						} else if(is_file($key)){
+							$zip->addFile($key, $basename);
+						}
 					}
 				}
+				return $zip->close();
 			}
-			return $zip->close();
 		}
 		return false;
 	}

@@ -56,6 +56,17 @@ $app->get(
 ))
 ->name('screen_picture_get');
 
+//Generate a picture based on fixcode
+$app->get(
+	'/:pitchid(/:page).zip',
+	'\bundles\bruno\screen\controllers\ControllerScreen:pitch_zip_get'
+)
+->conditions(array(
+	'pitchid' => '[a-z0-9]+',
+	'page' => '\d+?',
+))
+->name('screen_picture_get');
+
 //Unique session with no JS
 $app->get(
 	'/fc/:pitchid(/:page)',

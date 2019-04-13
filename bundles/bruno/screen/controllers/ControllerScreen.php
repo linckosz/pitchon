@@ -92,14 +92,18 @@ class ControllerScreen extends Controller {
 		return true;
 	}
 
-	public function pitch_picture_get($pitch_enc, $page=true, $ext=false){
+	public function pitch_picture_get($pitch_enc, $page=false, $ext=false){
 		$app = ModelBruno::getApp();
 		$data = ModelBruno::getData();
+		if($ext!='jpg' || $ext!='png'){
+			$ext = 'jpg';
+		}
 
 		$path = $app->bruno->path.'/bundles/bruno/wrapper/public/images/generic/unavailable.png';
+		$name = 'unavailable.png';
 		if($pitch_id = STR::integer_map($pitch_enc, true)){
 
-			$fixpicture = 1; //Default we fix the picture
+			$fixpicture = 1; //By default we fix the picture
 			if(isset($data->fixpicture) && !$data->fixpicture){
 				$fixpicture = 0;
 			}
@@ -193,6 +197,146 @@ class ControllerScreen extends Controller {
 			header('Content-Disposition: attachment; filename="'.$filename.'"');
 		}
 		header('Cache-Control: public, no-transform, max-age=86400'); //24H cache
+		session_write_close();
+		return exit(0);
+	}
+
+	public function pitch_zip_get($pitch_enc, $page=false){
+		$app = ModelBruno::getApp();
+		$data = ModelBruno::getData();
+
+		$zip_files = array();
+		$namezip = $pitch_enc.'.zip';
+		if(!is_bool($page)){
+			$namezip = $pitch_enc.'_'.$page.'.zip';
+		}
+		$pitch_id = STR::integer_map($pitch_enc, true);
+
+		$folder = new Folders;
+		$folder->createPath($app->bruno->filePath.'/microweber/jobs/pitch/'.$pitch_id.'/');
+		$folder->createPath($app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/');
+
+		$pathzip = $app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/'.$namezip;
+
+		if($pitch_id && $pitch = Pitch::find($pitch_id)){
+
+			$count = $pitch->questions(array('id'))->count();
+
+			$pages = array();
+			$pages[] = '0';
+			for ($i=1; $i <= $count; $i++) { 
+				$pages[] = $i.'a';
+				$pages[] = $i.'b';
+			}
+			$page_end = $count + 1;
+			$pages[] = $page_end.'a';
+
+			$ext = 'jpg';
+
+			foreach ($pages as $page) {
+
+				$fixpicture = 1; //By default we fix the picture
+				if(isset($data->fixpicture) && !$data->fixpicture){
+					$fixpicture = 0;
+				}
+				//Use fixcode to not display JS button and unique session
+				$url = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/fc/'.$pitch_enc.'/'.$page.'?fixpicture='.$fixpicture;
+
+				$width = 1280;
+				$height = 720;
+				//We don't adapt the resultion, we only fit the ratio
+				if(isset($data->width) && is_numeric($data->width) && $data->width>0 && isset($data->height) && is_numeric($data->height) && $data->height>0){
+					$width = round($height*$data->width/$data->height);
+				}
+
+				$capture = true;
+				$name = $width.'_'.$height.'_'.$fixpicture.'_'.$page.'.'.$ext;
+				$path = $app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/'.$name;
+				if(is_file($path)){
+					$pitch_id = STR::integer_map($pitch_enc, true);
+					$list = $this->set_page_array($page);
+					if($pitch = Pitch::find($pitch_id)){
+						$question = false;
+						if($list['nbr']>=1){
+							if($question = $pitch->question_offset($list['nbr']-1, array('id', 'u_at'))){
+								if($question->u_at <= 1000*filemtime($path)){
+									//If the Question is untouched, it will fasten a lot the picture generation
+									$capture = false;
+								}
+							}
+						}
+						if(!$question && $pitch->u_at <= 1000*filemtime($path)){
+							if($list['nbr']<=0){
+								//Start
+								$capture = false;
+							} else {
+								//End
+								$capture = false;
+							}
+						}
+					}
+				}
+				
+				if($capture){
+					$screenCapture = new Capture();
+					$screenCapture->setUrl($url);
+					$screenCapture->setWidth($width);
+					$screenCapture->setHeight($height);
+					$screenCapture->setClipWidth($width);
+					$screenCapture->setClipHeight($height);
+					$screenCapture->setImageType($ext);
+					$screenCapture->setOptions([
+					    'ignore-ssl-errors' => 'yes',
+					]);
+					$screenCapture->jobs->setLocation($app->bruno->filePath.'/microweber/jobs/pitch/'.$pitch_id.'/');
+					$screenCapture->output->setLocation($app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/');
+					$screenCapture->binPath = '/usr/local/bin/';
+					$screenCapture->save('tp0_'.$name); //JPEG compress is 75% (good ratio)
+					//$screenCapture->jobs->clean();
+					
+					@unlink($path);
+					rename($app->bruno->filePath.'/microweber/output/pitch/'.$pitch_id.'/tp0_'.$name, $path);
+				}
+
+				//Add to the zip file
+				if(is_file($path)){
+					$zip_files[] = $path;
+				}
+			}
+			
+		} else {
+			$zip_files[] = $app->bruno->path.'/bundles/bruno/wrapper/public/images/generic/unavailable.png';
+		}
+
+		if(is_file($pathzip)){
+			@unlink($pathzip);
+		}
+		$zip = new \ZipArchive();
+		if($zip->open($pathzip, \ZipArchive::CREATE) === TRUE) {
+			foreach ($zip_files as $file) {
+				if(is_file($file)){
+					$basename = basename($file);
+					$zip->addFile($file, $basename);
+				}
+			}
+			$zip->close();
+		}
+
+		$item_timestamp = filemtime($pathzip);
+		$gmt_mtime = gmdate('r', $item_timestamp);
+		$length = sprintf("%u", filesize($pathzip));
+		header('Content-Length: ' . $length);
+		header('Last-Modified: '.$gmt_mtime);
+		header('ETag: "'.md5($namezip.'-'.$item_timestamp).'"');
+		header('Content-Transfer-Encoding: binary');
+		header('Content-Type: application/force-download;');
+		header('Content-Disposition: attachment; filename="'.$namezip.'"');
+		header('Cache-Control', 'no-cache, must-revalidate'); //No cache
+		header('Expires', 'Fri, 12 Aug 2011 14:57:00 GMT');
+		header('Pragma: public');
+
+		readfile($pathzip);
+
 		session_write_close();
 		return exit(0);
 	}

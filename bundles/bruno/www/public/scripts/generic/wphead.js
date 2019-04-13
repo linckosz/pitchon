@@ -38,6 +38,9 @@ $('#wphead_bar_about').click(function(){
 	wphead_active_menu('about', true);
 });
 
+$('#base_content').click(function(){
+	dropmenu_Build("settings", $('#wphead_dropmenu'), true); //Only close
+});
 
 
 var wphead_active_menu = function(menu, redirect){
@@ -99,7 +102,7 @@ dropmenu_list['settings'] = $.extend(
 			"action": function(url){
 				wphead_active_menu('features', true);
 			},
-			"class": "wphead_dropmenu_first",
+			"class": "display_none wphead_dropmenu_first", //toto => remove display_none
 		},
 
 		"pricing": {
@@ -108,7 +111,7 @@ dropmenu_list['settings'] = $.extend(
 			"action": function(url){
 				wphead_active_menu('pricing', true);
 			},
-			"class": "wphead_dropmenu_first",
+			"class": "display_none wphead_dropmenu_first", //toto => remove display_none
 		},
 
 		"about": {
@@ -117,7 +120,7 @@ dropmenu_list['settings'] = $.extend(
 			"action": function(url){
 				wphead_active_menu('about', true);
 			},
-			"class": "wphead_dropmenu_first",
+			"class": "display_none wphead_dropmenu_first", //toto => remove display_none
 		},
 
 		"language": {
@@ -139,7 +142,8 @@ dropmenu_list['settings'] = $.extend(
 	dropmenu_list['settings']
 );
 
-function dropmenu_Build(menu, container) {
+function dropmenu_Build(menu, container, only_close) {
+	if(typeof only_close == "undefined"){ only_close = false; }
 	if(container.length>0 && typeof dropmenu_list[menu] == "object"){
 		var subm = dropmenu_list[menu];
 
@@ -150,6 +154,8 @@ function dropmenu_Build(menu, container) {
 
 		if(subm.opened){
 			container.velocity('transition.slideLeftBigOut', 300);
+		} else if(only_close){
+			return false;
 		} else {
 			//Build the menu
 			for (var att in subm) {
