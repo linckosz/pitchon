@@ -1,5 +1,12 @@
 \libs\Watch::php(true, '$var', __FILE__, __LINE__, false, false, true);
 
+ssh -p 2243 root@91.121.165.229
+https://91.121.165.229:8006
+CTSqiGHNyRRZ
+
+
+
+https://wistia.com/
 
 https://screen.lebonquiz.fr/fc/9qmmm/1a?html_zoom=0.374&html_width=1024&html_height=631&preview=1
 https://screen.lebonquiz.fr/9qmmm/1a.jpg
@@ -10,3 +17,43 @@ https://quiz.lebonquiz.fr/p/wgw?preview=1&zoom=0.94
 
 https://screen.lebonquiz.fr/9qmmm/3a.jpg
 https://quiz.lebonquiz.fr/p/9mq?preview=1&zoom=0.94
+
+
+Letsencrypt
+https://linuxscriptshub.com/install-letsencrypt-ssl-nginx-centos-6/
+yum install git python-tools python-pip
+cd /
+git clone https://github.com/letsencrypt/letsencrypt
+cd letsencrypt
+./letsencrypt-auto certonly -a standalone -d pitchon.xyz -d www.pitchon.xyz
+
+# git clone https://github.com/certbot/certbot.git
+# cd certbot
+# ./letsencrypt-auto certonly --manual --preferred-challenges=dns --email brunoocto@gmail.com --server https://acme-v02.api.letsencrypt.org/directory --agree-tos -d *.pitchon.xyz -d pitchon.xyz
+
+TXT record
+_acme-challenge.pitchon.xyz
+4j9wSfeZqo8K2L5Y8i4fOxDv8GHETm5frsbr50-gmG8
+
+certbot --server https://acme-v02.api.letsencrypt.org/directory -d *.pitchon.xyz --manual --preferred-challenges dns-01 certonly
+
+certbot certonly --manual --preferred-challenges dns --server https://acme-v02.api.letsencrypt.org/directory --manual-public-ip-logging-ok -d '*.<your.domain>' -d <your.domain>
+
++ --manual --preferred-challenges dns --server https://acme-v02.api.letsencrypt.org/directory --manual-public-ip-logging-ok
+
+
+./certbot-auto --nginx --config-dir /glusterfs/.pitchon.xyz/share/nginx/ssl/ --cert-name certbot.pitchon.xyz
+
+ -d pitchon.xyz
+ -d www.pitchon.xyz
+ -d app.pitchon.xyz
+ -d api.pitchon.xyz
+ -d screen.pitchon.xyz
+ -d remote.pitchon.xyz
+ -d quiz.pitchon.xyz
+ -d file.pitchon.xyz
+ -d ws.pitchon.xyz
+ -d wss.pitchon.xyz
+
+./certbot-auto --nginx certonly -n --no-redirect --email brunoocto@gmail.com --config-dir /glusterfs/.pitchon.xyz/share/nginx/ssl/ --cert-name certbot.pitchon.xyz -d pitchon.xyz -d www.pitchon.xyz -d app.pitchon.xyz -d api.pitchon.xyz -d screen.pitchon.xyz -d remote.pitchon.xyz -d quiz.pitchon.xyz -d file.pitchon.xyz -d ws.pitchon.xyz -d wss.pitchon.xyz
+

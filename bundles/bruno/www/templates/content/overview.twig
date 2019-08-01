@@ -9,10 +9,10 @@
 	<link rel="stylesheet" href="{{ _filelatest('/bruno/www/styles/content/overview.css') }}" type="text/css" />
 </div>
 <div id="overview_main" class="overthrow">
-	<div id="overview_title" >
-		Create fun and interactive presentations
+	<div id="overview_intro_top">
+		<div id="overview_intro_top_title">{{ _trans('www', 2, 2, 'brut') }}{# Interactive quiz maker for speaker loving fun #}</div>
+		<img id="overview_intro__top_img" src="{{ _filelatest('/bruno/www/images/content/overview/question/' ~ question ~ '.jpg') }}" />
 	</div>
-	<img id="overview_intro_img" src="{{ _filelatest('/bruno/www/images/content/overview/question/' ~ question ~ '.jpg') }}">
 	<div id="overview_intro_div" >
 		<iframe id="overview_intro_huawei_iframe" name="overview_intro_huawei_iframe" class="base_color_bg_main_gradient" frameborder="0" scrolling="no" src="{{ mobile_quiz }}"></iframe>
 		<img id="overview_intro_huawei" src="{{ _filelatest('/bruno/www/images/content/overview/huawei.png') }}" />

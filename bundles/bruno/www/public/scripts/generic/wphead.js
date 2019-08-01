@@ -238,7 +238,10 @@ var dropmenu_select = {
 			Elem.addClass(tab["class"]);
 		}
 		if ("title" in tab) {
-			Elem.html(tab["title"]);
+			Elem.html(
+				tab["title"]
+				+ '<span class="fa fa-angle-right wphead_dropmenu_next"></span>'
+			);
 		}
 		container.append(Elem);
 		container.append(Elem_next);

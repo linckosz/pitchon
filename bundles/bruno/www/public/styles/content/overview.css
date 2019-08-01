@@ -1,20 +1,25 @@
 
 #overview_main {
 	position: relative;
-}
-
-#overview_title {
-	position: absolute;
 	color: #00335F;
-	top: 10px;
-	left: 10px;
-	padding: 8px;
-	border-radius: 5px;
-	background-color: #ffffffbd;
-	font-size: 24px;
 }
 
-#overview_intro_img {
+#overview_intro_top {
+	position: relative;
+	background-color: #3EA9F5;
+	height: 600px;
+	width: 100%;
+	font-size: 36px;
+}
+
+#overview_intro_top_title {
+	font-size: 44px;
+	padding: 16px;
+	white-space: nowrap;
+	display: inline-block;
+}
+
+#overview_intro__top_img {
 	width: 100%;
 }
 
@@ -56,14 +61,23 @@
 
 /* Tablet in Portrait and below */
 @media only screen and (max-width: 900px){
-	#overview_title {
-		position: relative;
-		background: none;
-		width: 90%;
-		padding: 3% 5%;
-		text-align: center;
-		top: auto;
-		left: auto;
-		font-size: 22px;
+	#overview_intro_top_title {
+		font-size: 40px;
+		margin-left: 50%;
+		transform: translateX(-50%);
+		-webkit-transform: translateX(-50%);
+		-moz-transform: translateX(-50%);
+		-ms-transform: translateX(-50%);
+		-o-transform: translateX(-50%);
+		-webkit-backface-visibility: hidden;
+		backface-visibility: hidden;
+	}
+}
+
+/* Mobile phone in Portrait */
+@media only screen and (max-width: 479px){
+	#overview_intro_top_title {
+		font-size: 24px;
+		font-size: 7vw;
 	}
 }

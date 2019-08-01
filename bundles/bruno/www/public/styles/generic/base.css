@@ -229,3 +229,10 @@ html, .font_sans_serif {
 	z-index: 0 !important;
 	position: absolute !important;
 }
+
+/* Notebook and PC */
+@media only screen and (min-width: 1280px){
+	#base_content {
+		margin-top: 64px;
+	}
+}
